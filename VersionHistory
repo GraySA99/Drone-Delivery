@@ -5,6 +5,8 @@ To make versions numbers easier:
 -Add 00.00.001 if its just tweaks and bug fixes
 -Add 01.00.000 for each sprint
 
+Keywords for Starting entries:
+-Added, Removed, Fixed, Changed, Renamed, Enabled, Disabled, ect...
 
 Version Version# Month/Day/Year
 
