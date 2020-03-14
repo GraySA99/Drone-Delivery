@@ -8,7 +8,16 @@ To make versions numbers easier:
 Keywords for Starting entries:
 -Added, Removed, Fixed, Changed, Renamed, Enabled, Disabled, ect...
 
+
 Version Version# Month/Day/Year
+
+Version 1.1.0 3/13/20
+-Added the Food, Meal, Order, Map, Waypoint, Drone, and Simulation classes (Patrick)
+-Added the Food, Mapping, and Simulation packages (Patrick)
+-Added the getWeight and getName methods and their corresponding variables to the food class (Patrick)
+-Added the getTotalWeight, getProbability, addItem (Unimplemented) and calculateTotalWeight (unimplemented) methods and their
+corresponding variables to the meal class (Patrick)
+-Added the getDestination and getWaypoint methods and their corresponding variables to the order class (Patrick)
 
 Version 1.0.1 3/12/20
 -Added Version History file (Patrick)
