@@ -17,7 +17,7 @@ Version 1.2.0 3/14/20
 -Added the Hamburger, Fries, and Drink classes along with their corresponding variable values (Patrick)
 -Added the getOrderOnDrone, getWeightCapacity, getTargetPosition, and getCurrentPosition methods and their corresponding variables
 to the drone class (Patrick)
--Added the overall orderQueue and the currentOrderQueue to the simulation class (Patrick)
+-Added the overall orderQueue, mealList, and the currentOrderQueue to the simulation class (Patrick)
 -Added the startSimulation (Unimplemented), generateOrderQueue (Unimplemented), copyOrderQueue (Unimplemented), runFIFO (Unimplemented) and
 runKnapsack (Unimplemented) methods to the simulation class (Patrick)
 
