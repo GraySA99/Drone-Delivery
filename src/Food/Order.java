@@ -2,7 +2,7 @@ package Food;
 
 import Mapping.Waypoint;
 
-public class Order {
+public class Order{
     private Waypoint destination;
     private Meal orderMeal;
 

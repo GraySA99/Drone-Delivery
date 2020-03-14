@@ -10,12 +10,26 @@ public class Meal {
         //any constructors that create meals with items in them (can have them take an array of food) must add up the weight
     }
 
+    /**
+     * Parses through the foodList array and calculates the total weight of the current meal.
+     */
     private void calculateWeight(){
-        //parses through array and adds the weight of all food items
+        double sum = 0;
+        for(int i = 0; i < foodList.size(); i++){
+            sum += foodList.get(i).getWeight();
+        }
+
+        totalWeight = sum;
     }
 
-    public void addItem(){
-        //will need to call calculate weight at the end
+    public void addItem(Food f){
+        foodList.add(f);
+        calculateWeight();
+    }
+
+    public void removeItem(int i){
+        foodList.remove(i);
+        calculateWeight();
     }
 
     public double getTotalWeight(){
@@ -24,5 +38,9 @@ public class Meal {
 
     public double getProbability(){
         return probability;
+    }
+
+    public void setProbablity(double p){
+        probability = p;
     }
 }
