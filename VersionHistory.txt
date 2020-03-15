@@ -1,0 +1,37 @@
+Please note your changes with your name here!!! Keep newer versions at the top.
+
+To make versions numbers easier:
+-Add 00.01.000 to number for an update that implements any new features
+-Add 00.00.001 if its just tweaks and bug fixes
+-Add 01.00.000 for each sprint
+
+Keywords for Starting entries (Just as a guide to keep things consistent):
+-Added, Removed, Fixed, Changed, Renamed, Enabled, Disabled, ect...
+
+
+Version Version# Month/Day/Year
+
+Version 1.2.0 3/14/20
+-Implemented the addItem and calculateTotalWeight (added documentation) methods in the meal class (Patrick)
+-Added the removeItem and setProbability methods in the meal class (Patrick)
+-Added the Hamburger, Fries, and Drink classes along with their corresponding variable values (Patrick)
+-Added the getOrderOnDrone, getWeightCapacity, getTargetPosition, and getCurrentPosition methods and their corresponding variables
+to the drone class (Patrick)
+-Added the overall orderQueue, mealList, and the currentOrderQueue to the simulation class (Patrick)
+-Added the startSimulation (Unimplemented), generateOrderQueue (Unimplemented), copyOrderQueue (Unimplemented), runFIFO (Unimplemented) and
+runKnapsack (Unimplemented) methods to the simulation class (Patrick)
+
+Version 1.1.0 3/13/20
+-Added the Food (abstract), Meal, Order, Map, Waypoint, Drone, and Simulation classes (Patrick)
+-Added the Food, Mapping, and Simulation packages (Patrick)
+-Added the getWeight and getName methods and their corresponding variables to the food class (Patrick)
+-Added the getTotalWeight, getProbability, addItem (Unimplemented) and calculateTotalWeight (Unimplemented) methods and their
+corresponding variables to the meal class (Patrick)
+-Added the getDestination and getWaypoint methods and their corresponding variables to the order class (Patrick)
+
+Version 1.0.1 3/12/20
+-Added Version History file (Patrick)
+
+Version 1.0.0 3/12/20
+-Added main and controller classes made by default for JavaFX project's (Patrick)
+-Added the sample package (Patrick)

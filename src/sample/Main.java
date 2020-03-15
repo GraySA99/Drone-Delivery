@@ -79,6 +79,7 @@ public class Main extends Application {
         primaryStage.setWidth(bounds.getWidth());
         primaryStage.setHeight(bounds.getHeight());
         primaryStage.setScene(scene);
+      
         primaryStage.show();
     }
 
