@@ -8,13 +8,16 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.geometry.Rectangle2D;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.MouseEvent;
@@ -43,23 +46,51 @@ public class Main extends Application {
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Team Azure Drones");
         BorderPane root = new BorderPane();
-        BorderPane mapPage = new BorderPane();
+        GridPane mapPage = new GridPane();
         BorderPane foodPage = new BorderPane();
-        BorderPane mealsPage = new BorderPane();
-        BorderPane shiftsPage = new BorderPane();
+        GridPane mealsPage = new GridPane();
+        GridPane shiftsPage = new GridPane();
         sideMenu = new SideMenu(new Pane[]{mapPage, foodPage, mealsPage, shiftsPage}, root);
 
-        Text mapPageTitle = new Text("Map");
-        mapPage.setTop(mapPageTitle);
+        // DEV ON FOOD PAGE
+        foodPage.setStyle(myStyles.foodPage);
+        ListView<String> foodList = new ListView<String>();
+        foodList.setPrefWidth(550);
+        foodList.setStyle(myStyles.foodList);
+        foodList.getItems().add("Test");
 
-        Text foodPageTitle = new Text("Food");
-        foodPage.setTop(foodPageTitle);
+        Text foodNameLabel = new Text("Name");
+        Text foodWeightLabel = new Text("Weight");
+        TextField foodNameEnt = new TextField();
+        TextField foodWeightEnt = new TextField();
 
-        Text mealsPageTitle = new Text("Meals");
-        mealsPage.setTop(mealsPageTitle);
+        HBox foodAddItemFrame = new HBox();
+        HBox foodAddItemEmptySpaceOne = new HBox();
+        HBox foodAddItemEmptySpaceTwo = new HBox();
+        HBox.setHgrow(foodAddItemEmptySpaceOne, Priority.ALWAYS);
+        HBox.setHgrow(foodAddItemEmptySpaceTwo, Priority.ALWAYS);
+        Button foodAddItemBtn = new Button("Add");
+        foodAddItemFrame.getChildren().addAll(foodAddItemEmptySpaceOne, foodAddItemBtn, foodAddItemEmptySpaceTwo);
 
-        Text shiftsPageTitle = new Text("Shifts");
-        shiftsPage.setTop(shiftsPageTitle);
+        VBox foodEntryFrame = new VBox();
+        VBox.setVgrow(foodEntryFrame, Priority.ALWAYS);
+        foodEntryFrame.getChildren().addAll(
+                foodNameLabel,
+                foodNameEnt,
+                foodWeightLabel,
+                foodWeightEnt,
+                foodAddItemFrame
+        );
+
+        foodNameLabel.setStyle(myStyles.foodNameLabel);
+        foodWeightLabel.setStyle(myStyles.foodWeightLabel);
+        foodEntryFrame.setStyle(myStyles.foodEntryFrame);
+        foodNameEnt.setStyle(myStyles.foodNameEnt);
+        foodWeightEnt.setStyle(myStyles.foodWeightEnt);
+
+        foodPage.setRight(foodEntryFrame);
+        foodPage.setLeft(foodList);
+        // Dev Stop
 
         setOnClickPage(mapPage);
         setOnClickPage(foodPage);
