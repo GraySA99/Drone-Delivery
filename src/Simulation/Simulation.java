@@ -15,6 +15,10 @@ public class Simulation {
     //Create array for delivery times with the sum of the number of orders in all of the shifts.
     public float [] deliveryTimes = new float[60];
 
+    //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
+    float average = Results.getAverage(deliveryTimes);
+    float worst = Results.getWorst(deliveryTimes);
+
     private void startSimulation(){
         //should add default meals (for now) to meal list
         //is what calls the run FIFO and runKnapsack methods a specified amount of times
