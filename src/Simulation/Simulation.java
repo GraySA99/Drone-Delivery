@@ -16,8 +16,8 @@ public class Simulation {
     public float [] deliveryTimes = new float[60];
 
     //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
-    float average = Results.getAverage(deliveryTimes);
-    float worst = Results.getWorst(deliveryTimes);
+    public float average = Results.getAverage(deliveryTimes);
+    public float worst = Results.getWorst(deliveryTimes);
 
     private void startSimulation(){
         //should add default meals (for now) to meal list
