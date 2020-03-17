@@ -2,6 +2,29 @@ package sample;
 
 public class Styles {
 
+    public final String foodWeightLabel = ""
+            + "-fx-font-size: 55px;\n";
+
+    public final String foodNameLabel = ""
+            + "-fx-font-size: 55px;\n";
+
+    public final String foodWeightEnt = ""
+            + "-fx-margins: 0 0 75 0;\n";
+
+    public final String foodNameEnt = ""
+            + "-fx-margins: 0 0 75 0;\n";
+
+    public final String foodEntryFrame = ""
+            + "-fx-padding: 50 550 50 0;\n"
+            + "-fx-background-color: #51dacf;\n";
+
+    public final String foodList = ""
+            + "-fx-padding: 50 0 50 30;\n"
+            + "-fx-background-color: #51dacf;\n";
+
+    public final String foodPage = ""
+            + "-fx-background-color: #51dacf;\n";
+
     public final String secondaryMenuBtn = ""
             + "-fx-background-color: #d2fafb;\n"
             + "-fx-outline: none;\n"
