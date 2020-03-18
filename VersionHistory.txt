@@ -18,6 +18,10 @@ Version 1.5.0 3/18/20
 -Added the test class for testing non-gui code separately (Patrick)
 -Implemented the run simulation method in the simulation class (Patrick)
 -Began implementing the generateOrderQueue, runFIFO, and runKnapsack methods in the simulation class (Patrick)
+-Food Page adds and removes items in the list with some criteria (Spencer)
+-Meals Page now populated (Spencer)
+-Meals Page adds and removes items in the list with some criteria (Spencer)
+-Meals Page queries the Food page to get the list of food in the project (Spencer)
 
 Version 1.4.0 3/17/20
 -Made way to store average and worst in simulation (Paul)
