@@ -11,6 +11,14 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
+Version 1.5.0 3/18/20
+-Added parameterized constructor to the order class (Patrick)
+-Added times array to simulation class (Patrick)
+-Added the heapSort and createHeap methods for efficiently sorting the times array in the simulation class (Patrick)
+-Added the test class for testing non-gui code separately (Patrick)
+-Implemented the run simulation method in the simulation class (Patrick)
+-Began implementing the generateOrderQueue, runFIFO, and runKnapsack methods in the simulation class (Patrick)
+
 Version 1.4.0 3/17/20
 -Made way to store average and worst in simulation (Paul)
 -Made average and worst variables able to be accessed from all classes (Paul)
