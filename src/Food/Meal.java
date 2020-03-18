@@ -4,32 +4,37 @@ import java.util.ArrayList;
 
 public class Meal {
     private double probability, totalWeight;
-    private ArrayList<Food> foodList = new ArrayList<Food>();
+    private ArrayList<Food> foodList;
 
     public Meal(){
-        //any constructors that create meals with items in them (can have them take an array of food) must add up the weight
+        totalWeight = 0;
+        probability = 0;
+        foodList = new ArrayList<Food>();
+    }
+
+    public Meal(ArrayList<Food> list, double p){
+        totalWeight = 0;
+        probability = p;
+        foodList = new ArrayList<Food>();
+
+        for(int i = 0; i < list.size(); i++){
+            foodList.add(list.get(i));
+            totalWeight += list.get(i).getWeight();
+        }
     }
 
     /**
      * Parses through the foodList array and calculates the total weight of the current meal.
      */
-    private void calculateWeight(){
-        double sum = 0;
-        for(int i = 0; i < foodList.size(); i++){
-            sum += foodList.get(i).getWeight();
-        }
-
-        totalWeight = sum;
-    }
 
     public void addItem(Food f){
         foodList.add(f);
-        calculateWeight();
+        totalWeight += f.getWeight();
     }
 
     public void removeItem(int i){
+        totalWeight -= foodList.get(i).getWeight();
         foodList.remove(i);
-        calculateWeight();
     }
 
     public double getTotalWeight(){

@@ -14,6 +14,11 @@ Version Version# Month/Day/Year
 Version 1.4.0 3/17/20
 -Made way to store average and worst in simulation (Paul)
 -Made average and worst variables able to be accessed from all classes (Paul)
+-Added the default and parameterized constructor to the meal class (Patrick)
+-Added the default and parameterized (unimplemented) constructor to the simulation class (Patrick)
+-Added the getNextRoute method to the simulation class (Patrick)
+-Changed the startSimulation method to runSimulation in the Simulation class (Patrick)
+-Removed the calculateTotalWeight method from the meals class and changed the add and remove item methods to be more efficient (Patrick)
 
 Version 1.3.0 3/16/20
 -Made Results Class with Get Average and Get Worst with added Functionality (Paul)
