@@ -16,8 +16,6 @@ import java.util.HashMap;
 
 public class SideMenu extends ToolBar {
 
-    private final Styles myStyles = new Styles();
-    private final Values myVals = new Values();
     private HashMap<Button, Integer> menues;
     private Pane[] pages;
     private BorderPane rootMenu;
@@ -34,11 +32,11 @@ public class SideMenu extends ToolBar {
         Button sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn;
         pages = panes.clone();
         this.setOrientation(Orientation.VERTICAL);
-        this.setMaxWidth(myVals.sideMenuWidth);
-        this.setPrefWidth(myVals.sideMenuWidth);
-        this.setMinWidth(myVals.sideMenuWidth);
-        this.setMaxHeight(myVals.sideMenuHeight);
-        this.setStyle(myStyles.sideMenu);
+        this.setMaxWidth(Values.sideMenuWidth);
+        this.setPrefWidth(Values.sideMenuWidth);
+        this.setMinWidth(Values.sideMenuWidth);
+        this.setMaxHeight(Values.sideMenuHeight);
+        this.setStyle(Styles.sideMenu);
         setUpSecondaryMenu();
 
         HBox title = new HBox();
@@ -47,31 +45,31 @@ public class SideMenu extends ToolBar {
         HBox.setHgrow(title, Priority.ALWAYS);
         HBox.setHgrow(titleEmptySpace, Priority.ALWAYS);
         HBox.setHgrow(titleEmptySpace2, Priority.ALWAYS);
-        title.setMaxSize(myVals.sideMenuBtnWidth, myVals.sideMenuBtnHeight);
+        title.setMaxSize(Values.sideMenuBtnWidth, Values.sideMenuBtnHeight);
         Text titleLabel = new Text("AzureSim");
         Button titleBtn = new Button("|||");
         title.getChildren().addAll(titleEmptySpace2, titleLabel, titleEmptySpace, titleBtn);
-        title.setStyle(myStyles.sideMenuTitle);
-        titleLabel.setStyle(myStyles.sideMenuTitleText);
+        title.setStyle(Styles.sideMenuTitle);
+        titleLabel.setStyle(Styles.sideMenuTitleText);
         HamburgerButtonSetup(titleBtn);
 
         sideMenuMapBtn = new Button("Map");
-        sideMenuMapBtn.setMaxSize(myVals.sideMenuBtnWidth, myVals.sideMenuBtnHeight);
-        sideMenuMapBtn.setStyle(myStyles.sideMenuBtnActive);
+        sideMenuMapBtn.setMaxSize(Values.sideMenuBtnWidth, Values.sideMenuBtnHeight);
+        sideMenuMapBtn.setStyle(Styles.sideMenuBtnActive);
         sideMenuFoodBtn = new Button("Food");
-        sideMenuFoodBtn.setMaxSize(myVals.sideMenuBtnWidth, myVals.sideMenuBtnHeight);
-        sideMenuFoodBtn.setStyle(myStyles.sideMenuBtn);
+        sideMenuFoodBtn.setMaxSize(Values.sideMenuBtnWidth, Values.sideMenuBtnHeight);
+        sideMenuFoodBtn.setStyle(Styles.sideMenuBtn);
         sideMenuMealsBtn = new Button("Meals");
-        sideMenuMealsBtn.setMaxSize(myVals.sideMenuBtnWidth, myVals.sideMenuBtnHeight);
-        sideMenuMealsBtn.setStyle(myStyles.sideMenuBtn);
+        sideMenuMealsBtn.setMaxSize(Values.sideMenuBtnWidth, Values.sideMenuBtnHeight);
+        sideMenuMealsBtn.setStyle(Styles.sideMenuBtn);
         sideMenuShiftsBtn = new Button("Shifts");
-        sideMenuShiftsBtn.setMaxSize(myVals.sideMenuBtnWidth, myVals.sideMenuBtnHeight);
-        sideMenuShiftsBtn.setStyle(myStyles.sideMenuBtn);
+        sideMenuShiftsBtn.setMaxSize(Values.sideMenuBtnWidth, Values.sideMenuBtnHeight);
+        sideMenuShiftsBtn.setStyle(Styles.sideMenuBtn);
 
-        menues.put(sideMenuMapBtn, myVals.mapMenuID);
-        menues.put(sideMenuFoodBtn, myVals.foodMenuID);
-        menues.put(sideMenuMealsBtn, myVals.mealsMenuID);
-        menues.put(sideMenuShiftsBtn, myVals.shiftsMenuID);
+        menues.put(sideMenuMapBtn, Values.mapMenuID);
+        menues.put(sideMenuFoodBtn, Values.foodMenuID);
+        menues.put(sideMenuMealsBtn, Values.mealsMenuID);
+        menues.put(sideMenuShiftsBtn, Values.shiftsMenuID);
 
         SideMenuOnHover(sideMenuMapBtn);
         SideMenuOnHover(sideMenuFoodBtn);
@@ -108,11 +106,11 @@ public class SideMenu extends ToolBar {
 
         secondaryMenu = new ToolBar();
         secondaryMenu.setOrientation(Orientation.VERTICAL);
-        secondaryMenu.setMaxWidth(myVals.sideMenuWidth);
-        secondaryMenu.setPrefWidth(myVals.sideMenuWidth);
-        secondaryMenu.setMinWidth(myVals.sideMenuWidth);
-        secondaryMenu.setMaxHeight(myVals.sideMenuHeight);
-        secondaryMenu.setStyle(myStyles.secondaryMenu);
+        secondaryMenu.setMaxWidth(Values.sideMenuWidth);
+        secondaryMenu.setPrefWidth(Values.sideMenuWidth);
+        secondaryMenu.setMinWidth(Values.sideMenuWidth);
+        secondaryMenu.setMaxHeight(Values.sideMenuHeight);
+        secondaryMenu.setStyle(Styles.secondaryMenu);
 
         Button start, save, results, quit;
         start = new Button("Start");
@@ -123,16 +121,16 @@ public class SideMenu extends ToolBar {
 
         for (Button b : buttons) {
 
-            b.setMaxSize(myVals.sideMenuBtnWidth, myVals.sideMenuBtnHeight);
-            b.setStyle(myStyles.sideMenuBtnActive);
+            b.setMaxSize(Values.sideMenuBtnWidth, Values.sideMenuBtnHeight);
+            b.setStyle(Styles.sideMenuBtnActive);
 
             b.styleProperty().bind(
                     Bindings.when(b.hoverProperty())
                             .then(
-                                    new SimpleStringProperty(myStyles.secondaryMenuBtnHover)
+                                    new SimpleStringProperty(Styles.secondaryMenuBtnHover)
                             )
                             .otherwise(
-                                    new SimpleStringProperty(myStyles.secondaryMenuBtn)
+                                    new SimpleStringProperty(Styles.secondaryMenuBtn)
                             )
             );
 
@@ -155,6 +153,17 @@ public class SideMenu extends ToolBar {
         VBox emptySpace = new VBox();
         VBox.setVgrow(emptySpace, Priority.ALWAYS);
         secondaryMenu.getItems().addAll(start, save, results, emptySpace, quit);
+
+        for (Pane p : pages) {
+
+            p.setOnMouseClicked(evt -> {
+
+                if (this.isOnSecondaryScreen()) {
+
+                    this.swapMenues();
+                }
+            });
+        }
     }
 
     private void HamburgerButtonSetup(Button b) {
@@ -162,10 +171,10 @@ public class SideMenu extends ToolBar {
         b.styleProperty().bind(
                 Bindings.when(b.hoverProperty())
                         .then(
-                                new SimpleStringProperty(myStyles.sideMenuTitleBtnHover)
+                                new SimpleStringProperty(Styles.sideMenuTitleBtnHover)
                         )
                         .otherwise(
-                                new SimpleStringProperty(myStyles.sideMenuTitleBtn)
+                                new SimpleStringProperty(Styles.sideMenuTitleBtn)
                         )
         );
 
@@ -196,6 +205,14 @@ public class SideMenu extends ToolBar {
             @Override public void handle(ActionEvent e) {
 
                 activeScene = menues.get(b);
+
+                if (activeScene.equals(Values.mealsMenuID)) {
+
+                    ((MealsPage)(pages[activeScene-1])).setFoodFrame(
+                            ((FoodPage)(pages[Values.foodMenuID-1]))
+                    );
+                }
+
                 rootMenu.setCenter(pages[activeScene-1]);
                 for (Button btn : menues.keySet()) {
 
@@ -210,11 +227,11 @@ public class SideMenu extends ToolBar {
 
         if (activeScene.equals(menues.get(b))) {
 
-            return myStyles.sideMenuBtnActive;
+            return Styles.sideMenuBtnActive;
         }
 
         return isHover
-                ? myStyles.sideMenuBtnHover
-                : myStyles.sideMenuBtn;
+                ? Styles.sideMenuBtnHover
+                : Styles.sideMenuBtn;
     }
 }
