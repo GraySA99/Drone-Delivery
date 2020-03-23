@@ -11,6 +11,16 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
+Version 1.7.0 3/23/20
+-Some more kinks in storage changed and able to Display Graph with No Data (Paul)
+-Merge branch 'master' into Paul (Paul)
+-Refactor Displaying No Data Graph (Paul)
+-Live Map now loads onto Map page (Spencer)
+
+Version 1.6.0 3/22/20
+-Deleted Results class and Added OrderGenerator Class (Paul)
+-Created a Application to Test Making a Bar Graph (Paul)
+
 Version 1.5.0 3/18/20
 -Added parameterized constructor to the order class (Patrick)
 -Added times array to simulation class (Patrick)

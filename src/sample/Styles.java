@@ -2,6 +2,22 @@ package sample;
 
 public class Styles {
 
+    public static final String mapWebView = ""
+            + "-fx-border-style: solid;\n";
+
+    public static final String mapWebContainer = ""
+            + "-fx-padding: 25 50 25 50;\n";
+
+    public static final String mapPage = ""
+            + "-fx-background-color: #51dacf;\n";
+
+    public static final String shiftsList = ""
+            + "-fx-padding: 50 0 50 30;\n"
+            + "-fx-background-color: #51dacf;\n";
+
+    public static final String shiftsPage = ""
+            + "-fx-background-color: #51dacf;\n";
+
     public static final String mealEntry = ""
             + "-fx-background-color: #51dacf;\n"
             + "-fx-padding: 100 550 100 0";
@@ -67,7 +83,8 @@ public class Styles {
 
     public static final String sideMenuTitle = ""
             + "-fx-background-color: #d2fafb;\n"
-            + "-fx-padding: 10px;\n";
+            + "-fx-padding: 10px;\n"
+            + "-fx-border-style: hidden hidden solid hidden;\n";
 
     public static final String sideMenuTitleText = ""
             + "-fx-text-fill: black;\n"
@@ -93,6 +110,16 @@ public class Styles {
             + "-fx-outline: none;\n"
             + "-fx-text-fill: black;\n"
             + "-fx-font-size: 55px;\n";
+
+    public static final String pageTitleLabelContainer = ""
+            + "-fx-border-style: hidden hidden solid hidden;\n";
+
+    public static final String pageTitleLabel = ""
+            + "-fx-font-size: 80px;\n"
+            + "-fx-border-style: hidden hidden solid hidden;\n";
+
+    public static final String pageTitle = ""
+            + "-fx-padding: 25 0 0 0;\n";
 
     public static final String TopBar = ""
             + "-fx-background-color: #0db0c3;\n"
