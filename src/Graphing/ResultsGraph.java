@@ -12,9 +12,6 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class ResultsGraph extends Application {
@@ -24,7 +21,7 @@ public class ResultsGraph extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) {
         //Defining the x axis
         CategoryAxis xAxis = new CategoryAxis();
         ObservableList<String> array = FXCollections.observableArrayList();
@@ -61,6 +58,4 @@ public class ResultsGraph extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
-
 }
