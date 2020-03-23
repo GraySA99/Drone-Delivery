@@ -22,10 +22,11 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -44,10 +45,10 @@ public class Main extends Application {
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Team Azure Drones");
         BorderPane root = new BorderPane();
-        GridPane mapPage = new GridPane();
+        MapPage mapPage = new MapPage();
         FoodPage foodPage = new FoodPage();
         MealsPage mealsPage = new MealsPage();
-        GridPane shiftsPage = new GridPane();
+        ShiftsPage shiftsPage = new ShiftsPage();
         sideMenu = new SideMenu(new Pane[]{mapPage, foodPage, mealsPage, shiftsPage}, root);
 
         // Root Setup
@@ -65,6 +66,10 @@ public class Main extends Application {
         primaryStage.setScene(scene);
       
         primaryStage.show();
+    }
+
+    static { // use system proxy settings when standalone application
+        System.setProperty("java.net.useSystemProxies", "true");
     }
 
     public static void main(String[] args) {

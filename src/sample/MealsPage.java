@@ -19,6 +19,19 @@ public class MealsPage extends BorderPane {
 
         super(); // Super Constructor
         this.setStyle(Styles.mealsPage);
+        Text pageTitleLabel = new Text("Meals");
+        HBox pageTitle = new HBox();
+        pageTitle.setStyle(Styles.pageTitle);
+        HBox pageTitleLabelContainer = new HBox();
+        HBox pageTitleES1 = new HBox();
+        HBox pageTitleES2 = new HBox();
+        HBox.setHgrow(pageTitleES1, Priority.ALWAYS);
+        HBox.setHgrow(pageTitleES2, Priority.ALWAYS);
+        HBox.setHgrow(pageTitle, Priority.ALWAYS);
+        pageTitleLabelContainer.getChildren().add(pageTitleLabel);
+        pageTitle.getChildren().addAll(pageTitleES1, pageTitleLabelContainer, pageTitleES2);
+        pageTitleLabel.setStyle(Styles.pageTitleLabel);
+        pageTitleLabelContainer.setStyle(Styles.pageTitleLabelContainer);
 
         mealItems = new HashMap<>();
         foodItems = new HashMap<>();
@@ -120,6 +133,7 @@ public class MealsPage extends BorderPane {
 
         this.setRight(mealEntry);
         this.setLeft(mealsList);
+        this.setTop(pageTitle);
     }
 
     public void setFoodFrame(FoodPage foodPage) {
