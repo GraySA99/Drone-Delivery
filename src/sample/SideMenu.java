@@ -6,6 +6,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.*;
@@ -134,7 +136,16 @@ public class SideMenu extends ToolBar {
                             )
             );
 
-            // Implement Start Button
+            start.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+
+                    Alert programRunningWindow = new Alert(AlertType.NONE);
+                    programRunningWindow.setTitle("Simulation Running");
+                    programRunningWindow.setHeaderText("Simulation Running");
+                    programRunningWindow.setContentText("Please wait while simulation finishes");
+                    programRunningWindow.showAndWait();
+                }
+            });
             // Implement Save Button
             // Implement Results Button
 
