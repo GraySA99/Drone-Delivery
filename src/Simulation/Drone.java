@@ -15,7 +15,7 @@ public class Drone {
     OrderGenerator og = new OrderGenerator();
     int numShifts = og.numShifts;
 
-    public double [] deliveryTimes = new double[];
+    public double [] deliveryTimes = new double[numShifts];
 
     public Order getOrderOnDrone(int i){
         return loadedOrdersList.get(i);
