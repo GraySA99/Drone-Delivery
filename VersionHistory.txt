@@ -55,6 +55,12 @@ to the drone class (Patrick)
 -Added the overall orderQueue, mealList, and the currentOrderQueue to the simulation class (Patrick)
 -Added the startSimulation (Unimplemented), generateOrderQueue (Unimplemented), copyOrderQueue (Unimplemented), runFIFO (Unimplemented) and
 runKnapsack (Unimplemented) methods to the simulation class (Patrick)
+-Side Menu properly changes between the four main screens (Spencer)
+-Side Menu has a hamburger button to get to secondary side menu (Spencer)
+-Secondary Side Menu buttons are non-functional except for Quit (Spencer)
+-Clicking all main screens when secondary side menu closes the secondary side menu (Spencer)
+-Styles data class created to track CSS styles of all objects (Spencer)
+-Values data class created to track certain properties of all objects (Spencer)
 
 Version 1.1.0 3/13/20
 -Added the Food (abstract), Meal, Order, Map, Waypoint, Drone, and Simulation classes (Patrick)
