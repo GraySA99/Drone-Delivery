@@ -15,6 +15,7 @@ Version 1.7.0 3/23/20
 -Some more kinks in storage changed and able to Display Graph with No Data (Paul)
 -Merge branch 'master' into Paul (Paul)
 -Refactor Displaying No Data Graph (Paul)
+-Live Map now loads onto Map page (Spencer)
 
 Version 1.6.0 3/22/20
 -Deleted Results class and Added OrderGenerator Class (Paul)
