@@ -6,12 +6,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -139,11 +142,14 @@ public class SideMenu extends ToolBar {
             start.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
 
-                    Alert programRunningWindow = new Alert(AlertType.NONE);
-                    programRunningWindow.setTitle("Simulation Running");
-                    programRunningWindow.setHeaderText("Simulation Running");
-                    programRunningWindow.setContentText("Please wait while simulation finishes");
-                    programRunningWindow.showAndWait();
+                    final Stage dialog = new Stage();
+                    dialog.initModality(Modality.APPLICATION_MODAL);
+                    //dialog.initOwner(rootMenu);
+                    VBox dialogVbox = new VBox(20);
+                    dialogVbox.getChildren().add(new Text("This is a Dialog"));
+                    Scene dialogScene = new Scene(dialogVbox, 300, 200);
+                    dialog.setScene(dialogScene);
+                    dialog.show();
                 }
             });
             // Implement Save Button
