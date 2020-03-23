@@ -13,12 +13,8 @@ public class Simulation {
     private int numShifts, timesToBeRan; //passed in constructor, stores number of hours to do the simulation and number of dif sims
     private int[] ordersPerHour, times;
 
-    //Create array for delivery times with the sum of the number of orders in all of the shifts.
-    public float [] deliveryTimes = new float[60];
-
-    //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
-    public float average = Results.getAverage(deliveryTimes);
-    public float worst = Results.getWorst(deliveryTimes);
+    //Creation of drone for testing purposes at this point
+    Drone drone = new Drone();
 
     //the check for adding the probabilities needs to be somewhere. Should be outside of this class
     public Simulation(){
@@ -156,5 +152,26 @@ public class Simulation {
             a[largest] = temp;
             createHeap(a, largest, size);
         }
+    }
+
+    //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
+    public Double average = getAverage(drone.deliveryTimes);
+    public Double worst = getWorst(drone.deliveryTimes);
+
+    public static Double getAverage(Double [] times){
+        double sum = 0;
+        for(int i = 0; i<times.length; i++){
+            sum += times[i];
+        }
+        return sum/times.length;
+    }
+    public static Double getWorst(Double [] times){
+        double worst = 0;
+        for(int i = 0; i<times.length; i++){
+            if(times[i]>worst){
+                worst = times[i];
+            }
+        }
+        return worst;
     }
 }
