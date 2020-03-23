@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Drone {
     private ArrayList<Order> loadedOrdersList = new ArrayList<Order>();
     private double weightCapacity;
-    private Waypoint currentPosition, targetPosition;
+    //private Waypoint currentPosition, targetPosition;
 
     //Create array for delivery times with the sum of the number of orders in all of the shifts.
     OrderGenerator og = new OrderGenerator();
@@ -25,12 +25,12 @@ public class Drone {
         return weightCapacity;
     }
 
-    public Waypoint getCurrentPosition(){
-        return currentPosition;
-    }
+    //public Waypoint getCurrentPosition(){
+        //return currentPosition;
+    //}
 
-    public Waypoint getTargetPosition(){
-        return targetPosition;
-    }
+    //public Waypoint getTargetPosition(){
+        //return targetPosition;
+    //}
 
 }

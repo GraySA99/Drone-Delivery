@@ -1,14 +1,19 @@
 package Food;
 
-import Mapping.Waypoint;
+//import Mapping.Waypoint;
 
 public class Order{
-    private Waypoint destination;
+    //private Waypoint destination;
     private Meal orderMeal;
 
-    public Waypoint getDestination(){
-        return destination;
-    }
+    //public Order(Meal m, Waypoint w){
+        //destination = w;
+        //orderMeal = m;
+    //}
+
+    //public Waypoint getDestination(){
+        //return destination;
+    //}
 
     public Meal getMeal(){
         return orderMeal;
