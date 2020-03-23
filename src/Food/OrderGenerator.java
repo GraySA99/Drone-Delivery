@@ -15,7 +15,7 @@ public class OrderGenerator {
         this.numShifts = 4;
         this.ordersPerHour = new int[numShifts];
         //Add orders per hour to array then add that to totalOrders
-        for(int i = 0; i<numShifts; i++){
+        for(int i = 0; i<numShifts; i++) {
             ordersPerHour[i] = 15;
             totalOrders += ordersPerHour[i];
         }

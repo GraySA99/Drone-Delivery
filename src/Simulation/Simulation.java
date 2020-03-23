@@ -38,17 +38,17 @@ public class Simulation {
     }
 
     //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
-    public double average = getAverage(drone.deliveryTimes);
-    public double worst = getWorst(drone.deliveryTimes);
+    public Double average = getAverage(drone.deliveryTimes);
+    public Double worst = getWorst(drone.deliveryTimes);
 
-    public static double getAverage(double [] times){
+    public static Double getAverage(Double [] times){
         double sum = 0;
         for(int i = 0; i<times.length; i++){
             sum += times[i];
         }
         return sum/times.length;
     }
-    public static double getWorst(double [] times){
+    public static Double getWorst(Double [] times){
         double worst = 0;
         for(int i = 0; i<times.length; i++){
             if(times[i]>worst){

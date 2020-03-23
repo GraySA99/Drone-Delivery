@@ -13,9 +13,9 @@ public class Drone {
 
     //Create array for delivery times with the sum of the number of orders in all of the shifts.
     OrderGenerator og = new OrderGenerator();
-    int numShifts = og.numShifts;
+    int totalOrders = og.totalOrders;
 
-    public double [] deliveryTimes = new double[numShifts];
+    public Double [] deliveryTimes = new Double[totalOrders];
 
     public Order getOrderOnDrone(int i){
         return loadedOrdersList.get(i);
