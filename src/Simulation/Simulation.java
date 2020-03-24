@@ -2,9 +2,7 @@ package Simulation;
 
 import Food.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 
 public class Simulation {
     private ArrayList<Order> orderQueue = new ArrayList<Order>();
@@ -14,9 +12,10 @@ public class Simulation {
     private int[] ordersPerHour, times;
 
     //Creation of drone for testing purposes at this point
-    Drone drone = new Drone();
+    private Drone drone = new Drone();
 
     //the check for adding the probabilities needs to be somewhere. Should be outside of this class
+    //for simulations with default settings ie sprint 1
     public Simulation(){
         numShifts = 4;
         ordersPerHour = new int[numShifts];
@@ -57,14 +56,16 @@ public class Simulation {
 
         for(int i = 0; i < timesToBeRan; i++){
             generateOrderQueue();
-            //copyOrderQueue();
+            copyOrderQueue();
 
             //runFIFO();
 
-            //copyOrderQueue();
+            copyOrderQueue();
 
             //runKnapsack();
         }
+
+        //drones must be reset before each simulation
     }
 
     private void generateOrderQueue(){
@@ -87,6 +88,9 @@ public class Simulation {
 
     private void copyOrderQueue(){
         //makes a deep copy of the orderQueue and makes in into a priority queue
+        for(int i = 0; i < orderQueue.size(); i++){
+            currentOrderQueue.add(orderQueue.get(i));
+        }
     }
 
     private void runFIFO(){
@@ -94,10 +98,44 @@ public class Simulation {
         //at start, wait for 5 min or until full
         //go minute by minute. Update the current order queue with any new orders, see where the drone is. if its at the sac pick up orders.
         //if not then let it keep doing its thing. Maybe store the time for the drones current route
-        int currentTime = 0;
+        double currentTime = 0;
+        int remainingTransit = 0, overtime = 0, currentOrder; //remainingTransit will indicate how close a drone is to its current target position
+        //overtime will add additional minutes to the simulation if there are any last minute orders
+        //currentOrder tracks the current order. Will be used with the times array for checking
 
-        while (currentTime < numShifts * 60){
-            //fifo
+        while (currentTime < (numShifts * 60) + overtime){
+            if(currentTime <= 5){ //and at the starting position (... && drone.getCurrentPosition())
+                if(drone.getTurnAroundTime() == 0){
+                    //loading phase if anything is available
+                    //if conditions are met for the drone to leave, calculate tsp and start it on its route
+                } else {
+                    drone.setTurnAroundTime(drone.getTurnAroundTime() - 1);
+                    currentTime++;
+                }
+            } /*else if(){//drone is at the starting position
+                if(drone.getTurnAroundTime() == 0){
+                    //loading phase if anything is available
+                    //calculate tsp and start the drone
+                } else {
+                    drone.setTurnAroundTime(drone.getTurnAroundTime() - 1);
+                    currentTime++;
+                }
+            }*/ else {//drove is not at the stating position
+                if(remainingTransit == 0){
+                    //if the drone is carrying nothing then it returns home
+                    //else call tsp/a list of destinations already found by tsp to get the drones next route
+                    //reset the drones target destination and the distance to get there
+                } else if (remainingTransit > 0){
+
+                }
+            }
+
+            if(currentTime >= (numShifts * 60) + overtime - 1){ //and if the current order queue is not empty and the drone is not empty
+                //the drone also must not be home
+                overtime++;
+            }
+
+            //the appropriate time needs added to the drone depending on if it delivered or traveled
         }
     }
 
@@ -155,8 +193,8 @@ public class Simulation {
     }
 
     //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
-    public Double average = getAverage(drone.deliveryTimes);
-    public Double worst = getWorst(drone.deliveryTimes);
+    //public Double average = getAverage(drone.deliveryTimes);
+    //public Double worst = getWorst(drone.deliveryTimes);
 
     public static Double getAverage(Double [] times){
         double sum = 0;

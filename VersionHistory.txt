@@ -11,6 +11,14 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Yea
 
+Version 1.8.0
+-Added the drones current turn around time and its getter and setter methods to the drone class (Patrick)
+-Added the default constructor in the Drone class
+-Implemented the copyOrderQueue method in the simulation class (Patrick)
+-Changed the targetPosition waypoint in drone to a list of target positions calculated with TSP (Patrick)
+-Changed the getTargetPosition method in drone to get the first position within the drone (Patrick)
+-Began implementing part of the FIFO method as well as continued planning it out in more depth (Patrick)
+
 Version 1.7.0 3/23/20
 -Some more kinks in storage changed and able to Display Graph with No Data (Paul)
 -Merge branch 'master' into Paul (Paul)
