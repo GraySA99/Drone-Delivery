@@ -46,7 +46,7 @@ public class ResultsGraph extends Application {
             Random rand = new Random();
             Double newDouble = rand.nextDouble();
             drone.deliveryTimes[i] = newDouble;
-            series1.getData().add(new XYChart.Data<>("Meal #", drone.deliveryTimes[i]));
+            series1.getData().add(new XYChart.Data<>(""+(i+1), drone.deliveryTimes[i]));
         }
 
         //Setting the data to bar chart
