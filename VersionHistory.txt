@@ -9,7 +9,15 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 -Added, Removed, Fixed, Changed, Renamed, Enabled, Disabled, ect...
 
 
-Version Version# Month/Day/Year
+Version Version# Month/Day/Yea
+
+Version 1.8.0
+-Added the drones current turn around time and its getter and setter methods to the drone class (Patrick)
+-Added the default constructor in the Drone class
+-Implemented the copyOrderQueue method in the simulation class (Patrick)
+-Changed the targetPosition waypoint in drone to a list of target positions calculated with TSP (Patrick)
+-Changed the getTargetPosition method in drone to get the first position within the drone (Patrick)
+-Began implementing part of the FIFO method as well as continued planning it out in more depth (Patrick)
 
 Version 1.7.0 3/23/20
 -Some more kinks in storage changed and able to Display Graph with No Data (Paul)
@@ -55,6 +63,12 @@ to the drone class (Patrick)
 -Added the overall orderQueue, mealList, and the currentOrderQueue to the simulation class (Patrick)
 -Added the startSimulation (Unimplemented), generateOrderQueue (Unimplemented), copyOrderQueue (Unimplemented), runFIFO (Unimplemented) and
 runKnapsack (Unimplemented) methods to the simulation class (Patrick)
+-Side Menu properly changes between the four main screens (Spencer)
+-Side Menu has a hamburger button to get to secondary side menu (Spencer)
+-Secondary Side Menu buttons are non-functional except for Quit (Spencer)
+-Clicking all main screens when secondary side menu closes the secondary side menu (Spencer)
+-Styles data class created to track CSS styles of all objects (Spencer)
+-Values data class created to track certain properties of all objects (Spencer)
 
 Version 1.1.0 3/13/20
 -Added the Food (abstract), Meal, Order, Map, Waypoint, Drone, and Simulation classes (Patrick)
