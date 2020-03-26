@@ -11,7 +11,19 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Yea
 
-Version 1.8.0
+Version 1.10.0 3/26/20
+-Refactored to show data in test graph for ArrayList (Paul)
+
+Version 1.9.0 3/25/20
+-Added the isStartingPoint boolean to Waypoints (Patrick)
+-Clicking on the Google Map now adds the lat and long of the point clicked into the list (Spencer)
+(This is temporary but it proves that the data fetch worked)
+-Reorganized the Map Page (Spencer)
+-Clicking on the map now changes a temporary variable instead of adding it to the list (Spencer)
+-Polished Test Creation of Graph (Paul)
+-Can Actually Show Data in the Test (Paul)
+
+Version 1.8.0 3/24/20
 -Added the drones current turn around time and its getter and setter methods to the drone class (Patrick)
 -Added the default constructor in the Drone class
 -Implemented the copyOrderQueue method in the simulation class (Patrick)

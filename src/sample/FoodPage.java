@@ -36,10 +36,13 @@ public class FoodPage extends BorderPane {
         foodItems = new HashMap<>();
 
         // Left Side - The List of Entered Food
+        StackPane foodListContainer = new StackPane();
+        foodListContainer.setStyle(Styles.foodListContainer);
         ListView<HBox> foodList = new ListView<HBox>();
         foodList.setPrefWidth(Values.foodListWidth);
         foodList.setStyle(Styles.foodList);
         foodList.getItems().add(new HBox());
+        foodListContainer.getChildren().add(foodList);
 
         // Right Side - How the user enters the food
         GridPane foodItemEntry = new GridPane(); // Container for right side
@@ -127,7 +130,7 @@ public class FoodPage extends BorderPane {
 
         // Add Frames to this
         this.setRight(foodItemEntry);
-        this.setLeft(foodList);
+        this.setLeft(foodListContainer);
         this.setTop(pageTitle);
     }
 

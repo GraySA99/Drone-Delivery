@@ -5,10 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 public class ShiftsPage extends BorderPane {
@@ -34,9 +31,12 @@ public class ShiftsPage extends BorderPane {
         pageTitleLabelContainer.setStyle(Styles.pageTitleLabelContainer);
 
         // Left Side
+        StackPane hoursListContainer = new StackPane();
         hoursList = new ListView<>();
         hoursList.setPrefWidth(550);
+        hoursListContainer.setStyle(Styles.shiftsListContainer);
         hoursList.setStyle(Styles.shiftsList);
+        hoursListContainer.getChildren().add(hoursList);
 
         // Right Side
         VBox entryContainer = new VBox();
@@ -72,7 +72,7 @@ public class ShiftsPage extends BorderPane {
             System.out.println("Invalid Number Format for Shifts Page");
         }
 
-        this.setLeft(hoursList);
+        this.setLeft(hoursListContainer);
         this.setRight(entryContainer);
         this.setTop(pageTitle);
         this.setStyle(Styles.shiftsPage);
