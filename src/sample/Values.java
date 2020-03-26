@@ -18,9 +18,9 @@ public class Values {
     public static final Integer shiftsMenuID = 4;
 
     public static final String googleMapsAPIKey = "AIzaSyCC1c7VEIHPU08i-fNQEkfps0S4i-TsU9I";
-    public static final String html = "<!DOCTYPE html>\n" +
+    public static final String googleMapsJavaScript = "<!DOCTYPE html>\n" +
             "<html>\n" +
-            "  <head>\n" +
+            "<head>\n" +
             "    <meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\">\n" +
             "    <meta charset=\"utf-8\">\n" +
             "    <title>Places Search Box</title>\n" +
@@ -107,11 +107,34 @@ public class Values {
             "        width: 345px;\n" +
             "      }\n" +
             "    </style>\n" +
-            "  </head>\n" +
-            "  <body>\n" +
-            "    <input id=\"pac-input\" class=\"controls\" type=\"text\" placeholder=\"Search Box\">\n" +
-            "    <div id=\"map\"></div>\n" +
-            "    <script>\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "<input id=\"pac-input\" class=\"controls\" type=\"text\" placeholder=\"Search Box\">\n" +
+            "<div id=\"map\"></div>\n" +
+            "<script type=\"text/javascript\">\n" +
+            "\n" +
+            "      var lastLat = 0;\n" +
+            "      var lastLng = 0;\n" +
+            "\n" +
+            "      function sendToJava (lat, lon) {\n" +
+            "            javaConnector.sendLatLong(lat, lon);\n" +
+            "        };\n" +
+            "\n" +
+            "        var jsConnector = {\n" +
+            "            addMarker: function (name) {\n" +
+            "              var myLatLng = {lat: 41.15516, lng: -80.07863};\n" +
+            "              var marker = new google.maps.Marker({\n" +
+            "                  position: myLatLng,\n" +
+            "                  map: map,\n" +
+            "                  title: 'name'\n" +
+            "              });\n" +
+            "            }\n" +
+            "        };\n" +
+            "\n" +
+            "        function getJsConnector() {\n" +
+            "            return jsConnector;\n" +
+            "        };\n" +
+            "\n" +
             "      // This example adds a search box to a map, using the Google Place Autocomplete\n" +
             "      // feature. People can enter geographical searches. The search box will return a\n" +
             "      // pick list containing a mix of places and predicted search terms.\n" +
@@ -122,9 +145,15 @@ public class Values {
             "\n" +
             "      function initAutocomplete() {\n" +
             "        var map = new google.maps.Map(document.getElementById('map'), {\n" +
-            "          center: {lat: 41.154931, lng: -80.078003},\n" +
-            "          zoom: 17,\n" +
+            "          center: {lat: 41.154984, lng: -80.078031},\n" +
+            "          zoom: 18,\n" +
             "          mapTypeId: 'roadmap'\n" +
+            "        });\n" +
+            "\n" +
+            "        google.maps.event.addListener(map, 'click', function( event ){\n" +
+            "          sendToJava(event.latLng.lat(), event.latLng.lng());\n" +
+            "          lastLat = event.latLng.lat();\n" +
+            "          lastLng = event.latLng.lng();\n" +
             "        });\n" +
             "\n" +
             "        // Create the search box and link it to the UI element.\n" +
@@ -188,8 +217,9 @@ public class Values {
             "      }\n" +
             "\n" +
             "    </script>\n" +
-            "    <script src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyCC1c7VEIHPU08i-fNQEkfps0S4i-TsU9I&libraries=places&callback=initAutocomplete\"\n" +
-            "         async defer></script>\n" +
-            "  </body>\n" +
+            "<script src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyCC1c7VEIHPU08i-fNQEkfps0S4i-TsU9I&libraries=places&callback=initAutocomplete\"\n" +
+            "        async defer></script>\n" +
+            "</body>\n" +
             "</html>";
+
 }

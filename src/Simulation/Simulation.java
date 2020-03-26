@@ -7,18 +7,22 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Simulation {
-    private ArrayList<Order> orderQueue = new ArrayList<Order>();
-    private ArrayList<Meal> mealList = new ArrayList<Meal>(); //stores all different possible meals. Will be passed on constructor
-    private ArrayList<Order> currentOrderQueue = new ArrayList<Order>();
+    private ArrayList<Order> orderQueue;
+    private ArrayList<Meal> mealList; //stores all different possible meals. Will be passed on constructor
+    private ArrayList<Order> currentOrderQueue;
     private int numShifts, timesToBeRan; //passed in constructor, stores number of hours to do the simulation and number of dif sims
-    private int[] ordersPerHour, times;
+    public int[] ordersPerHour, times;
 
     //Creation of drone for testing purposes at this point
-    private Drone drone = new Drone();
+    public Drone drone = new Drone();
 
     //the check for adding the probabilities needs to be somewhere. Should be outside of this class
     //for simulations with default settings ie sprint 1
     public Simulation(){
+        orderQueue = new ArrayList<Order>();
+        mealList = new ArrayList<Meal>();
+        currentOrderQueue = new ArrayList<Order>();
+
         numShifts = 4;
         ordersPerHour = new int[numShifts];
         timesToBeRan = 1;

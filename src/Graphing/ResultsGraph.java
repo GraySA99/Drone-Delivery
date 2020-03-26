@@ -1,6 +1,7 @@
 package Graphing;
 
 import Simulation.Drone;
+import Simulation.Simulation;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,8 +26,9 @@ public class ResultsGraph extends Application {
         //Defining the x axis
         CategoryAxis xAxis = new CategoryAxis();
         ObservableList<String> array = FXCollections.observableArrayList();
-        for(int i = 1; i<60; i++){
-            array.add(""+i);
+        Simulation test = new Simulation();
+        for(int i = 1; i<=test.times.length; i++) {
+            array.add("" + i);
         }
         xAxis.setCategories(array);
         xAxis.setLabel("Meal #");
@@ -40,22 +42,30 @@ public class ResultsGraph extends Application {
         //Prepare XYChart.Series objects by setting data
         XYChart.Series<String, Number> series1 = new XYChart.Series<>();
         series1.setName("FIFO");
-        Drone drone = new Drone();
-        for(int i = 0; i<drone.deliveryTimes.length; i++){
+
+        for(int i = 0; i<test.times.length; i++){
             Random rand = new Random();
             Double newDouble = rand.nextDouble();
-            drone.deliveryTimes[i] = newDouble;
-        }
-        for(int i = 0; i<drone.deliveryTimes.length; i++){
-            series1.getData().add(new XYChart.Data<String, Number>("Meal #", drone.deliveryTimes[i]));
+            test.drone.deliveryTimes.add(newDouble);
+            series1.getData().add(new XYChart.Data<>(""+(i+1), test.drone.deliveryTimes.get(i)));
         }
 
         //Setting the data to bar chart
         barChart.getData().addAll(series1);
+
+        //Creating a Group object
         Group root = new Group(barChart);
-        Scene scene = new Scene(root ,600, 300);
-        primaryStage.setTitle("Graphing");
+
+        //Creating a scene object
+        Scene scene = new Scene(root, 600, 400);
+
+        //Setting title to the Stage
+        primaryStage.setTitle("Bar Chart");
+
+        //Adding scene to the stage
         primaryStage.setScene(scene);
+
+        //Displaying the contents of the stage
         primaryStage.show();
     }
 }

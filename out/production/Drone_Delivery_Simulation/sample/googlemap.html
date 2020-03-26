@@ -91,7 +91,30 @@
 <body>
 <input id="pac-input" class="controls" type="text" placeholder="Search Box">
 <div id="map"></div>
-<script>
+<script type="text/javascript">
+
+      var lastLat = 0;
+      var lastLng = 0;
+
+      function sendToJava (lat, lon) {
+            javaConnector.sendLatLong(lat, lon);
+        };
+
+        var jsConnector = {
+            addMarker: function (name) {
+              var myLatLng = {lat: 41.15516, lng: -80.07863};
+              var marker = new google.maps.Marker({
+                  position: myLatLng,
+                  map: map,
+                  title: 'Hello'
+              });
+            }
+        };
+
+        function getJsConnector() {
+            return jsConnector;
+        };
+
       // This example adds a search box to a map, using the Google Place Autocomplete
       // feature. People can enter geographical searches. The search box will return a
       // pick list containing a mix of places and predicted search terms.
@@ -102,9 +125,15 @@
 
       function initAutocomplete() {
         var map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -33.8688, lng: 151.2195},
-          zoom: 13,
+          center: {lat: 41.154984, lng: -80.078031},
+          zoom: 18,
           mapTypeId: 'roadmap'
+        });
+
+        google.maps.event.addListener(map, 'click', function( event ){
+          sendToJava(event.latLng.lat(), event.latLng.lng());
+          lastLat = event.latLng.lat();
+          lastLng = event.latLng.lng();
         });
 
         // Create the search box and link it to the UI element.
@@ -168,7 +197,7 @@
       }
 
     </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initAutocomplete"
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC1c7VEIHPU08i-fNQEkfps0S4i-TsU9I&libraries=places&callback=initAutocomplete"
         async defer></script>
 </body>
 </html>
