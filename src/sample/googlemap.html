@@ -91,21 +91,23 @@
 <body>
 <input id="pac-input" class="controls" type="text" placeholder="Search Box">
 <div id="map"></div>
-<main>
-    <div><input id="input" type="text"/></div>
-    <button onclick="sendToJava();">to lower case</button>
-    <div id="result"></div>
-</main>
 <script type="text/javascript">
 
+      var lastLat = 0;
+      var lastLng = 0;
+
       function sendToJava (lat, lon) {
-            var s = document.getElementById('input').value;
             javaConnector.sendLatLong(lat, lon);
         };
 
         var jsConnector = {
-            showResult: function (result) {
-                document.getElementById('result').innerHTML = result;
+            addMarker: function (name) {
+              var myLatLng = {lat: 41.15516, lng: -80.07863};
+              var marker = new google.maps.Marker({
+                  position: myLatLng,
+                  map: map,
+                  title: 'Hello'
+              });
             }
         };
 
@@ -129,8 +131,9 @@
         });
 
         google.maps.event.addListener(map, 'click', function( event ){
-          alert( "Latitude: "+event.latLng.lat()+" "+", longitude: "+event.latLng.lng() );
           sendToJava(event.latLng.lat(), event.latLng.lng());
+          lastLat = event.latLng.lat();
+          lastLng = event.latLng.lng();
         });
 
         // Create the search box and link it to the UI element.

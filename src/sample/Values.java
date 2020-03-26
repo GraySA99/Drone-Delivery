@@ -111,21 +111,23 @@ public class Values {
             "<body>\n" +
             "<input id=\"pac-input\" class=\"controls\" type=\"text\" placeholder=\"Search Box\">\n" +
             "<div id=\"map\"></div>\n" +
-            "<main>\n" +
-            "    <div><input id=\"input\" type=\"text\"/></div>\n" +
-            "    <button onclick=\"sendToJava();\">to lower case</button>\n" +
-            "    <div id=\"result\"></div>\n" +
-            "</main>\n" +
             "<script type=\"text/javascript\">\n" +
             "\n" +
+            "      var lastLat = 0;\n" +
+            "      var lastLng = 0;\n" +
+            "\n" +
             "      function sendToJava (lat, lon) {\n" +
-            "            var s = document.getElementById('input').value;\n" +
             "            javaConnector.sendLatLong(lat, lon);\n" +
             "        };\n" +
             "\n" +
             "        var jsConnector = {\n" +
-            "            showResult: function (result) {\n" +
-            "                document.getElementById('result').innerHTML = result;\n" +
+            "            addMarker: function (name) {\n" +
+            "              var myLatLng = {lat: 41.15516, lng: -80.07863};\n" +
+            "              var marker = new google.maps.Marker({\n" +
+            "                  position: myLatLng,\n" +
+            "                  map: map,\n" +
+            "                  title: 'name'\n" +
+            "              });\n" +
             "            }\n" +
             "        };\n" +
             "\n" +
@@ -149,8 +151,9 @@ public class Values {
             "        });\n" +
             "\n" +
             "        google.maps.event.addListener(map, 'click', function( event ){\n" +
-            "          alert( \"Latitude: \"+event.latLng.lat()+\" \"+\", longitude: \"+event.latLng.lng() );\n" +
             "          sendToJava(event.latLng.lat(), event.latLng.lng());\n" +
+            "          lastLat = event.latLng.lat();\n" +
+            "          lastLng = event.latLng.lng();\n" +
             "        });\n" +
             "\n" +
             "        // Create the search box and link it to the UI element.\n" +

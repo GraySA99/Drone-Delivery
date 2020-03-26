@@ -37,6 +37,8 @@ public class MealsPage extends BorderPane {
         foodItems = new HashMap<>();
 
         // Left Side
+        StackPane mealsListContainer = new StackPane();
+        mealsListContainer.setStyle(Styles.foodListContainer);
         ListView<HBox> mealsList = new ListView<>();
         mealsList.setPrefWidth(550);
         mealsList.setStyle(Styles.mealsList);
