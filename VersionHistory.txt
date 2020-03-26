@@ -12,7 +12,9 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 Version Version# Month/Day/Yea
 
 Version 1.10.0 3/26/20
+-Added initial TSP code (Josh)
 -Refactored to show data in test graph for ArrayList (Paul)
+-Fixed some Arraylists in simulation not being initialized in the right place (Patrick)
 
 Version 1.9.0 3/25/20
 -Added the isStartingPoint boolean to Waypoints (Patrick)
