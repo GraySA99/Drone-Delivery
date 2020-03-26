@@ -11,7 +11,7 @@ public class Drone {
     private Waypoint currentPosition;
     private ArrayList<Waypoint> targetPositions;
     private int turnAroundTime;
-    private ArrayList<Double> deliveryTimes;
+    public ArrayList<Double> deliveryTimes;
 
     public Drone(){ //for a default drone
         loadedOrdersList  = new ArrayList<Order>();
