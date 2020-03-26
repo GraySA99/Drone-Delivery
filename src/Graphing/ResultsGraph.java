@@ -1,6 +1,7 @@
 package Graphing;
 
 import Simulation.Drone;
+import Simulation.Simulation;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,9 +26,9 @@ public class ResultsGraph extends Application {
         //Defining the x axis
         CategoryAxis xAxis = new CategoryAxis();
         ObservableList<String> array = FXCollections.observableArrayList();
-        Drone drone = new Drone();
-        for(int i = 1; i<=drone.deliveryTimes.length; i++){
-            array.add(""+i);
+        Simulation test = new Simulation();
+        for(int i = 1; i<=test.times.length; i++) {
+            array.add("" + i);
         }
         xAxis.setCategories(array);
         xAxis.setLabel("Meal #");
@@ -42,11 +43,11 @@ public class ResultsGraph extends Application {
         XYChart.Series<String, Number> series1 = new XYChart.Series<>();
         series1.setName("FIFO");
 
-        for(int i = 0; i<drone.deliveryTimes.length; i++){
+        for(int i = 0; i<test.times.length; i++){
             Random rand = new Random();
             Double newDouble = rand.nextDouble();
-            drone.deliveryTimes[i] = newDouble;
-            series1.getData().add(new XYChart.Data<>(""+(i+1), drone.deliveryTimes[i]));
+            test.drone.deliveryTimes.add(newDouble);
+            series1.getData().add(new XYChart.Data<>(""+(i+1), test.drone.deliveryTimes.get(i)));
         }
 
         //Setting the data to bar chart
