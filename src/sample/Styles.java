@@ -2,6 +2,16 @@ package sample;
 
 public class Styles {
 
+    public static final String currentPointLabel = ""
+            + "-fx-font-size: 55px;\n";
+
+    public static final String DPListContainer = ""
+            + "-fx-padding: 50 0 50 30;\n";
+
+    public static final String DPList = ""
+            + "-fx-border-style: solid;\n"
+            + "-fx-background-color: #51dacf;\n";
+
     public static final String mapWebView = ""
             + "-fx-border-style: solid;\n";
 
@@ -9,14 +19,19 @@ public class Styles {
             + "-fx-padding: 25 50 25 50;\n";
 
     public static final String mapPage = ""
-            + "-fx-background-color: #51dacf;\n";
+            + "-fx-background-color: #51dacf;\n"
+            + "-fx-border-style: hidden hidden hidden solid;\n";
+
+    public static final String shiftsListContainer = ""
+            + "-fx-padding: 50 0 50 30;\n";
 
     public static final String shiftsList = ""
-            + "-fx-padding: 50 0 50 30;\n"
+            + "-fx-border-style: solid;\n"
             + "-fx-background-color: #51dacf;\n";
 
     public static final String shiftsPage = ""
-            + "-fx-background-color: #51dacf;\n";
+            + "-fx-background-color: #51dacf;\n"
+            + "-fx-border-style: hidden hidden hidden solid;\n";
 
     public static final String mealEntry = ""
             + "-fx-background-color: #51dacf;\n"
@@ -34,10 +49,14 @@ public class Styles {
             + "-fx-border-style: hidden hidden solid hidden;\n";
 
     public static final String mealsPage = ""
-            + "-fx-background-color: #51dacf;\n";
+            + "-fx-background-color: #51dacf;\n"
+            + "-fx-border-style: hidden hidden hidden solid;\n";
+
+    public static final String mealsListContainer = ""
+            + "-fx-padding: 50 0 50 30;\n";
 
     public static final String mealsList = ""
-            + "-fx-padding: 50 0 50 30;\n"
+            + "-fx-border-style: solid;\n"
             + "-fx-background-color: #51dacf;\n";
 
     public static final String foodEntries = ""
@@ -49,12 +68,16 @@ public class Styles {
     public static final String foodItemEntry = ""
             + "-fx-padding: 100 550 100 0;\n";
 
+    public static final String foodListContainer = ""
+            + "-fx-padding: 50 0 50 30;\n";
+
     public static final String foodList = ""
-            + "-fx-padding: 50 0 50 30;\n"
+            + "-fx-border-style: solid;\n"
             + "-fx-background-color: #51dacf;\n";
 
     public static final String foodPage = ""
-            + "-fx-background-color: #51dacf;\n";
+            + "-fx-background-color: #51dacf;\n"
+            + "-fx-border-style: hidden hidden hidden solid;\n";
 
     public static final String secondaryMenuBtn = ""
             + "-fx-background-color: #d2fafb;\n"
