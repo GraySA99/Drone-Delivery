@@ -2,7 +2,9 @@ package Simulation;
 
 import Food.*;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Simulation {
     private ArrayList<Order> orderQueue = new ArrayList<Order>();
@@ -151,8 +153,215 @@ public class Simulation {
         }
     }
 
-    private void getNextRoute(){
+    //The TSP Route Calculator - Josh
+    //Searches the Routes Search tree recursively with DFS
+    //and uses backtracking to efficiently find best route
+    private int[] tspRoute(double[][] graph, int[] solution, int[] bestSolution, boolean[] visited,
+                          int currentNode, int level, int numNodes) {
+        boolean debug = false;
+
+        if(debug)
+            System.out.println("I'm at Node: " + currentNode);
+
+        //modify solution SO FAR
+        solution[level] = currentNode;
+
+        //calculate the COST SO FAR
+        double costSoFar = 0.0;
+        int lastNode = 0;
+        for(int i = 1; i <= level; i++) {
+            int node1 = solution[i - 1];
+            int node2 = solution[i];
+            costSoFar += graph[node1][node2];
+            if(i == level)
+                lastNode = solution[i];
+        }
+
+        //find BEST COST SO FAR
+        double bestCostSoFar = 0.0;
+        for(int i = 1; i < bestSolution.length; i++) {
+            int node1 = bestSolution[i - 1];
+            int node2 = bestSolution[i];
+            bestCostSoFar += graph[node1][node2];
+        }
+
+
+        //BACKTRACK if I've passed the best cost so far
+        //AND we're not just at the beginning node
+        //AND we actually have a bestCostSoFar
+        //(Agent will go down left side of tree and find the first complete cost
+        // and that cost will be set as the first bestCostSoFar)
+        if(debug)
+            System.out.println("costSoFar: " + costSoFar + " bestCostSoFar: " + bestCostSoFar);
+        if(costSoFar > bestCostSoFar && level != 0 && bestCostSoFar != 0.0) {
+            if(debug)
+                System.out.println("RETURNING");
+            return solution;
+        }
+
+
+        //BOTTOM OF RECURSIVE CALL
+        //I've hit the second to last level of tree, still need to check path back to 1
+        if(level == numNodes - 1) {
+            if(debug)
+                System.out.println("HIT BOTTOM");
+
+            //add going to 0 to my current solution
+            solution[solution.length - 1] = 0;
+            costSoFar += graph[lastNode][0];
+
+            //For testing purposes only
+            if(debug ) {
+                System.out.print("CURRENT SOLUTION: ");
+                for(int i = 0; i < solution.length; i++)
+                    System.out.print(solution[i] + " ");
+                System.out.println("COST: " + costSoFar);
+            }
+
+            // check solution against best solution
+            // If my current cost is better than my best cost so far, OR
+            // if I don't yet have a best cost so far, make one
+            if(costSoFar < bestCostSoFar || bestCostSoFar == 0) {
+                if(debug)
+                    System.out.println("REASSIGNING BESTSOLUTION");
+                for(int i = 0; i < bestSolution.length; i++) {
+                    bestSolution[i] = solution[i];
+                }
+            }
+
+            if(debug) {
+                System.out.println("RETURNING TO PARENT...");
+                System.out.println("");
+            }
+            return solution;
+        }
+
+        visited[currentNode] = true;
+        for(int i = 0; i < numNodes; i++) {
+            if(!visited[i]) {
+                if(debug)
+                    System.out.println("I'm in level " + level + " node " + currentNode + " and visiting node " + i);
+                solution = tspRoute(graph, solution, bestSolution, visited,
+                        i, level + 1, numNodes);
+                if(debug)
+                    System.out.println("I'm back in level " + level + " and node " + currentNode);
+            }
+        }
+        visited[currentNode] = false;
+
+        if(level == 0) {
+            if(debug)
+                System.out.println("FINAL RETURN...");
+            return bestSolution;
+        }
+        else {
+            if(debug)
+                System.out.println("RETURNING TO PARENT...");
+            return solution;
+        }
+    }
+
+    //This uses the TSP algorithm to find the best possible route
+    //returns: an int array containing the best way to make deliveries starting at node 0
+    //and ending with node n. Returning [0, 2, 4, 1, 3, 0] would mean start at 0th node, then
+    //go to index 2 node, then index 4 node, etc., returning to start at the end
+    private int[] getNextRoute(){
         //will use the drones current location and current orders to solve the traveling salesman problem
+        //This is the same as my main in BackTrackingTSP.java - Josh
+        //the number of nodes i.e. V
+        int numNodes = 0;
+        double[][] points = new double[numNodes][2];
+
+        // need to get the list of points
+        try {
+            FileInputStream fis = new FileInputStream("graph.txt");
+            Scanner scn = new Scanner(fis);
+
+            // get the number of nodes
+            numNodes = scn.nextInt();
+            scn.nextLine();
+
+            points = new double[numNodes][2];
+            int currentNode = 0;
+
+            // Fill points
+            while(scn.hasNext()) {
+                if(scn.hasNextDouble())
+                    points[currentNode][0] = scn.nextDouble();
+                else {
+                    scn.close();
+                    throw new Exception("Trouble getting x");
+                }
+                if(scn.hasNextDouble())
+                    points[currentNode][1] = scn.nextDouble();
+                else {
+                    scn.close();
+                    throw new Exception("Trouble getting y");
+                }
+                System.out.println("(" + points[currentNode][0] + ", " + points[currentNode][1] + ")");
+
+                currentNode++;
+                if(scn.hasNextLine())
+                    scn.nextLine();
+            }
+            System.out.println("Total nodes: " + numNodes);
+
+            scn.close();
+        } catch(Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        double[][] graph = new double[numNodes][numNodes];
+
+        System.out.println("length: " + points.length);
+        //Now that I have the points, I need to make the graph
+        for(int node = 0; node < points.length; node++) {
+            for(int otherNode = 0; otherNode < points.length; otherNode++) {
+                //need to find the x and y distances between node and otherNode
+                double deltaX = points[node][0] - points[otherNode][0];
+                double deltaY = points[node][1] - points[otherNode][1];
+                //We raise those distances to the second power
+                double powX = Math.pow(deltaX, 2.0);
+                double powY = Math.pow(deltaY, 2.0);
+                //The distance between the points using the pythagorean theorem
+                graph[node][otherNode] = (Math.sqrt(powX + powY));
+            }
+        }
+
+        //For testing purposes, print the graph
+        for(int i = 0; i < numNodes; i++) {
+            for(int j = 0; j < numNodes; j++) {
+                System.out.printf("%.2f ", graph[i][j]);
+            }
+            System.out.println("");
+        }
+
+        int[] solution = new int[numNodes + 1];
+        int[] bestSolution = new int[numNodes + 1];
+        for(int i = 0; i < numNodes + 1; i++) {
+            solution[i] = 0;
+            bestSolution[i] = 0;
+        }
+
+        boolean[] visited = new boolean[numNodes];
+        for(int i = 0; i < numNodes; i++)
+            visited[i] = false;
+
+        bestSolution = tspRoute(graph, solution, bestSolution, visited, 0, 0, numNodes);
+
+        System.out.println("BEST SOLUTION:");
+        double bestCost = 0;
+        for(int i = 1; i < bestSolution.length; i++) {
+            int node1 = bestSolution[i - 1];
+            int node2 = bestSolution[i];
+            System.out.printf("%d >(+%.2f)> ", node1, graph[node1][node2]);
+            if(i == bestSolution.length - 1)
+                System.out.print(node2);
+            bestCost += graph[node1][node2];
+        }
+        System.out.printf(", COST: %.4f\n", bestCost);
+
+        return bestSolution;
     }
 
     public void heapSort(int a[])
