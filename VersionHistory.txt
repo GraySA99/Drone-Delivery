@@ -11,6 +11,9 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Yea
 
+Version 1.11.0 3/28/20
+-Adding a point now adds the name and the lat and lng of the point to the list (Spencer)
+
 Version 1.10.0 3/26/20
 -Added initial TSP code (Josh)
 -Refactored to show data in test graph for ArrayList (Paul)
