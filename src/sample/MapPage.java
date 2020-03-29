@@ -101,11 +101,11 @@ public class MapPage extends BorderPane {
 
                     String name = nameEnt.getText();
                     String[] cords = currentPointLabel.getText().split(", ");
-                    String lat = cords[0].substring(1, cords[0].length());
-                    String lng = cords[1].substring(0, cords[1].length()-1);
+                    double lat = Double.parseDouble(cords[0].substring(1, cords[0].length()));
+                    double lng = Double.parseDouble(cords[1].substring(0, cords[1].length()-1));
 
                     javascriptConnector.call("addMarker", name);
-                    DPList.getItems().add(nameEnt.getText());
+                    DPList.getItems().add(String.format("%s\t(%.3f, %.3f)", nameEnt.getText(), lat, lng));
                     nameEnt.setText("");
                     currentPointLabel.setText("(, )");
                 }
