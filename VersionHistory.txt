@@ -11,6 +11,13 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Yea
 
+Version 1.12.0 3/29/20
+-Added getIsStartingPoint method to Waypoint class (Patrick)
+-Added a variable to store the drones current weight and its corresponding getter (Patrick)
+-Added methods to the drone class for adding and removing orders which automatically recalculate the drone's current weight (Patrick)
+-Removed several variables from the FIFO simulation that were no longer needed (Patrick)
+-Changed what keeps the FIFO simulation looping as there was something much easier and smarter (Patrick)
+
 Version 1.11.0 3/28/20
 -Adding a point now adds the name and the lat and lng of the point to the list (Spencer)
 
