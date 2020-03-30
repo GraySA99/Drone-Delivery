@@ -17,6 +17,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 
 public class MapPage extends BorderPane {
 
@@ -45,10 +46,10 @@ public class MapPage extends BorderPane {
         // Left Side - Point List
         StackPane DPListContainer = new StackPane();
         DPListContainer.setStyle(Styles.DPListContainer);
-        ListView<String> DPList = new ListView<>();
+        ListView<HBox> DPList = new ListView<>();
         DPList.setStyle(Styles.DPList);
         DPList.setPrefWidth(600);
-        DPList.getItems().add(new String(""));
+        DPList.getItems().add(new HBox());
         DPListContainer.getChildren().add(DPList);
 
         // Right Side - Map
@@ -94,7 +95,7 @@ public class MapPage extends BorderPane {
                         && !currentPointLabel.getText().equals("(, )")) {
 
                     if (DPList.getItems().size() == 1
-                            && DPList.getItems().get(0).isBlank()) {
+                            && DPList.getItems().get(0).getChildren().size() == 0) {
 
                         DPList.getItems().clear();
                     }
@@ -104,8 +105,21 @@ public class MapPage extends BorderPane {
                     double lat = Double.parseDouble(cords[0].substring(1, cords[0].length()));
                     double lng = Double.parseDouble(cords[1].substring(0, cords[1].length()-1));
 
+                    HBox frame = new HBox();
+                    HBox frameEmptySpace = new HBox();
+                    HBox.setHgrow(frameEmptySpace, Priority.ALWAYS);
+                    Text frameName = new Text(name);
+                    Text frameData = new Text(String.format("(%.5f, %.5f)", lat, lng));
+                    frame.getChildren().addAll(frameName, frameEmptySpace, frameData);
+
+                    frame.setOnMouseClicked(evt -> {
+
+                        nameEnt.setText(((Text)frame.getChildren().get(0)).getText());
+                        currentPointLabel.setText(((Text)frame.getChildren().get(2)).getText());
+                    });
+
                     javascriptConnector.call("addMarker", name);
-                    DPList.getItems().add(String.format("%s\t(%.3f, %.3f)", nameEnt.getText(), lat, lng));
+                    DPList.getItems().add(frame);
                     nameEnt.setText("");
                     currentPointLabel.setText("(, )");
                 }
@@ -117,9 +131,10 @@ public class MapPage extends BorderPane {
 
                 int count = 0;
 
-                for (String s : DPList.getItems()) {
+                for (HBox box : DPList.getItems()) {
 
-                    if (s.equals(nameEnt.getText())) {
+                    if (box.getChildren().size() > 0
+                            && ((Text)box.getChildren().get(0)).getText().equals(nameEnt.getText())) {
 
                         DPList.getItems().remove(count);
                         break;
@@ -129,7 +144,7 @@ public class MapPage extends BorderPane {
 
                 if (DPList.getItems().isEmpty()) {
 
-                    DPList.getItems().add(new String(""));
+                    DPList.getItems().add(new HBox());
                 }
 
                 nameEnt.clear();

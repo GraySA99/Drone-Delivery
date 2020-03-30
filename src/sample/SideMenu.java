@@ -145,15 +145,24 @@ public class SideMenu extends ToolBar {
                     final Stage dialog = new Stage();
                     dialog.initModality(Modality.APPLICATION_MODAL);
                     //dialog.initOwner(rootMenu);
-                    VBox dialogVbox = new VBox(20);
-                    dialogVbox.getChildren().add(new Text("This is a Dialog"));
-                    Scene dialogScene = new Scene(dialogVbox, 300, 200);
+
+                    BorderPane subRoot = new BorderPane();
+                    Text dialogText = new Text("Simulation is Running Please Wait");
+                    subRoot.setCenter(dialogText);
+                    Scene dialogScene = new Scene(subRoot, 300, 200);
                     dialog.setScene(dialogScene);
                     dialog.show();
+                    //dialog.close();
                 }
             });
             // Implement Save Button
-            // Implement Results Button
+
+            results.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+
+
+                }
+            });
 
             if (b.equals(quit)) {
 
