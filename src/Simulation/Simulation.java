@@ -1,6 +1,7 @@
 package Simulation;
 
 import Food.*;
+import Mapping.Waypoint;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -266,15 +267,19 @@ public class Simulation {
     }
 
     //This uses the TSP algorithm to find the best possible route
-    //returns: an int array containing the best way to make deliveries starting at node 0
-    //and ending with node n. Returning [0, 2, 4, 1, 3, 0] would mean start at 0th node, then
-    //go to index 2 node, then index 4 node, etc., returning to start at the end
-    private int[] getNextRoute(){
+    //returns: an ordered version of the "orders" arraylist passed in
+    private ArrayList<Order> sortOrders(ArrayList<Order> orders) {
         //will use the drones current location and current orders to solve the traveling salesman problem
         //This is the same as my main in BackTrackingTSP.java - Josh
         //the number of nodes i.e. V
         int numNodes = 0;
-        double[][] points = new double[numNodes][2];
+        double[][] points = new double[orders.size()][2];
+
+        // Fill points with orders ArrayList
+        for(int i = 0; i < orders.size(); i++) {
+            double latitude = orders.get(i).getDestination().getLatitude();
+            double longitude = orders.get(i).getDestination().getLongitude();
+        }
 
         // need to get the list of points
         try {
@@ -288,7 +293,7 @@ public class Simulation {
             points = new double[numNodes][2];
             int currentNode = 0;
 
-            // Fill points
+            // Fill points - OLD
             while(scn.hasNext()) {
                 if(scn.hasNextDouble())
                     points[currentNode][0] = scn.nextDouble();
@@ -365,7 +370,8 @@ public class Simulation {
         }
         System.out.printf(", COST: %.4f\n", bestCost);
 
-        return bestSolution;
+        //return bestSolution;
+        return orders;
     }
 
     public void heapSort(int a[])
