@@ -19,11 +19,10 @@ public class Meal {
     public Meal(ArrayList<Food> list, double p){
         totalWeight = 0;
         probability = p;
-        // josh - comment these back in!
-        foodList = new ArrayList<Food>();
+        foodList = new HashMap<Food, Integer>();
 
         for(int i = 0; i < list.size(); i++){
-            foodList.add(list.get(i));
+            //foodList.add(list.get(i));
             totalWeight += list.get(i).getWeight();
         }
     }
