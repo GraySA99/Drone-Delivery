@@ -110,7 +110,7 @@ public class Simulation {
         //currentOrder tracks the current order. Will be used with the times array for checking
 
         while (currentOrderQueue.size() > 0 || drone.getNumOrders() > 0){
-            if(drone.getCurrentPosition().getIsStartingPoint()){
+            if(drone.getCurrentPosition().getIsStartingPoint()){ // was getIsStartingPoint
                 launched = false;
                 canLoad = true;
                 if(drone.getTurnAroundTime() == 0){

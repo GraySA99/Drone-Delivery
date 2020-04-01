@@ -41,7 +41,7 @@ public class Waypoint {
     @Override
     public int hashCode() {
         return Objects.hash(name, latitude, longitude);
-        return longitude;
+        return longitude; // Josh - commented out - 4/1/20
     }
 
     public boolean isStarting() {
