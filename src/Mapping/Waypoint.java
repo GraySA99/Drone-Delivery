@@ -23,5 +23,4 @@ public class Waypoint {
     public boolean isStarting() {
         return isStartingPoint;
     }
-
 }
