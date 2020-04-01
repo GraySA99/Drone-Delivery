@@ -120,7 +120,7 @@ public class MapPage extends BorderPane {
                         nameEnt.setText(((Text)frame.getChildren().get(0)).getText());
                         currentPointLabel.setText(((Text)frame.getChildren().get(2)).getText());
                     });
-                    //Waypoint takes in 4 arguments
+
                     DataTransfer.addWaypoint(new Waypoint(name, lat, lng));
 
                     javascriptConnector.call("addMarker", name);
