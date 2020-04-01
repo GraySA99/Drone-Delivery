@@ -1,5 +1,8 @@
 package sample;
 
+import Food.Food;
+import Food.Meal;
+import Simulation.DataTransfer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -7,13 +10,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MealsPage extends BorderPane {
 
     private VBox foodFrame;
-    private HashMap<String, HBox> mealItems;
-    private HashMap<String, HBox> foodItems;
+    private HashMap<Food, HBox> foodItems;
 
     public MealsPage() {
 
@@ -33,7 +36,6 @@ public class MealsPage extends BorderPane {
         pageTitleLabel.setStyle(Styles.pageTitleLabel);
         pageTitleLabelContainer.setStyle(Styles.pageTitleLabelContainer);
 
-        mealItems = new HashMap<>();
         foodItems = new HashMap<>();
 
         // Left Side
@@ -73,34 +75,63 @@ public class MealsPage extends BorderPane {
         mealsAddItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
-                if (!mealItems.containsKey(mealsNameEnt.getText().toLowerCase())
-                    && !mealsNameEnt.getText().isBlank()
-                    && isNumeric(mealsProbEnt.getText())) {
+                String name = mealsNameEnt.getText();
+                String prob = mealsProbEnt.getText();
 
-                    if (mealItems.isEmpty()) {
-                        mealsList.getItems().clear();
-                    }
-
-                    HBox temp = new HBox();
-                    Text name = new Text(mealsNameEnt.getText());
-                    Text prob = new Text(mealsProbEnt.getText() + "%");
-                    HBox emptySpace = new HBox();
-                    HBox.setHgrow(emptySpace, Priority.ALWAYS);
-                    temp.getChildren().addAll(name, emptySpace, prob);
-                    mealsList.getItems().add(temp);
-                    mealItems.put(mealsNameEnt.getText().toLowerCase(), temp);
+                if (DataTransfer.getFoodItems() != null && !name.strip().isBlank() && !prob.strip().isBlank()
+                        && isNumeric(prob)
+                        && DataTransfer.getMeal(name) == null) {
 
                     for (HBox hb : foodItems.values()) {
 
-                        ((CheckBox)hb.getChildren().get(0)).setSelected(false);
-                        checkBoxActive(
-                                ((CheckBox)hb.getChildren().get(0)),
-                                ((TextField)hb.getChildren().get(4))
-                        );
+                        if (((CheckBox)hb.getChildren().get(0)).isSelected()) {
+
+                            String qty = ((TextField)hb.getChildren().get(4)).getText();
+                            if (!isNumeric(qty))
+                                return;
+                        }
                     }
+
+                    HashMap<Food, Integer> tempFoodList = new HashMap<>();
+
+                    for (Food food : foodItems.keySet()) {
+
+                        // foodFrameRow.getChildren().addAll(isItemIn, foodName, ES, qtyLabel, qtyEnt);
+                        if (((CheckBox)foodItems.get(food).getChildren().get(0)).isSelected()) {
+
+                            int qty = Integer.parseInt(
+                                    ((TextField)foodItems.get(food).getChildren().get(4)).getText()
+                            );
+
+                            tempFoodList.put(new Food(food.getName(), food.getWeight()), qty);
+                        }
+                    }
+
+                    DataTransfer.addMeal(new Meal(name, tempFoodList, Double.parseDouble(prob)));
+
+                    HBox frame = new HBox();
+                    Text frameName = new Text(name);
+                    HBox emptySpace = new HBox();
+                    HBox.setHgrow(emptySpace, Priority.ALWAYS);
+                    Text frameProb = new Text(prob + "%");
+                    frame.getChildren().addAll(frameName, emptySpace, frameProb);
+
+                    if (mealsList.getItems().size() == 1 && mealsList.getItems().get(0).getChildren().isEmpty()) {
+
+                        mealsList.getItems().clear();
+                    }
+                    mealsList.getItems().add(frame);
 
                     mealsNameEnt.clear();
                     mealsProbEnt.clear();
+                    for (HBox hb : foodItems.values()) {
+
+                        CheckBox tempCB = ((CheckBox)hb.getChildren().get(0));
+                        TextField tempTF = ((TextField)hb.getChildren().get(4));
+                        tempCB.setSelected(false);
+                        tempTF.clear();
+                        tempTF.setDisable(!tempCB.isSelected());
+                    }
                 }
             }
         });
@@ -108,27 +139,26 @@ public class MealsPage extends BorderPane {
         mealsRemoveItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
-                if (mealItems.containsKey(mealsNameEnt.getText().toLowerCase())) {
+                String name = mealsNameEnt.getText();
 
-                    mealsList.getItems().remove(mealItems.get(mealsNameEnt.getText().toLowerCase()));
-                    mealItems.remove(mealsNameEnt.getText().toLowerCase());
+                if (DataTransfer.getMeal(name) != null) {
 
-                    for (HBox hb : foodItems.values()) {
+                    DataTransfer.removeMeal(DataTransfer.getMeal(name));
+                    mealsList.getItems().removeIf(hb -> ((Text) hb.getChildren().get(0)).getText().equals(name));
 
-                        ((CheckBox)hb.getChildren().get(0)).setSelected(false);
-                        checkBoxActive(
-                                ((CheckBox)hb.getChildren().get(0)),
-                                ((TextField)hb.getChildren().get(4))
-                        );
-                    }
-
-                    if (mealsList.getItems().isEmpty()) {
-
+                    if (mealsList.getItems().isEmpty())
                         mealsList.getItems().add(new HBox());
-                    }
 
                     mealsNameEnt.clear();
                     mealsProbEnt.clear();
+                    for (HBox hb : foodItems.values()) {
+
+                        CheckBox tempCB = ((CheckBox)hb.getChildren().get(0));
+                        TextField tempTF = ((TextField)hb.getChildren().get(4));
+                        tempCB.setSelected(false);
+                        tempTF.clear();
+                        tempTF.setDisable(!tempCB.isSelected());
+                    }
                 }
             }
         });
@@ -138,46 +168,46 @@ public class MealsPage extends BorderPane {
         this.setTop(pageTitle);
     }
 
-    public void setFoodFrame(FoodPage foodPage) {
+    public void setFoodFrame() {
 
         foodFrame.getChildren().clear();
 
-        for (String s : foodPage.getFoodItems()) {
+        if (DataTransfer.getFoodItems() != null) {
 
-            HBox foodFrameRow = new HBox();
-            HBox.setHgrow(foodFrameRow, Priority.ALWAYS);
-            foodFrameRow.setStyle(Styles.foodFrameRow);
-            HBox.setHgrow(foodFrameRow, Priority.ALWAYS);
-            CheckBox isItemIn = new CheckBox();
-            Text foodName = new Text(s.substring(0,1).toUpperCase().concat(s.substring(1,s.length())));
-            HBox ES = new HBox();
-            HBox.setHgrow(ES, Priority.ALWAYS);
-            Text qtyLabel = new Text("                   Qty");
-            TextField qtyEnt = new TextField();
-            qtyEnt.setPromptText("0");
-            qtyEnt.setPrefSize(35, 20);
-            foodFrameRow.getChildren().addAll(isItemIn, foodName, ES, qtyLabel, qtyEnt);
-            foodItems.put(s, foodFrameRow);
+            for (Food food : DataTransfer.getFoodItems()) {
 
-            checkBoxActive(isItemIn, qtyEnt);
-            isItemIn.setOnMouseClicked(evt -> {
+                HBox foodFrameRow = new HBox();
+                HBox.setHgrow(foodFrameRow, Priority.ALWAYS);
+                foodFrameRow.setStyle(Styles.foodFrameRow);
+                HBox.setHgrow(foodFrameRow, Priority.ALWAYS);
+                CheckBox isItemIn = new CheckBox();
+                Text foodName = new Text(food.getName().substring(0,1).toUpperCase()
+                        .concat(food.getName().substring(1,food.getName().length())));
+                HBox ES = new HBox();
+                HBox.setHgrow(ES, Priority.ALWAYS);
+                Text qtyLabel = new Text("Qty");
+                TextField qtyEnt = new TextField();
+                qtyEnt.setPromptText("0");
+                qtyEnt.setPrefSize(35, 20);
+                foodFrameRow.getChildren().addAll(isItemIn, foodName, ES, qtyLabel, qtyEnt);
+                foodItems.put(food, foodFrameRow);
 
-                checkBoxActive(isItemIn, qtyEnt);
-            });
+                qtyEnt.clear();
+                qtyEnt.setDisable(!isItemIn.isSelected());
+                isItemIn.setOnMouseClicked(evt -> {
 
-            foodFrame.getChildren().add(foodFrameRow);
+                    qtyEnt.clear();
+                    qtyEnt.setDisable(!isItemIn.isSelected());
+                });
+
+                foodFrame.getChildren().add(foodFrameRow);
+            }
+
+            if (foodFrame.getChildren().isEmpty()) {
+
+                foodFrame.getChildren().add(new HBox());
+            }
         }
-
-        if (foodFrame.getChildren().isEmpty()) {
-
-            foodFrame.getChildren().add(new HBox());
-        }
-    }
-
-    private void checkBoxActive(CheckBox cb, TextField tf) {
-
-        tf.clear();
-        tf.setDisable(!cb.isSelected());
     }
 
     private boolean isNumeric(String s) {

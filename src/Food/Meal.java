@@ -1,13 +1,24 @@
 package Food;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 public class Meal {
     private double probability, totalWeight;
-    private ArrayList<Food> foodList = new ArrayList<Food>();
+    private HashMap<Food, Integer> foodList = new HashMap<>();
+    private String name;
 
     public Meal(){
         //any constructors that create meals with items in them (can have them take an array of food) must add up the weight
+    }
+
+    public Meal(String n, HashMap<Food, Integer> fList, double prob) {
+
+        name = n;
+        foodList = fList;
+        probability = prob;
+        calculateWeight();
     }
 
     /**
@@ -15,21 +26,40 @@ public class Meal {
      */
     private void calculateWeight(){
         double sum = 0;
-        for(int i = 0; i < foodList.size(); i++){
-            sum += foodList.get(i).getWeight();
+        for (Food food: foodList.keySet()) {
+
+            sum += food.getWeight();
         }
 
         totalWeight = sum;
     }
 
     public void addItem(Food f){
-        foodList.add(f);
+        foodList.put(f, 1);
         calculateWeight();
     }
 
-    public void removeItem(int i){
-        foodList.remove(i);
-        calculateWeight();
+    public Set<Food> getFoodItems() {
+
+        return foodList.keySet();
+    }
+
+    public int getFoodItemQty(Food food) {
+
+        return foodList.get(food);
+    }
+
+    public boolean hasFoodItem(Food f) {
+
+        for (Food food : foodList.keySet()) {
+
+            if (food.getName().equals(f)) {
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public double getTotalWeight(){
@@ -43,4 +73,6 @@ public class Meal {
     public void setProbablity(double p){
         probability = p;
     }
+
+    public String getName() { return name; }
 }

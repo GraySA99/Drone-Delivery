@@ -1,5 +1,7 @@
 package sample;
 
+import Mapping.Waypoint;
+import Simulation.DataTransfer;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
@@ -155,7 +157,13 @@ public class SideMenu extends ToolBar {
                     //dialog.close();
                 }
             });
-            // Implement Save Button
+
+            save.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+
+                    DataTransfer.debugToString();
+                }
+            });
 
             results.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
@@ -234,9 +242,7 @@ public class SideMenu extends ToolBar {
 
                 if (activeScene.equals(Values.mealsMenuID)) {
 
-                    ((MealsPage)(pages[activeScene-1])).setFoodFrame(
-                            ((FoodPage)(pages[Values.foodMenuID-1]))
-                    );
+                    ((MealsPage)(pages[activeScene-1])).setFoodFrame();
                 }
 
                 rootMenu.setCenter(pages[activeScene-1]);

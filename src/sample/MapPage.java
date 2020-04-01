@@ -1,5 +1,7 @@
 package sample;
 
+import Mapping.Waypoint;
+import Simulation.DataTransfer;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
@@ -28,6 +30,7 @@ public class MapPage extends BorderPane {
     public MapPage() {
 
         super(); // Super Constructor
+
         this.setStyle(Styles.mapPage);
         Text pageTitleLabel = new Text("Maps");
         HBox pageTitle = new HBox();
@@ -118,6 +121,8 @@ public class MapPage extends BorderPane {
                         currentPointLabel.setText(((Text)frame.getChildren().get(2)).getText());
                     });
 
+                    DataTransfer.addWaypoint(new Waypoint(name, lat, lng));
+
                     javascriptConnector.call("addMarker", name);
                     DPList.getItems().add(frame);
                     nameEnt.setText("");
@@ -137,6 +142,7 @@ public class MapPage extends BorderPane {
                             && ((Text)box.getChildren().get(0)).getText().equals(nameEnt.getText())) {
 
                         DPList.getItems().remove(count);
+                        DataTransfer.removeWaypoint(nameEnt.getText());
                         break;
                     }
                     count++;

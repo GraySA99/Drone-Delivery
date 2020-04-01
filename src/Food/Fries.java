@@ -1,8 +1,8 @@
 package Food;
 
-public class Fries extends Food{
-    public Fries(){
-        name = "Fries";
-        weight = 0.25;
-    }
+public class Fries {
+//    public Fries(){
+//        name = "Fries";
+//        weight = 0.25;
+//    }
 }

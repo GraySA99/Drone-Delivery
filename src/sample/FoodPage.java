@@ -1,8 +1,12 @@
 package sample;
 
+import Food.Food;
+
+import Simulation.DataTransfer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
@@ -12,8 +16,6 @@ import java.util.HashMap;
 import java.util.Set;
 
 public class FoodPage extends BorderPane {
-
-    private HashMap<String, HBox> foodItems; // List of entered food items
 
     public FoodPage() {
 
@@ -32,8 +34,6 @@ public class FoodPage extends BorderPane {
         pageTitle.getChildren().addAll(pageTitleES1, pageTitleLabelContainer, pageTitleES2);
         pageTitleLabel.setStyle(Styles.pageTitleLabel);
         pageTitleLabelContainer.setStyle(Styles.pageTitleLabelContainer);
-
-        foodItems = new HashMap<>();
 
         // Left Side - The List of Entered Food
         StackPane foodListContainer = new StackPane();
@@ -59,31 +59,39 @@ public class FoodPage extends BorderPane {
         foodAddItemBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
-                // If name entry doesn't already exist
-                // AND name entry isn't blank
-                // AND weight is an numeric value
-                if (!foodItems.containsKey(foodNameEnt.getText().toLowerCase())
-                        && !foodNameEnt.getText().isBlank()
-                        && isNumeric(foodWeightEnt.getText())) {
+                String name = foodNameEnt.getText();
+                String weight = foodWeightEnt.getText();
 
-                    if (foodItems.isEmpty()) {
-                        foodList.getItems().clear();
-                    } // If list is empty then get rid of the blank item in the list view
+                if (!name.strip().isBlank() && !weight.strip().isBlank()
+                        && isNumeric(weight)
+                        && DataTransfer.getFood(name) == null) {
 
-                    // Add new item to list view
-                    HBox temp = new HBox();
-                    Text name = new Text(foodNameEnt.getText());
-                    Text weight = new Text(foodWeightEnt.getText() + " oz");
-                    HBox emptySpace = new HBox();
-                    HBox.setHgrow(emptySpace, Priority.ALWAYS);
-                    temp.getChildren().addAll(name, emptySpace, weight);
-                    foodList.getItems().add(temp);
-                    foodItems.put(foodNameEnt.getText().toLowerCase(), temp);
-
-                    // Clear Entry Fields
-                    foodNameEnt.clear();
-                    foodWeightEnt.clear();
+                    DataTransfer.addFood(new Food(name, Double.parseDouble(weight)));
                 }
+
+                HBox foodItemFrame = new HBox();
+                Text foodItemName = new Text(name);
+                HBox emptySpace = new HBox();
+                HBox.setHgrow(emptySpace, Priority.ALWAYS);
+                Text foodItemWeight = new Text(weight + " oz.");
+                foodItemFrame.getChildren().addAll(foodItemName, emptySpace, foodItemWeight);
+                foodItemFrame.setOnMouseClicked(evt -> {
+
+                    String foodName = ((Text)foodItemFrame.getChildren().get(0)).getText();
+                    String foodWeight = ((Text)foodItemFrame.getChildren().get(2)).getText()
+                            .replaceAll(" oz.", "");
+
+                    foodNameEnt.setText(foodName);
+                    foodWeightEnt.setText(foodWeight);
+                });
+
+                if (foodList.getItems().size() == 1 && foodList.getItems().get(0).getChildren().isEmpty()) {
+                    foodList.getItems().clear();
+                }
+                foodList.getItems().add(foodItemFrame);
+
+                foodNameEnt.clear();
+                foodWeightEnt.clear();
             }
         });
 
@@ -91,20 +99,16 @@ public class FoodPage extends BorderPane {
         foodRemoveItemBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
-                // If the item actually exists
-                if (foodItems.containsKey(foodNameEnt.getText().toLowerCase())) {
+                String name = foodNameEnt.getText();
 
-                    // Remove item from the list view and the HashMap
-                    foodList.getItems().remove(foodItems.get(foodNameEnt.getText().toLowerCase()));
-                    foodItems.remove(foodNameEnt.getText().toLowerCase());
+                if (DataTransfer.getMeal(name) != null) {
 
-                    // If the last item was just removed then add a blank to keep the list view visible
-                    if (foodList.getItems().isEmpty()) {
+                    DataTransfer.removeFood(DataTransfer.getFood(name));
+                    foodList.getItems().removeIf(hb -> ((Text) hb.getChildren().get(0)).getText().equals(name));
 
+                    if (foodList.getItems().isEmpty())
                         foodList.getItems().add(new HBox());
-                    }
 
-                    // Clear Entries
                     foodNameEnt.clear();
                     foodWeightEnt.clear();
                 }
@@ -149,14 +153,5 @@ public class FoodPage extends BorderPane {
 
             return false;
         }
-    }
-
-    // Function: getFoodItems
-    // Purpose: returns the names of all food items
-    // Input: NA
-    // Returns: Set of Strings (Set<String>)
-    public Set<String> getFoodItems() {
-
-        return foodItems.keySet();
     }
 }
