@@ -10,10 +10,11 @@ import java.util.Scanner;
 public class Simulation {
     private ArrayList<Order> orderQueue;
     private ArrayList<Meal> mealList; //stores all different possible meals. Will be passed on constructor
-    private ArrayList<Order> currentOrderQueue;
+    private ArrayList<Order> currentOrderQueue; //for knapsack, skipped orders are prioritized and to a priority list
     private int numShifts, timesToBeRan; //passed in constructor, stores number of hours to do the simulation and number of dif sims
     public int[] ordersPerHour, times;
-
+    //assign a value to every order in queue, grab the heaviest and put it in the bag, then next heaviest, then so forth. if it fits, put it in.
+    //skipped me counter, make sure skipped meals are prioritized
     //Creation of drone for testing purposes at this point
     public Drone drone = new Drone();
 
@@ -105,16 +106,19 @@ public class Simulation {
         //at start, wait for 5 min or until full
         double currentTime = 0;
         int currentOrder = 0;
+        boolean launched = false, canLoad = true;
         //currentOrder tracks the current order. Will be used with the times array for checking
 
         while (currentOrderQueue.size() > 0 || drone.getNumOrders() > 0){
             if(drone.getCurrentPosition().getIsStartingPoint()){
+                launched = false;
+                canLoad = true;
                 if(drone.getTurnAroundTime() == 0){
 
                     //when the drone is at the starting point and it's within the first five minutes of the simulation
                     if(currentTime <= 5){
                         //the drone will add any available orders if it can. If the drone is full then it will launch
-                        while(times[currentOrder] <= currentTime){
+                        while(times[currentOrder] <= currentTime && !launched){
                             if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
                                 drone.addOrderToDrone(currentOrderQueue.get(0));
                                 currentOrderQueue.remove(0);
@@ -123,16 +127,19 @@ public class Simulation {
                                 //calculate tsp, remaining transit, then add the time it takes to get to the destination with current time
                                 //set the drones current location to the orders waypoint
                                 //adds the calculated delivery time to the delivery times list
+                                launched = true;
                             }
                         }
 
                         //when the drone is at the starting position and it's not within the first five minutes of the simulation
                     } else {
-                        while(times[currentOrder] <= currentTime){
+                        while(times[currentOrder] <= currentTime && canLoad){
                             if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
                                 drone.addOrderToDrone(currentOrderQueue.get(0));
                                 currentOrderQueue.remove(0);
                                 currentOrder++;
+                            } else {
+                                canLoad = false;
                             }
                         }
                         if(drone.getCurrentWeight() > 0){
