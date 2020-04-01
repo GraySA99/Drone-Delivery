@@ -1,7 +1,8 @@
 package Simulation;
 
-import Food.*;
-import Mapping.Waypoint;
+import Food.Food;
+import Food.Meal;
+import Food.Order;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -36,20 +37,20 @@ public class Simulation {
         times = new int[ordersPerHour[0] + ordersPerHour[1] + ordersPerHour[2] + ordersPerHour[3]];
 
         ArrayList<Food> temp = new ArrayList<Food>();
-        temp.add(new Hamburger());
-        temp.add(new Drink());
-        temp.add(new Fries());
+        //temp.add(new Hamburger());
+        //temp.add(new Drink());
+        //temp.add(new Fries());
 
         mealList.add(new Meal(temp, 0.55));
 
-        temp.add(new Hamburger());
+        //temp.add(new Hamburger());
         mealList.add(new Meal(temp, 0.1));
 
-        temp.remove(2);
-        temp.remove(2);
+        //temp.remove(2);
+        //temp.remove(2);
         mealList.add(new Meal(temp, 0.2));
 
-        temp.add(new Hamburger());
+        //temp.add(new Hamburger());
         mealList.add(new Meal(temp, 0.15));
     }
 
@@ -110,7 +111,7 @@ public class Simulation {
         //currentOrder tracks the current order. Will be used with the times array for checking
 
         while (currentOrderQueue.size() > 0 || drone.getNumOrders() > 0){
-            if(drone.getCurrentPosition().getIsStartingPoint()){
+            if(drone.getCurrentPosition().isStarting()){
                 launched = false;
                 canLoad = true;
                 if(drone.getTurnAroundTime() == 0){
