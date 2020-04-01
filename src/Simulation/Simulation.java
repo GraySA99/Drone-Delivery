@@ -103,54 +103,61 @@ public class Simulation {
     private void runFIFO(){
         //runs FIFO simulations
         //at start, wait for 5 min or until full
-        //go minute by minute. Update the current order queue with any new orders, see where the drone is. if its at the sac pick up orders.
-        //if not then let it keep doing its thing. Maybe store the time for the drones current route
         double currentTime = 0;
-        int remainingTransit = 0, overtime = 0, currentOrder; //remainingTransit will indicate how close a drone is to its current target position
-        //overtime will add additional minutes to the simulation if there are any last minute orders
+        int currentOrder = 0;
         //currentOrder tracks the current order. Will be used with the times array for checking
 
-        while (currentTime < (numShifts * 60) + overtime){
-            if(currentTime <= 5){ //and at the starting position (... && drone.getCurrentPosition())
+        while (currentOrderQueue.size() > 0 || drone.getNumOrders() > 0){
+            if(drone.getCurrentPosition().getIsStartingPoint()){
                 if(drone.getTurnAroundTime() == 0){
-                    //loading phase if anything is available
-                    //if conditions are met for the drone to leave, calculate tsp and start it on its route
+
+                    //when the drone is at the starting point and it's within the first five minutes of the simulation
+                    if(currentTime <= 5){
+                        //the drone will add any available orders if it can. If the drone is full then it will launch
+                        while(times[currentOrder] <= currentTime){
+                            if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
+                                drone.addOrderToDrone(currentOrderQueue.get(0));
+                                currentOrderQueue.remove(0);
+                                currentOrder++;
+                            } else { //launch
+                                //calculate tsp, remaining transit, then add the time it takes to get to the destination with current time
+                                //set the drones current location to the orders waypoint
+                                //adds the calculated delivery time to the delivery times list
+                            }
+                        }
+
+                        //when the drone is at the starting position and it's not within the first five minutes of the simulation
+                    } else {
+                        while(times[currentOrder] <= currentTime){
+                            if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
+                                drone.addOrderToDrone(currentOrderQueue.get(0));
+                                currentOrderQueue.remove(0);
+                                currentOrder++;
+                            }
+                        }
+                        if(drone.getCurrentWeight() > 0){
+                            //calculate tsp, remaining transit, then add the time it takes to get to the destination with current time
+                            //set the drones current location to the orders waypoint
+                            //adds the calculated delivery time to the delivery times list
+                        }
+
+                        //when the drone is not at the starting position but is at a waypoint
+                    }
                 } else {
-                    drone.setTurnAroundTime(drone.getTurnAroundTime() - 1);
-                    currentTime++;
+                    currentTime += drone.getTurnAroundTime();
+                    drone.setTurnAroundTime(0);
                 }
-            } /*else if(){//drone is at the starting position
-                if(drone.getTurnAroundTime() == 0){
-                    //loading phase if anything is available
-                    //calculate tsp and start the drone
-                } else {
-                    drone.setTurnAroundTime(drone.getTurnAroundTime() - 1);
-                    currentTime++;
-                }
-            }*/ else {//drove is not at the stating position
-                if(remainingTransit == 0){
-                    //if the drone is carrying nothing then it returns home
-                    //else call tsp/a list of destinations already found by tsp to get the drones next route
-                    //reset the drones target destination and the distance to get there
-                } else if (remainingTransit > 0){
-
-                }
+            } else {
+                //if the drone is carrying nothing then it returns home (Calculate distance to home)
+                //else call tsp/a list of destinations already found by tsp to get the drones next route
+                //reset the drones target destination and the distance to get there
+                //deliver the order (add appropriate time)
             }
-
-            if(currentTime >= (numShifts * 60) + overtime - 1){ //and if the current order queue is not empty and the drone is not empty
-                //the drone also must not be home
-                overtime++;
-            }
-
-            //the appropriate time needs added to the drone depending on if it delivered or traveled
         }
     }
 
     private void runKnapsack(){
         //runs knapsack simulations
-        //at start, wait for 5 min or until full
-        //go minute by minute. Update the current order queue with any new orders, see where the drone is. if its at the sac pick up orders.
-        //if not then let it keep doing its thing
         int currentTime = 0;
 
         while (currentTime < numShifts * 60){
