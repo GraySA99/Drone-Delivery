@@ -4,30 +4,28 @@ import java.util.Objects;
 
 public class Waypoint {
 
-    private String name;
     private double latitude;
     private double longitude;
+    private boolean isStartingPoint;
+    private String name;
 
-    public Waypoint(String n, double lat, double lng) {
-
+    public Waypoint(String n, double latitude, double longitude, boolean isStarting) {
+        latitude = latitude;
+        longitude = longitude;
+        isStartingPoint = isStarting;
         name = n;
-        latitude = lat;
-        longitude = lng;
-    }
-
-    public String getName() {
-
-        return name;
     }
 
     public double getLatitude() {
-
         return latitude;
     }
 
     public double getLongitude() {
-
         return longitude;
+    }
+  
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -43,5 +41,10 @@ public class Waypoint {
     @Override
     public int hashCode() {
         return Objects.hash(name, latitude, longitude);
+        return longitude;
+    }
+
+    public boolean isStarting() {
+        return isStartingPoint;
     }
 }

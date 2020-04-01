@@ -9,7 +9,85 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 -Added, Removed, Fixed, Changed, Renamed, Enabled, Disabled, ect...
 
 
-Version Version# Month/Day/Year
+Version Version# Month/Day/Yea
+
+Version 1/14/20
+-DataTransfer.java is a static class made for transfering live data between different parts of the application (Spencer)
+-The GUI adds all elements in, everything else should only access the data. (Spencer)
+-Food.java is no longer an abstract class as it has been deemed unnecessary. (Spencer)
+-Waypoint.java now has a constructor (Josh and Spencer)
+-Meal.java no longer uses an ArrayList<Food> to keep track of the food in the meal (Spencer)
+-Now food is tracked by a HashMap<Food, Integer> so that we can keep track of the amount of a certain food now too. (Spencer)
+
+Version 1.13.0 3/30/20
+-Adding a point now adds the name and the lat and lng of the point to the list (Spencer)
+
+Version 1.12.0 3/29/20
+-Added getIsStartingPoint method to Waypoint class (Patrick)
+-Added a variable to store the drones current weight and its corresponding getter (Patrick)
+-Added methods to the drone class for adding and removing orders which automatically recalculate the drone's current weight (Patrick)
+-Removed several variables from the FIFO simulation that were no longer needed (Patrick)
+-Changed what keeps the FIFO simulation looping as there was something much easier and smarter (Patrick)
+
+Version 1.11.0 3/28/20
+-Adding a point now adds the name and the lat and lng of the point to the list (Spencer)
+
+Version 1.10.0 3/26/20
+-Added initial TSP code (Josh)
+-Refactored to show data in test graph for ArrayList (Paul)
+-Fixed some Arraylists in simulation not being initialized in the right place (Patrick)
+
+Version 1.9.0 3/25/20
+-Added the isStartingPoint boolean to Waypoints (Patrick)
+-Clicking on the Google Map now adds the lat and long of the point clicked into the list (Spencer)
+(This is temporary but it proves that the data fetch worked)
+-Reorganized the Map Page (Spencer)
+-Clicking on the map now changes a temporary variable instead of adding it to the list (Spencer)
+-Polished Test Creation of Graph (Paul)
+-Can Actually Show Data in the Test (Paul)
+
+Version 1.8.0 3/24/20
+-Added the drones current turn around time and its getter and setter methods to the drone class (Patrick)
+-Added the default constructor in the Drone class
+-Implemented the copyOrderQueue method in the simulation class (Patrick)
+-Changed the targetPosition waypoint in drone to a list of target positions calculated with TSP (Patrick)
+-Changed the getTargetPosition method in drone to get the first position within the drone (Patrick)
+-Began implementing part of the FIFO method as well as continued planning it out in more depth (Patrick)
+
+Version 1.7.0 3/23/20
+-Some more kinks in storage changed and able to Display Graph with No Data (Paul)
+-Merge branch 'master' into Paul (Paul)
+-Refactor Displaying No Data Graph (Paul)
+-Live Map now loads onto Map page (Spencer)
+
+Version 1.6.0 3/22/20
+-Deleted Results class and Added OrderGenerator Class (Paul)
+-Created a Application to Test Making a Bar Graph (Paul)
+
+Version 1.5.0 3/18/20
+-Added parameterized constructor to the order class (Patrick)
+-Added times array to simulation class (Patrick)
+-Added the heapSort and createHeap methods for efficiently sorting the times array in the simulation class (Patrick)
+-Added the test class for testing non-gui code separately (Patrick)
+-Implemented the run simulation method in the simulation class (Patrick)
+-Began implementing the generateOrderQueue, runFIFO, and runKnapsack methods in the simulation class (Patrick)
+-Food Page adds and removes items in the list with some criteria (Spencer)
+-Meals Page now populated (Spencer)
+-Meals Page adds and removes items in the list with some criteria (Spencer)
+-Meals Page queries the Food page to get the list of food in the project (Spencer)
+
+Version 1.4.0 3/17/20
+-Made way to store average and worst in simulation (Paul)
+-Made average and worst variables able to be accessed from all classes (Paul)
+-Added the default and parameterized constructor to the meal class (Patrick)
+-Added the default and parameterized (unimplemented) constructor to the simulation class (Patrick)
+-Added the getNextRoute method to the simulation class (Patrick)
+-Changed the startSimulation method to runSimulation in the Simulation class (Patrick)
+-Removed the calculateTotalWeight method from the meals class and changed the add and remove item methods to be more efficient (Patrick)
+
+Version 1.3.0 3/16/20
+-Made Results Class with Get Average and Get Worst with added Functionality (Paul)
+-Food Page now populated with the objects it will have (Spencer)
 
 Version 1.2.0 3/14/20
 -Implemented the addItem and calculateTotalWeight (added documentation) methods in the meal class (Patrick)
@@ -20,6 +98,12 @@ to the drone class (Patrick)
 -Added the overall orderQueue, mealList, and the currentOrderQueue to the simulation class (Patrick)
 -Added the startSimulation (Unimplemented), generateOrderQueue (Unimplemented), copyOrderQueue (Unimplemented), runFIFO (Unimplemented) and
 runKnapsack (Unimplemented) methods to the simulation class (Patrick)
+-Side Menu properly changes between the four main screens (Spencer)
+-Side Menu has a hamburger button to get to secondary side menu (Spencer)
+-Secondary Side Menu buttons are non-functional except for Quit (Spencer)
+-Clicking all main screens when secondary side menu closes the secondary side menu (Spencer)
+-Styles data class created to track CSS styles of all objects (Spencer)
+-Values data class created to track certain properties of all objects (Spencer)
 
 Version 1.1.0 3/13/20
 -Added the Food (abstract), Meal, Order, Map, Waypoint, Drone, and Simulation classes (Patrick)

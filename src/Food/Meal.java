@@ -9,8 +9,22 @@ public class Meal {
     private HashMap<Food, Integer> foodList = new HashMap<>();
     private String name;
 
+
     public Meal(){
-        //any constructors that create meals with items in them (can have them take an array of food) must add up the weight
+        totalWeight = 0;
+        probability = 0;
+        foodList = new ArrayList<Food>();
+    }
+
+    public Meal(ArrayList<Food> list, double p){
+        totalWeight = 0;
+        probability = p;
+        foodList = new ArrayList<Food>();
+
+        for(int i = 0; i < list.size(); i++){
+            foodList.add(list.get(i));
+            totalWeight += list.get(i).getWeight();
+        }
     }
 
     public Meal(String n, HashMap<Food, Integer> fList, double prob) {
@@ -60,6 +74,7 @@ public class Meal {
         }
 
         return false;
+
     }
 
     public double getTotalWeight(){
