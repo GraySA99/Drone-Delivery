@@ -11,14 +11,13 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Yea
 
-Version 1.14.0 4/1/20
+Version 1/14/20
 -DataTransfer.java is a static class made for transfering live data between different parts of the application (Spencer)
 -The GUI adds all elements in, everything else should only access the data. (Spencer)
 -Food.java is no longer an abstract class as it has been deemed unnecessary. (Spencer)
 -Waypoint.java now has a constructor (Josh and Spencer)
 -Meal.java no longer uses an ArrayList<Food> to keep track of the food in the meal (Spencer)
 -Now food is tracked by a HashMap<Food, Integer> so that we can keep track of the amount of a certain food now too. (Spencer)
--Fixed several errors in the Simulation and Waypoint classes after merge. (Patrick)
 
 Version 1.13.0 3/30/20
 -Adding a point now adds the name and the lat and lng of the point to the list (Spencer)
