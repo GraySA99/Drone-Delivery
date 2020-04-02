@@ -22,7 +22,7 @@ public class Meal {
         foodList = new HashMap<Food, Integer>();
 
         for(int i = 0; i < list.size(); i++){
-            //foodList.add(list.get(i));
+            //foodList.put(list.get(i));
             totalWeight += list.get(i).getWeight();
         }
     }
