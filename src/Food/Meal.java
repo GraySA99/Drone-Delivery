@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class Meal {
     private double probability, totalWeight;
-    private HashMap<Food, Integer> foodList = new HashMap<>();
+    private HashMap<Food, Integer> foodList;
     private String name;
 
 
@@ -21,8 +21,20 @@ public class Meal {
         probability = p;
         foodList = new HashMap<Food, Integer>();
 
-        for(int i = 0; i < list.size(); i++){
-            //foodList.put(list.get(i));
+        for(int i = 0; i < list.size(); i++){ //I don't think this accounting for more than one food of a given type
+            foodList.put(list.get(i), 1);
+            totalWeight += list.get(i).getWeight();
+        }
+    }
+
+    public Meal(String n, ArrayList<Food> list, double p){
+        totalWeight = 0;
+        probability = p;
+        foodList = new HashMap<Food, Integer>();
+        name = n;
+
+        for(int i = 0; i < list.size(); i++){ //I don't think this accounting for more than one food of a given type
+            foodList.put(list.get(i), 1);
             totalWeight += list.get(i).getWeight();
         }
     }

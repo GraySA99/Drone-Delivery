@@ -9,7 +9,17 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 -Added, Removed, Fixed, Changed, Renamed, Enabled, Disabled, ect...
 
 
-Version Version# Month/Day/Yea
+Version Version# Month/Day/Year
+
+Version 1.15.0 4/2/20
+-Added the map parameter to both Simulation constructors, as well as the simMap variable (Patrick)
+-Added setStartingPoint method to Waypoint class (Patrick)
+-Added startPoint, mapPoints list, the getStartingPoint, getMapPoint, and constructor taking a starting point and list of points to the
+map class (Patrick)
+-Added documentation for the copyOrderQueue and the generateOrderQueue methods in the simulation class (Patrick)
+-Fully added the ability for the simulation class to generate orders. (Patrick)
+-Fixed the hardcoded defaults for the simulation (Patrick)
+-Fixed several errors with the order generation, including null pointers, and not all points being used (Patrick)
 
 Version 1.14.0 4/1/20
 -DataTransfer.java is a static class made for transferring live data between different parts of the application (Spencer)
