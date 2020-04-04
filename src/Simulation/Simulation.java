@@ -3,20 +3,17 @@ package Simulation;
 import Food.Food;
 import Food.Meal;
 import Food.Order;
-import Mapping.Waypoint;
 import Mapping.Map;
 import Mapping.Waypoint;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Simulation {
     private ArrayList<Order> orderQueue;
     private ArrayList<Meal> mealList; //stores all different possible meals. Will be passed on constructor
     private ArrayList<Order> currentOrderQueue; //for knapsack, skipped orders are prioritized and to a priority list
     private int numShifts, timesToBeRan; //passed in constructor, stores number of hours to do the simulation and number of dif sims
-    private int[] ordersPerHour, times;
+    public int[] ordersPerHour, times;
     private Map simMap;
 
     //Creation of drone for testing purposes at this point
