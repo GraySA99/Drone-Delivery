@@ -15,8 +15,8 @@ public class Simulation {
     private ArrayList<Meal> mealList; //stores all different possible meals. Will be passed on constructor
     private ArrayList<Order> currentOrderQueue; //for knapsack, skipped orders are prioritized and to a priority list
     private int numShifts, timesToBeRan; //passed in constructor, stores number of hours to do the simulation and number of dif sims
-    public int[] ordersPerHour, times;
-    public Map simMap;
+    private int[] ordersPerHour, times;
+    private Map simMap;
 
     //Creation of drone for testing purposes at this point
     public Drone drone = new Drone();
@@ -164,9 +164,9 @@ public class Simulation {
         //sorts the times array from least to greatest
         heapSort(times);
 
-        for(int r = 0; r < orderQueue.size(); r++){
+        /*for(int r = 0; r < orderQueue.size(); r++){
             System.out.println("At time " + times[r] + " An order with " + orderQueue.get(r).getMeal().getName() + " to " + orderQueue.get(r).getDestination().getName() + " will appear in the queue.");
-        }
+        }*/
     }
 
     /**
