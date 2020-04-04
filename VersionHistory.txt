@@ -11,6 +11,10 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
+Version 1.16.0 4/4/20
+-Cleaned Up code and make some sub classes so that the main pages were easier to read - will look into doing that more in the future. (Spencer)
+-Results page can be found under the Results button in the hamburger menu; however, once you go there you can go back yet (Spencer)
+
 Version 1.15.0 4/2/20
 -Added the map parameter to both Simulation constructors, as well as the simMap variable (Patrick)
 -Added setStartingPoint method to Waypoint class (Patrick)
