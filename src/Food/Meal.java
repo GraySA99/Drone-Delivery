@@ -13,16 +13,16 @@ public class Meal {
     public Meal(){
         totalWeight = 0;
         probability = 0;
-        foodList = new ArrayList<Food>();
+        //foodList = new ArrayList<Food>();
     }
 
     public Meal(ArrayList<Food> list, double p){
         totalWeight = 0;
         probability = p;
-        foodList = new ArrayList<Food>();
+        //foodList = new ArrayList<Food>();
 
         for(int i = 0; i < list.size(); i++){
-            foodList.add(list.get(i));
+            //foodList.add(list.get(i));
             totalWeight += list.get(i).getWeight();
         }
     }

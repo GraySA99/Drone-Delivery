@@ -28,14 +28,16 @@ public class SideMenu extends ToolBar {
     private BorderPane rootMenu;
     private Integer activeScene;
     private ToolBar secondaryMenu;
+    private Stage primaryStage;
 
-    public SideMenu(Pane[] panes, BorderPane rM) {
+    public SideMenu(Pane[] panes, BorderPane rM, Stage pM) {
 
         // Set Up
         super();
         menues = new HashMap<Button, Integer>();
         activeScene = 1;
         rootMenu = rM;
+        primaryStage = pM;
         Button sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn;
         pages = panes.clone();
         this.setOrientation(Orientation.VERTICAL);
@@ -168,7 +170,7 @@ public class SideMenu extends ToolBar {
             results.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
 
-
+                    primaryStage.getScene().setRoot(new ResultsPage());
                 }
             });
 

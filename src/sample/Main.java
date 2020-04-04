@@ -49,7 +49,7 @@ public class Main extends Application {
         FoodPage foodPage = new FoodPage();
         MealsPage mealsPage = new MealsPage();
         ShiftsPage shiftsPage = new ShiftsPage();
-        sideMenu = new SideMenu(new Pane[]{mapPage, foodPage, mealsPage, shiftsPage}, root);
+        sideMenu = new SideMenu(new Pane[]{mapPage, foodPage, mealsPage, shiftsPage}, root, primaryStage);
 
         // Root Setup
         root.setLeft(sideMenu);

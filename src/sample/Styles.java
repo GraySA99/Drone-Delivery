@@ -2,6 +2,9 @@ package sample;
 
 public class Styles {
 
+    public static final String resultsBottomFrame = ""
+            + "-fx-border-style: solid hidden hidden hidden;\n";
+
     public static final String currentPointLabel = ""
             + "-fx-font-size: 55px;\n";
 

@@ -30,21 +30,8 @@ public class MapPage extends BorderPane {
     public MapPage() {
 
         super(); // Super Constructor
-
         this.setStyle(Styles.mapPage);
-        Text pageTitleLabel = new Text("Maps");
-        HBox pageTitle = new HBox();
-        pageTitle.setStyle(Styles.pageTitle);
-        HBox pageTitleLabelContainer = new HBox();
-        HBox pageTitleES1 = new HBox();
-        HBox pageTitleES2 = new HBox();
-        HBox.setHgrow(pageTitleES1, Priority.ALWAYS);
-        HBox.setHgrow(pageTitleES2, Priority.ALWAYS);
-        HBox.setHgrow(pageTitle, Priority.ALWAYS);
-        pageTitleLabelContainer.getChildren().add(pageTitleLabel);
-        pageTitle.getChildren().addAll(pageTitleES1, pageTitleLabelContainer, pageTitleES2);
-        pageTitleLabel.setStyle(Styles.pageTitleLabel);
-        pageTitleLabelContainer.setStyle(Styles.pageTitleLabelContainer);
+        PageTitle pageTitle = new PageTitle("Map");
 
         // Left Side - Point List
         StackPane DPListContainer = new StackPane();
@@ -121,7 +108,7 @@ public class MapPage extends BorderPane {
                         currentPointLabel.setText(((Text)frame.getChildren().get(2)).getText());
                     });
 
-                    DataTransfer.addWaypoint(new Waypoint(name, lat, lng));
+                    DataTransfer.addWaypoint(new Waypoint(name, lat, lng, DPList.getItems().isEmpty()));
 
                     javascriptConnector.call("addMarker", name);
                     DPList.getItems().add(frame);
