@@ -21,19 +21,8 @@ public class FoodPage extends BorderPane {
 
         super(); // Super Constructor
         this.setStyle(Styles.foodPage);
-        Text pageTitleLabel = new Text("Food Items");
-        HBox pageTitle = new HBox();
-        pageTitle.setStyle(Styles.pageTitle);
-        HBox pageTitleLabelContainer = new HBox();
-        HBox pageTitleES1 = new HBox();
-        HBox pageTitleES2 = new HBox();
-        HBox.setHgrow(pageTitleES1, Priority.ALWAYS);
-        HBox.setHgrow(pageTitleES2, Priority.ALWAYS);
-        HBox.setHgrow(pageTitle, Priority.ALWAYS);
-        pageTitleLabelContainer.getChildren().add(pageTitleLabel);
-        pageTitle.getChildren().addAll(pageTitleES1, pageTitleLabelContainer, pageTitleES2);
-        pageTitleLabel.setStyle(Styles.pageTitleLabel);
-        pageTitleLabelContainer.setStyle(Styles.pageTitleLabelContainer);
+
+        PageTitle pageTitle = new PageTitle("Food Items");
 
         // Left Side - The List of Entered Food
         StackPane foodListContainer = new StackPane();
@@ -71,10 +60,8 @@ public class FoodPage extends BorderPane {
 
                 HBox foodItemFrame = new HBox();
                 Text foodItemName = new Text(name);
-                HBox emptySpace = new HBox();
-                HBox.setHgrow(emptySpace, Priority.ALWAYS);
                 Text foodItemWeight = new Text(weight + " oz.");
-                foodItemFrame.getChildren().addAll(foodItemName, emptySpace, foodItemWeight);
+                foodItemFrame.getChildren().addAll(foodItemName, new ESHBox(), foodItemWeight);
                 foodItemFrame.setOnMouseClicked(evt -> {
 
                     String foodName = ((Text)foodItemFrame.getChildren().get(0)).getText();

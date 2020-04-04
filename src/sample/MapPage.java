@@ -23,21 +23,8 @@ public class MapPage extends BorderPane {
     public MapPage() {
 
         super(); // Super Constructor
-
         this.setStyle(Styles.mapPage);
-        Text pageTitleLabel = new Text("Maps");
-        HBox pageTitle = new HBox();
-        pageTitle.setStyle(Styles.pageTitle);
-        HBox pageTitleLabelContainer = new HBox();
-        HBox pageTitleES1 = new HBox();
-        HBox pageTitleES2 = new HBox();
-        HBox.setHgrow(pageTitleES1, Priority.ALWAYS);
-        HBox.setHgrow(pageTitleES2, Priority.ALWAYS);
-        HBox.setHgrow(pageTitle, Priority.ALWAYS);
-        pageTitleLabelContainer.getChildren().add(pageTitleLabel);
-        pageTitle.getChildren().addAll(pageTitleES1, pageTitleLabelContainer, pageTitleES2);
-        pageTitleLabel.setStyle(Styles.pageTitleLabel);
-        pageTitleLabelContainer.setStyle(Styles.pageTitleLabelContainer);
+        PageTitle pageTitle = new PageTitle("Map");
 
         // Left Side - Point List
         StackPane DPListContainer = new StackPane();
@@ -52,35 +39,21 @@ public class MapPage extends BorderPane {
         VBox pointEntryContainer = new VBox();
 
         HBox nameContainer = new HBox();
-        HBox nameEmptySpaceOne = new HBox();
-        HBox nameEmptySpaceTwo = new HBox();
-        HBox.setHgrow(nameEmptySpaceOne, Priority.ALWAYS);
-        HBox.setHgrow(nameEmptySpaceTwo, Priority.ALWAYS);
         Text nameLabel = new Text("Name:");
         TextField nameEnt = new TextField();
         nameEnt.setPromptText("ex. Home");
-        nameContainer.getChildren().addAll(nameEmptySpaceOne, nameLabel, nameEnt, nameEmptySpaceTwo);
+        nameContainer.getChildren().addAll(new ESHBox(), nameLabel, nameEnt, new ESHBox());
 
         HBox currentPointContainer = new HBox();
-        HBox currentPointEmptySpaceOne = new HBox();
-        HBox currentPointEmptySpaceTwo = new HBox();
-        HBox.setHgrow(currentPointEmptySpaceOne, Priority.ALWAYS);
-        HBox.setHgrow(currentPointEmptySpaceTwo, Priority.ALWAYS);
         currentPointLabel = new Text("(, )");
         currentPointLabel.setStyle(Styles.currentPointLabel);
         currentPointContainer.getChildren().addAll(
-                currentPointEmptySpaceOne,
+                new ESHBox(),
                 currentPointLabel,
-                currentPointEmptySpaceTwo
+                new ESHBox()
         );
 
         HBox addRemoveContainer = new HBox();
-        HBox addRemoveEmptySpaceOne = new HBox();
-        HBox addRemoveEmptySpaceTwo = new HBox();
-        HBox addRemoveEmptySpaceThree = new HBox();
-        HBox.setHgrow(addRemoveEmptySpaceOne, Priority.ALWAYS);
-        HBox.setHgrow(addRemoveEmptySpaceTwo, Priority.ALWAYS);
-        HBox.setHgrow(addRemoveEmptySpaceThree, Priority.ALWAYS);
         Button addDP = new Button("Add");
         Button removeDP = new Button("Remove");
 
@@ -102,11 +75,9 @@ public class MapPage extends BorderPane {
                     double lng = Double.parseDouble(cords[1].substring(0, cords[1].length()-1));
 
                     HBox frame = new HBox();
-                    HBox frameEmptySpace = new HBox();
-                    HBox.setHgrow(frameEmptySpace, Priority.ALWAYS);
                     Text frameName = new Text(name);
                     Text frameData = new Text(String.format("(%.5f, %.5f)", lat, lng));
-                    frame.getChildren().addAll(frameName, frameEmptySpace, frameData);
+                    frame.getChildren().addAll(frameName, new ESHBox(), frameData);
 
                     frame.setOnMouseClicked(evt -> {
 
@@ -114,7 +85,7 @@ public class MapPage extends BorderPane {
                         currentPointLabel.setText(((Text)frame.getChildren().get(2)).getText());
                     });
 
-                    DataTransfer.addWaypoint(new Waypoint(name, lat, lng));
+                    DataTransfer.addWaypoint(new Waypoint(name, lat, lng, DPList.getItems().isEmpty()));
 
                     javascriptConnector.call("addMarker", name);
                     DPList.getItems().add(frame);
@@ -153,11 +124,11 @@ public class MapPage extends BorderPane {
         });
 
         addRemoveContainer.getChildren().addAll(
-                addRemoveEmptySpaceOne,
+                new ESHBox(),
                 addDP,
-                addRemoveEmptySpaceTwo,
+                new ESHBox(),
                 removeDP,
-                addRemoveEmptySpaceThree
+                new ESHBox()
         );
 
         StackPane webContainer = new StackPane();
