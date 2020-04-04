@@ -365,34 +365,10 @@ public class Simulation {
         //will use the drones current location and current orders to solve the traveling salesman problem
         //This is the same as my main in BackTrackingTSP.java - Josh
 
-        // orders will be passed in
-        //ArrayList<Order> orders = new ArrayList<>();
-
         // I'll need to automatically put the SAC as the starting point
         Waypoint sac = new Waypoint("SAC", 41.154870, -80.077945, true);
-
-        //This will obviously all come from the orders list
-        //ArrayList<Waypoint> waypoints = new ArrayList<>();
-        //waypoints.add(new Waypoint("Ketler", 41.155468, -80.080485, false));
-        //waypoints.add(new Waypoint("Memorial", 41.155074, -80.081892, false));
-        //waypoints.add(new Waypoint("Football", 41.156870, -80.084683, false));
-        //waypoints.add(new Waypoint("MAP", 41.156778, -80.079591, false));
-        //waypoints.add(new Waypoint("HAL", 41.154607, -80.077311, false));
-
-        //for(int i = 0; i < waypoints.size(); i++) {
-            //orders.add(new Order(waypoints.get(i)));
-        //}
         orders.add(0, new Order(new Meal(), sac));
 
-        /*
-        for(int i = 0; i < orders.size(); i++) {
-            System.out.print(i + ": ");
-            System.out.print(orders.get(i).getDestination().getName() + ": ");
-            System.out.print(orders.get(i).getDestination().getLatitude() + ", ");
-            System.out.print(orders.get(i).getDestination().getLongitude());
-            System.out.println("");
-        }
-        */
 
         int numNodes = orders.size();
         double[][] graph = new double[numNodes][numNodes];
@@ -413,16 +389,6 @@ public class Simulation {
             }
         }
 
-        //For testing purposes, print the graph
-        /*
-        for(int i = 0; i < numNodes; i++) {
-            for(int j = 0; j < numNodes; j++) {
-                System.out.printf("%.6f ", graph[i][j]);
-            }
-            System.out.println("");
-        }
-        */
-
         int[] solution = new int[numNodes + 1];
         int[] bestSolution = new int[numNodes + 1];
         for(int i = 0; i < numNodes + 1; i++) {
@@ -434,35 +400,16 @@ public class Simulation {
         for(int i = 0; i < numNodes; i++)
             visited[i] = false;
 
-        //Calculate the best solution
         bestSolution = tspRoute(graph, solution, bestSolution, visited, 0, 0, numNodes);
-
-        System.out.println("BEST SOLUTION:");
-        double bestCost = 0;
-        for(int i = 1; i < bestSolution.length; i++) {
-            int node1 = bestSolution[i - 1];
-            int node2 = bestSolution[i];
-            System.out.printf("%d >(+%.6f)> ", node1, graph[node1][node2]);
-            if(i == bestSolution.length - 1)
-                System.out.print(node2);
-            bestCost += graph[node1][node2];
-        }
-        System.out.printf(", COST: %.6f\n", bestCost);
 
         //Reorder 'orders', at this point, it's "SAC", "HAL", "Ketler",...
         ArrayList<Order> sortedOrders = new ArrayList<>();
 
         // We want to start at the first
         for(int i = 1; i < bestSolution.length - 1; i++) {
+            //System.out.println("Putting the " + bestSolution[i] + "th index of orders in sortedOrders");
             sortedOrders.add(orders.get(bestSolution[i]));
         }
-
-        /*
-        System.out.println("\nFINAL TRIP:");
-        for(int i = 0; i < sortedOrders.size(); i++) {
-            System.out.println(sortedOrders.get(i).getDestination().getName());
-        }
-        */
 
         return sortedOrders;
 
