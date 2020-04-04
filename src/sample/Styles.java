@@ -2,6 +2,24 @@ package sample;
 
 public class Styles {
 
+    public static final String resultsDataFrame = ""
+            + "-fx-padding: 0px 0px 0px 150px;\n";
+
+    public static final String resultsDeliveryTime = ""
+            + "-fx-font-size: 25px;\n"
+            + "-fx-font-weight: normal;\n";
+
+    public static final String resultsDeliveryTypeLabel = ""
+            + "-fx-font-size: 45px;\n"
+            + "-fx-font-weight: bolder";
+
+    public static final String FIFODataFrame = ""
+            + "-fx-border-style: hidden hidden solid hidden;\n"
+            + "-fx-padding: 0px 0px 75px 0px;\n";
+
+    public static final String resultsButtonFrame = ""
+            + "-fx-border-style: solid hidden hidden hidden;\n";
+
     public static final String currentPointLabel = ""
             + "-fx-font-size: 55px;\n";
 

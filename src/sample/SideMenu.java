@@ -25,17 +25,15 @@ public class SideMenu extends ToolBar {
 
     private HashMap<Button, Integer> menues;
     private Pane[] pages;
-    private BorderPane rootMenu;
     private Integer activeScene;
     private ToolBar secondaryMenu;
 
-    public SideMenu(Pane[] panes, BorderPane rM) {
+    public SideMenu(Pane[] panes, BorderPane rM, Stage pM) {
 
         // Set Up
         super();
         menues = new HashMap<Button, Integer>();
         activeScene = 1;
-        rootMenu = rM;
         Button sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn;
         pages = panes.clone();
         this.setOrientation(Orientation.VERTICAL);
@@ -47,15 +45,11 @@ public class SideMenu extends ToolBar {
         setUpSecondaryMenu();
 
         HBox title = new HBox();
-        HBox titleEmptySpace = new HBox();
-        HBox titleEmptySpace2 = new HBox();
         HBox.setHgrow(title, Priority.ALWAYS);
-        HBox.setHgrow(titleEmptySpace, Priority.ALWAYS);
-        HBox.setHgrow(titleEmptySpace2, Priority.ALWAYS);
         title.setMaxSize(Values.sideMenuBtnWidth, Values.sideMenuBtnHeight);
         Text titleLabel = new Text("AzureSim");
         Button titleBtn = new Button("|||");
-        title.getChildren().addAll(titleEmptySpace2, titleLabel, titleEmptySpace, titleBtn);
+        title.getChildren().addAll(new ESHBox(), titleLabel, new ESHBox(), titleBtn);
         title.setStyle(Styles.sideMenuTitle);
         titleLabel.setStyle(Styles.sideMenuTitleText);
         HamburgerButtonSetup(titleBtn);
@@ -78,14 +72,8 @@ public class SideMenu extends ToolBar {
         menues.put(sideMenuMealsBtn, Values.mealsMenuID);
         menues.put(sideMenuShiftsBtn, Values.shiftsMenuID);
 
-        SideMenuOnHover(sideMenuMapBtn);
-        SideMenuOnHover(sideMenuFoodBtn);
-        SideMenuOnHover(sideMenuMealsBtn);
-        SideMenuOnHover(sideMenuShiftsBtn);
-        SideMenuOnClick(sideMenuMapBtn);
-        SideMenuOnClick(sideMenuFoodBtn);
-        SideMenuOnClick(sideMenuMealsBtn);
-        SideMenuOnClick(sideMenuShiftsBtn);
+        SideMenuOnHover(new Button[]{sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn});
+        SideMenuOnClick(new Button[]{sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn});
 
         this.getItems().addAll(title, sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn);
     }
@@ -97,15 +85,15 @@ public class SideMenu extends ToolBar {
 
     public boolean isOnSecondaryScreen() {
 
-        return rootMenu.getLeft().equals(secondaryMenu);
+        return Values.rootPage.getLeft().equals(secondaryMenu);
     }
 
     public void swapMenues() {
 
         if (isOnSecondaryScreen()) {
-            rootMenu.setLeft(this);
+            Values.rootPage.setLeft(this);
         } else {
-            rootMenu.setLeft(secondaryMenu);
+            Values.rootPage.setLeft(secondaryMenu);
         }
     }
 
@@ -168,7 +156,7 @@ public class SideMenu extends ToolBar {
             results.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
 
-
+                    Values.primaryStage.getScene().setRoot(new ResultsPage());
                 }
             });
 
@@ -184,9 +172,7 @@ public class SideMenu extends ToolBar {
             }
         }
 
-        VBox emptySpace = new VBox();
-        VBox.setVgrow(emptySpace, Priority.ALWAYS);
-        secondaryMenu.getItems().addAll(start, save, results, emptySpace, quit);
+        secondaryMenu.getItems().addAll(start, save, results, new ESHBox(), quit);
 
         for (Pane p : pages) {
 
@@ -220,39 +206,45 @@ public class SideMenu extends ToolBar {
         });
     }
 
-    private void SideMenuOnHover(Button b) {
+    private void SideMenuOnHover(Button[] buttons) {
 
-        b.styleProperty().bind(
-                Bindings.when(b.hoverProperty())
-                        .then(
-                                new SimpleStringProperty(getButtonStyle(b, true))
-                        )
-                        .otherwise(
-                                new SimpleStringProperty(getButtonStyle(b, false))
-                        )
-        );
+        for (Button b : buttons) {
+
+            b.styleProperty().bind(
+                    Bindings.when(b.hoverProperty())
+                            .then(
+                                    new SimpleStringProperty(getButtonStyle(b, true))
+                            )
+                            .otherwise(
+                                    new SimpleStringProperty(getButtonStyle(b, false))
+                            )
+            );
+        }
     }
 
-    private void SideMenuOnClick(Button b) {
+    private void SideMenuOnClick(Button[] buttons) {
 
-        b.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+        for (Button b : buttons) {
 
-                activeScene = menues.get(b);
+            b.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
 
-                if (activeScene.equals(Values.mealsMenuID)) {
+                    activeScene = menues.get(b);
 
-                    ((MealsPage)(pages[activeScene-1])).setFoodFrame();
+                    if (activeScene.equals(Values.mealsMenuID)) {
+
+                        ((MealsPage)(pages[activeScene-1])).setFoodFrame();
+                    }
+
+                    Values.rootPage.setCenter(pages[activeScene-1]);
+                    for (Button btn : menues.keySet()) {
+
+                        btn.styleProperty().unbind();
+                        SideMenuOnHover(new Button[]{btn});
+                    }
                 }
-
-                rootMenu.setCenter(pages[activeScene-1]);
-                for (Button btn : menues.keySet()) {
-
-                    btn.styleProperty().unbind();
-                    SideMenuOnHover(btn);
-                }
-            }
-        });
+            });
+        }
     }
 
     private String getButtonStyle(Button b, boolean isHover) {
