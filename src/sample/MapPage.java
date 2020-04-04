@@ -2,7 +2,6 @@ package sample;
 
 import Mapping.Waypoint;
 import Simulation.DataTransfer;
-import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,12 +13,6 @@ import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.DecimalFormat;
-import java.util.HashMap;
 
 public class MapPage extends BorderPane {
 

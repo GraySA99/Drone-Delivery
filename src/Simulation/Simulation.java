@@ -3,6 +3,9 @@ package Simulation;
 import Food.Food;
 import Food.Meal;
 import Food.Order;
+import Mapping.Waypoint;
+import Mapping.Map;
+import Mapping.Waypoint;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -13,15 +16,18 @@ public class Simulation {
     private ArrayList<Meal> mealList; //stores all different possible meals. Will be passed on constructor
     private ArrayList<Order> currentOrderQueue; //for knapsack, skipped orders are prioritized and to a priority list
     private int numShifts, timesToBeRan; //passed in constructor, stores number of hours to do the simulation and number of dif sims
-    public int[] ordersPerHour, times;
-    //assign a value to every order in queue, grab the heaviest and put it in the bag, then next heaviest, then so forth. if it fits, put it in.
-    //skipped me counter, make sure skipped meals are prioritized
+    private int[] ordersPerHour, times;
+    private Map simMap;
+
     //Creation of drone for testing purposes at this point
     public Drone drone = new Drone();
 
-    //the check for adding the probabilities needs to be somewhere. Should be outside of this class
-    //for simulations with default settings ie sprint 1
     public Simulation(){
+        ArrayList<Waypoint> testPoints = new ArrayList<Waypoint>();
+        testPoints.add(new Waypoint("Point 1", 1, 1, true));
+        testPoints.add(new Waypoint("Point 2", 2, 1, true));
+        testPoints.add(new Waypoint("Point 3", 3, 1, true));
+        simMap = new Map(new Waypoint("Starting", 0, 0, true), testPoints);
         orderQueue = new ArrayList<Order>();
         mealList = new ArrayList<Meal>();
         currentOrderQueue = new ArrayList<Order>();
@@ -37,25 +43,65 @@ public class Simulation {
         times = new int[ordersPerHour[0] + ordersPerHour[1] + ordersPerHour[2] + ordersPerHour[3]];
 
         ArrayList<Food> temp = new ArrayList<Food>();
-        //temp.add(new Hamburger());
-        //temp.add(new Drink());
-        //temp.add(new Fries());
+        temp.add(new Food("Hamburger", 0.375));
+        temp.add(new Food("Drink", 0.875));
+        temp.add(new Food("Fries", 0.25));
+
+        mealList.add(new Meal("One of Each", temp, 0.55));
+
+        temp.add(new Food("Hamburger", 0.375));
+        mealList.add(new Meal("Two burgers, one drink, one fry", temp, 0.1));
+
+        temp.remove(2);
+        temp.remove(2);
+        mealList.add(new Meal("Burger and Drink", temp, 0.2));
+
+        temp.add(new Food("Hamburger", 0.375));
+        mealList.add(new Meal("Two Burgers and a Drink", temp, 0.15));
+    }
+
+    //the check for adding the probabilities needs to be somewhere. Should be outside of this class
+    //for simulations with default settings ie sprint 1
+    public Simulation(Map m){
+        simMap = m;
+        orderQueue = new ArrayList<Order>();
+        mealList = new ArrayList<Meal>();
+        currentOrderQueue = new ArrayList<Order>();
+
+        numShifts = 4;
+        ordersPerHour = new int[numShifts];
+        timesToBeRan = 1;
+        ordersPerHour[0] = 15;
+        ordersPerHour[1] = 17;
+        ordersPerHour[2] = 22;
+        ordersPerHour[3] = 15;
+
+        times = new int[ordersPerHour[0] + ordersPerHour[1] + ordersPerHour[2] + ordersPerHour[3]];
+
+        ArrayList<Food> temp = new ArrayList<Food>();
+        temp.add(new Food("Hamburger", 0.375));
+        temp.add(new Food("Drink", 0.875));
+        temp.add(new Food("Fries", 0.25));
 
         mealList.add(new Meal(temp, 0.55));
 
-        //temp.add(new Hamburger());
+        temp.add(new Food("Hamburger", 0.375));
         mealList.add(new Meal(temp, 0.1));
 
-        //temp.remove(2);
-        //temp.remove(2);
+        temp.remove(2);
+        temp.remove(2);
         mealList.add(new Meal(temp, 0.2));
 
-        //temp.add(new Hamburger());
+        temp.add(new Food("Hamburger", 0.375));
         mealList.add(new Meal(temp, 0.15));
     }
 
-    public Simulation(int numberOfShifts, int timesToRun, ArrayList<Meal> listOfMeals, int[] avgOrdersEachHour){
+    public Simulation(int numberOfShifts, int timesToRun, ArrayList<Meal> listOfMeals, int[] avgOrdersEachHour, Map m){
         //this will be used when we start having settings for the simulation
+        numShifts = numberOfShifts;
+        timesToBeRan = timesToRun;
+        //deep copy of meals list
+
     }
 
     public void runSimulation(){
@@ -77,26 +123,57 @@ public class Simulation {
         //drones must be reset before each simulation
     }
 
+    /**
+     * Generates a list of random orders and puts them in the simulations order queue. Uses the probabilities for each order to appear and
+     * randomly selects a point on the map to generate the specified number of orders in each hour using the meals available in the meals list.
+     */
     private void generateOrderQueue(){
-        int count = 0;
+        int count = 0, curPos, mapPos;
+        double prob, curProb;
+        boolean found;
 
+        //clears out the previous order queue
         for(int r = orderQueue.size(); r > 0; r--){
             orderQueue.remove(r - 1);
         }
 
         for(int i = 0; i < numShifts; i++){
             for(int j = 0; j < ordersPerHour[i]; j++){
-                //orderQueue.add(new Order(mealList.get((int)(Math.random() * ((mealList.size() - 1) + 1))), )); //need a way to get a list of destinations
+                curProb = 0;
+                curPos = 0;
+                found = false;
+
+                //generates orders according to their given probabilities
+                prob = (Math.random()*(1));
+                while(curPos < mealList.size() && !found){
+                    //System.out.println("The probability is " + prob + "\tThe Current pos is " + curPos + "\t Im checking if it's under " + mealList.get(curPos).getProbability() + curProb + "\twhich equals " + mealList.get(curPos).getProbability() + "+" + curProb);
+                    if(prob < mealList.get(curPos).getProbability() + curProb){
+                        found = true;
+                    } else {
+                        curProb += mealList.get(curPos).getProbability();
+                        curPos++;
+                    }
+                }
+                //finds a random delivery location to give an order based off of the current map
+                mapPos = ((int) (Math.random()*(simMap.getSize())));
+                orderQueue.add(new Order(mealList.get(curPos), simMap.getMapPoint(mapPos)));
                 times[count] = (i * 60) + (int) (1 + Math.random() * ((60 - 1) + 1));
                 count++;
             }
         }
 
+        //sorts the times array from least to greatest
         heapSort(times);
+
+        /*for(int r = 0; r < orderQueue.size(); r++){
+            System.out.println("At time " + times[r] + " An order with " + orderQueue.get(r).getMeal().getName() + " to " + orderQueue.get(r).getDestination().getName() + " will appear in the queue.");
+        }*/
     }
 
+    /**
+     * Creates a deep copy of the orderQueue and stores it in currentOrderQueue to allow modifications during a simulation
+     */
     private void copyOrderQueue(){
-        //makes a deep copy of the orderQueue and makes in into a priority queue
         for(int i = 0; i < orderQueue.size(); i++){
             currentOrderQueue.add(orderQueue.get(i));
         }
@@ -167,7 +244,8 @@ public class Simulation {
     private void runKnapsack(){
         //runs knapsack simulations
         int currentTime = 0;
-
+        //assign a value to every order in queue, grab the heaviest and put it in the bag, then next heaviest, then so forth. if it fits, put it in.
+        //skipped me counter, make sure skipped meals are prioritized
         while (currentTime < numShifts * 60){
             //fifo
         }
@@ -286,78 +364,29 @@ public class Simulation {
     private ArrayList<Order> sortOrders(ArrayList<Order> orders) {
         //will use the drones current location and current orders to solve the traveling salesman problem
         //This is the same as my main in BackTrackingTSP.java - Josh
-        //the number of nodes i.e. V
-        int numNodes = 0;
-        double[][] points = new double[orders.size()][2];
 
-        // Fill points with orders ArrayList
-        for(int i = 0; i < orders.size(); i++) {
-            double latitude = orders.get(i).getDestination().getLatitude();
-            double longitude = orders.get(i).getDestination().getLongitude();
-        }
+        // I'll need to automatically put the SAC as the starting point
+        Waypoint sac = new Waypoint("SAC", 41.154870, -80.077945, true);
+        orders.add(0, new Order(new Meal(), sac));
 
-        // need to get the list of points
-        try {
-            FileInputStream fis = new FileInputStream("graph.txt");
-            Scanner scn = new Scanner(fis);
 
-            // get the number of nodes
-            numNodes = scn.nextInt();
-            scn.nextLine();
-
-            points = new double[numNodes][2];
-            int currentNode = 0;
-
-            // Fill points - OLD
-            while(scn.hasNext()) {
-                if(scn.hasNextDouble())
-                    points[currentNode][0] = scn.nextDouble();
-                else {
-                    scn.close();
-                    throw new Exception("Trouble getting x");
-                }
-                if(scn.hasNextDouble())
-                    points[currentNode][1] = scn.nextDouble();
-                else {
-                    scn.close();
-                    throw new Exception("Trouble getting y");
-                }
-                System.out.println("(" + points[currentNode][0] + ", " + points[currentNode][1] + ")");
-
-                currentNode++;
-                if(scn.hasNextLine())
-                    scn.nextLine();
-            }
-            System.out.println("Total nodes: " + numNodes);
-
-            scn.close();
-        } catch(Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-
+        int numNodes = orders.size();
         double[][] graph = new double[numNodes][numNodes];
 
-        System.out.println("length: " + points.length);
         //Now that I have the points, I need to make the graph
-        for(int node = 0; node < points.length; node++) {
-            for(int otherNode = 0; otherNode < points.length; otherNode++) {
-                //need to find the x and y distances between node and otherNode
-                double deltaX = points[node][0] - points[otherNode][0];
-                double deltaY = points[node][1] - points[otherNode][1];
-                //We raise those distances to the second power
+        for(int node = 0; node < orders.size(); node++) {
+            for(int otherNode = 0; otherNode < orders.size(); otherNode++) {
+                // First get difference in longitude
+                double deltaX = orders.get(node).getDestination().getLongitude() -
+                        orders.get(otherNode).getDestination().getLongitude();
+                // Then get difference in latitude
+                double deltaY = orders.get(node).getDestination().getLatitude() -
+                        orders.get(otherNode).getDestination().getLatitude();
                 double powX = Math.pow(deltaX, 2.0);
                 double powY = Math.pow(deltaY, 2.0);
                 //The distance between the points using the pythagorean theorem
                 graph[node][otherNode] = (Math.sqrt(powX + powY));
             }
-        }
-
-        //For testing purposes, print the graph
-        for(int i = 0; i < numNodes; i++) {
-            for(int j = 0; j < numNodes; j++) {
-                System.out.printf("%.2f ", graph[i][j]);
-            }
-            System.out.println("");
         }
 
         int[] solution = new int[numNodes + 1];
@@ -373,20 +402,17 @@ public class Simulation {
 
         bestSolution = tspRoute(graph, solution, bestSolution, visited, 0, 0, numNodes);
 
-        System.out.println("BEST SOLUTION:");
-        double bestCost = 0;
-        for(int i = 1; i < bestSolution.length; i++) {
-            int node1 = bestSolution[i - 1];
-            int node2 = bestSolution[i];
-            System.out.printf("%d >(+%.2f)> ", node1, graph[node1][node2]);
-            if(i == bestSolution.length - 1)
-                System.out.print(node2);
-            bestCost += graph[node1][node2];
-        }
-        System.out.printf(", COST: %.4f\n", bestCost);
+        //Reorder 'orders', at this point, it's "SAC", "HAL", "Ketler",...
+        ArrayList<Order> sortedOrders = new ArrayList<>();
 
-        //return bestSolution;
-        return orders;
+        // We want to start at the first
+        for(int i = 1; i < bestSolution.length - 1; i++) {
+            //System.out.println("Putting the " + bestSolution[i] + "th index of orders in sortedOrders");
+            sortedOrders.add(orders.get(bestSolution[i]));
+        }
+
+        return sortedOrders;
+
     }
 
     public void heapSort(int a[])

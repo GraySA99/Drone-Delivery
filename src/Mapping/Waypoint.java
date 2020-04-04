@@ -16,6 +16,13 @@ public class Waypoint {
         name = n;
     }
 
+    public Waypoint(String n, double latitude, double longitude) {
+        latitude = latitude;
+        longitude = longitude;
+        isStartingPoint = false;
+        name = n;
+    }
+
     public double getLatitude() {
         return latitude;
     }
@@ -46,5 +53,9 @@ public class Waypoint {
 
     public boolean isStarting() {
         return isStartingPoint;
+    }
+
+    public void setStartingPoint(boolean b){
+        isStartingPoint = b;
     }
 }

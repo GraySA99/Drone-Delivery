@@ -1,6 +1,5 @@
 package Graphing;
 
-import Simulation.Drone;
 import Simulation.Simulation;
 import javafx.application.Application;
 import javafx.collections.FXCollections;

@@ -9,16 +9,30 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 -Added, Removed, Fixed, Changed, Renamed, Enabled, Disabled, ect...
 
 
-Version Version# Month/Day/Yea
+Version Version# Month/Day/Year
+
+Version 1.16.0 4/4/20
+-Cleaned Up code and make some sub classes so that the main pages were easier to read - will look into doing that more in the future. (Spencer)
+-Results page can be found under the Results button in the hamburger menu; however, once you go there you can go back yet (Spencer)
+
+Version 1.15.0 4/2/20
+-Added the map parameter to both Simulation constructors, as well as the simMap variable (Patrick)
+-Added setStartingPoint method to Waypoint class (Patrick)
+-Added startPoint, mapPoints list, the getStartingPoint, getMapPoint, and constructor taking a starting point and list of points to the
+map class (Patrick)
+-Added documentation for the copyOrderQueue and the generateOrderQueue methods in the simulation class (Patrick)
+-Fully added the ability for the simulation class to generate orders. (Patrick)
+-Fixed the hardcoded defaults for the simulation (Patrick)
+-Fixed several errors with the order generation, including null pointers, and not all points being used (Patrick)
 
 Version 1.14.0 4/1/20
--DataTransfer.java is a static class made for transfering live data between different parts of the application (Spencer)
+-DataTransfer.java is a static class made for transferring live data between different parts of the application (Spencer)
 -The GUI adds all elements in, everything else should only access the data. (Spencer)
 -Food.java is no longer an abstract class as it has been deemed unnecessary. (Spencer)
 -Waypoint.java now has a constructor (Josh and Spencer)
 -Meal.java no longer uses an ArrayList<Food> to keep track of the food in the meal (Spencer)
 -Now food is tracked by a HashMap<Food, Integer> so that we can keep track of the amount of a certain food now too. (Spencer)
--Fixed several errors in the Simulation and Waypoint classes after merge. (Patrick)
+-Fixed a lot of bugs temporarily (Patrick)
 
 Version 1.13.0 3/30/20
 -Adding a point now adds the name and the lat and lng of the point to the list (Spencer)
