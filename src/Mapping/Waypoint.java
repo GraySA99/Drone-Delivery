@@ -54,4 +54,8 @@ public class Waypoint {
     public boolean isStarting() {
         return isStartingPoint;
     }
+
+    public void setStartingPoint(boolean b){
+        isStartingPoint = b;
+    }
 }
