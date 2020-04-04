@@ -1,6 +1,10 @@
 package Simulation;
 
-import Food.*;
+import Food.Food;
+import Food.Meal;
+import Food.Order;
+import Mapping.Waypoint;
+import Mapping.Map;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -9,16 +13,20 @@ import java.util.Scanner;
 public class Simulation {
     private ArrayList<Order> orderQueue;
     private ArrayList<Meal> mealList; //stores all different possible meals. Will be passed on constructor
-    private ArrayList<Order> currentOrderQueue;
+    private ArrayList<Order> currentOrderQueue; //for knapsack, skipped orders are prioritized and to a priority list
     private int numShifts, timesToBeRan; //passed in constructor, stores number of hours to do the simulation and number of dif sims
     public int[] ordersPerHour, times;
+    public Map simMap;
 
     //Creation of drone for testing purposes at this point
     public Drone drone = new Drone();
 
-    //the check for adding the probabilities needs to be somewhere. Should be outside of this class
-    //for simulations with default settings ie sprint 1
     public Simulation(){
+        ArrayList<Waypoint> testPoints = new ArrayList<Waypoint>();
+        testPoints.add(new Waypoint("Point 1", 1, 1, true));
+        testPoints.add(new Waypoint("Point 2", 2, 1, true));
+        testPoints.add(new Waypoint("Point 3", 3, 1, true));
+        simMap = new Map(new Waypoint("Starting", 0, 0, true), testPoints);
         orderQueue = new ArrayList<Order>();
         mealList = new ArrayList<Meal>();
         currentOrderQueue = new ArrayList<Order>();
@@ -34,25 +42,65 @@ public class Simulation {
         times = new int[ordersPerHour[0] + ordersPerHour[1] + ordersPerHour[2] + ordersPerHour[3]];
 
         ArrayList<Food> temp = new ArrayList<Food>();
-        temp.add(new Hamburger());
-        temp.add(new Drink());
-        temp.add(new Fries());
+        temp.add(new Food("Hamburger", 0.375));
+        temp.add(new Food("Drink", 0.875));
+        temp.add(new Food("Fries", 0.25));
+
+        mealList.add(new Meal("One of Each", temp, 0.55));
+
+        temp.add(new Food("Hamburger", 0.375));
+        mealList.add(new Meal("Two burgers, one drink, one fry", temp, 0.1));
+
+        temp.remove(2);
+        temp.remove(2);
+        mealList.add(new Meal("Burger and Drink", temp, 0.2));
+
+        temp.add(new Food("Hamburger", 0.375));
+        mealList.add(new Meal("Two Burgers and a Drink", temp, 0.15));
+    }
+
+    //the check for adding the probabilities needs to be somewhere. Should be outside of this class
+    //for simulations with default settings ie sprint 1
+    public Simulation(Map m){
+        simMap = m;
+        orderQueue = new ArrayList<Order>();
+        mealList = new ArrayList<Meal>();
+        currentOrderQueue = new ArrayList<Order>();
+
+        numShifts = 4;
+        ordersPerHour = new int[numShifts];
+        timesToBeRan = 1;
+        ordersPerHour[0] = 15;
+        ordersPerHour[1] = 17;
+        ordersPerHour[2] = 22;
+        ordersPerHour[3] = 15;
+
+        times = new int[ordersPerHour[0] + ordersPerHour[1] + ordersPerHour[2] + ordersPerHour[3]];
+
+        ArrayList<Food> temp = new ArrayList<Food>();
+        temp.add(new Food("Hamburger", 0.375));
+        temp.add(new Food("Drink", 0.875));
+        temp.add(new Food("Fries", 0.25));
 
         mealList.add(new Meal(temp, 0.55));
 
-        temp.add(new Hamburger());
+        temp.add(new Food("Hamburger", 0.375));
         mealList.add(new Meal(temp, 0.1));
 
         temp.remove(2);
         temp.remove(2);
         mealList.add(new Meal(temp, 0.2));
 
-        temp.add(new Hamburger());
+        temp.add(new Food("Hamburger", 0.375));
         mealList.add(new Meal(temp, 0.15));
     }
 
-    public Simulation(int numberOfShifts, int timesToRun, ArrayList<Meal> listOfMeals, int[] avgOrdersEachHour){
+    public Simulation(int numberOfShifts, int timesToRun, ArrayList<Meal> listOfMeals, int[] avgOrdersEachHour, Map m){
         //this will be used when we start having settings for the simulation
+        numShifts = numberOfShifts;
+        timesToBeRan = timesToRun;
+        //deep copy of meals list
+
     }
 
     public void runSimulation(){
@@ -74,26 +122,57 @@ public class Simulation {
         //drones must be reset before each simulation
     }
 
+    /**
+     * Generates a list of random orders and puts them in the simulations order queue. Uses the probabilities for each order to appear and
+     * randomly selects a point on the map to generate the specified number of orders in each hour using the meals available in the meals list.
+     */
     private void generateOrderQueue(){
-        int count = 0;
+        int count = 0, curPos, mapPos;
+        double prob, curProb;
+        boolean found;
 
+        //clears out the previous order queue
         for(int r = orderQueue.size(); r > 0; r--){
             orderQueue.remove(r - 1);
         }
 
         for(int i = 0; i < numShifts; i++){
             for(int j = 0; j < ordersPerHour[i]; j++){
-                //orderQueue.add(new Order(mealList.get((int)(Math.random() * ((mealList.size() - 1) + 1))), )); //need a way to get a list of destinations
+                curProb = 0;
+                curPos = 0;
+                found = false;
+
+                //generates orders according to their given probabilities
+                prob = (Math.random()*(1));
+                while(curPos < mealList.size() && !found){
+                    //System.out.println("The probability is " + prob + "\tThe Current pos is " + curPos + "\t Im checking if it's under " + mealList.get(curPos).getProbability() + curProb + "\twhich equals " + mealList.get(curPos).getProbability() + "+" + curProb);
+                    if(prob < mealList.get(curPos).getProbability() + curProb){
+                        found = true;
+                    } else {
+                        curProb += mealList.get(curPos).getProbability();
+                        curPos++;
+                    }
+                }
+                //finds a random delivery location to give an order based off of the current map
+                mapPos = ((int) (Math.random()*(simMap.getSize())));
+                orderQueue.add(new Order(mealList.get(curPos), simMap.getMapPoint(mapPos)));
                 times[count] = (i * 60) + (int) (1 + Math.random() * ((60 - 1) + 1));
                 count++;
             }
         }
 
+        //sorts the times array from least to greatest
         heapSort(times);
+
+        for(int r = 0; r < orderQueue.size(); r++){
+            System.out.println("At time " + times[r] + " An order with " + orderQueue.get(r).getMeal().getName() + " to " + orderQueue.get(r).getDestination().getName() + " will appear in the queue.");
+        }
     }
 
+    /**
+     * Creates a deep copy of the orderQueue and stores it in currentOrderQueue to allow modifications during a simulation
+     */
     private void copyOrderQueue(){
-        //makes a deep copy of the orderQueue and makes in into a priority queue
         for(int i = 0; i < orderQueue.size(); i++){
             currentOrderQueue.add(orderQueue.get(i));
         }
@@ -104,16 +183,19 @@ public class Simulation {
         //at start, wait for 5 min or until full
         double currentTime = 0;
         int currentOrder = 0;
+        boolean launched = false, canLoad = true;
         //currentOrder tracks the current order. Will be used with the times array for checking
 
         while (currentOrderQueue.size() > 0 || drone.getNumOrders() > 0){
-            if(drone.getCurrentPosition().getIsStartingPoint()){
+            if(drone.getCurrentPosition().isStarting()){
+                launched = false;
+                canLoad = true;
                 if(drone.getTurnAroundTime() == 0){
 
                     //when the drone is at the starting point and it's within the first five minutes of the simulation
                     if(currentTime <= 5){
                         //the drone will add any available orders if it can. If the drone is full then it will launch
-                        while(times[currentOrder] <= currentTime){
+                        while(times[currentOrder] <= currentTime && !launched){
                             if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
                                 drone.addOrderToDrone(currentOrderQueue.get(0));
                                 currentOrderQueue.remove(0);
@@ -122,16 +204,19 @@ public class Simulation {
                                 //calculate tsp, remaining transit, then add the time it takes to get to the destination with current time
                                 //set the drones current location to the orders waypoint
                                 //adds the calculated delivery time to the delivery times list
+                                launched = true;
                             }
                         }
 
                         //when the drone is at the starting position and it's not within the first five minutes of the simulation
                     } else {
-                        while(times[currentOrder] <= currentTime){
+                        while(times[currentOrder] <= currentTime && canLoad){
                             if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
                                 drone.addOrderToDrone(currentOrderQueue.get(0));
                                 currentOrderQueue.remove(0);
                                 currentOrder++;
+                            } else {
+                                canLoad = false;
                             }
                         }
                         if(drone.getCurrentWeight() > 0){
@@ -158,7 +243,8 @@ public class Simulation {
     private void runKnapsack(){
         //runs knapsack simulations
         int currentTime = 0;
-
+        //assign a value to every order in queue, grab the heaviest and put it in the bag, then next heaviest, then so forth. if it fits, put it in.
+        //skipped me counter, make sure skipped meals are prioritized
         while (currentTime < numShifts * 60){
             //fifo
         }
@@ -273,15 +359,19 @@ public class Simulation {
     }
 
     //This uses the TSP algorithm to find the best possible route
-    //returns: an int array containing the best way to make deliveries starting at node 0
-    //and ending with node n. Returning [0, 2, 4, 1, 3, 0] would mean start at 0th node, then
-    //go to index 2 node, then index 4 node, etc., returning to start at the end
-    private int[] getNextRoute(){
+    //returns: an ordered version of the "orders" arraylist passed in
+    private ArrayList<Order> sortOrders(ArrayList<Order> orders) {
         //will use the drones current location and current orders to solve the traveling salesman problem
         //This is the same as my main in BackTrackingTSP.java - Josh
         //the number of nodes i.e. V
         int numNodes = 0;
-        double[][] points = new double[numNodes][2];
+        double[][] points = new double[orders.size()][2];
+
+        // Fill points with orders ArrayList
+        for(int i = 0; i < orders.size(); i++) {
+            double latitude = orders.get(i).getDestination().getLatitude();
+            double longitude = orders.get(i).getDestination().getLongitude();
+        }
 
         // need to get the list of points
         try {
@@ -295,7 +385,7 @@ public class Simulation {
             points = new double[numNodes][2];
             int currentNode = 0;
 
-            // Fill points
+            // Fill points - OLD
             while(scn.hasNext()) {
                 if(scn.hasNextDouble())
                     points[currentNode][0] = scn.nextDouble();
@@ -372,7 +462,8 @@ public class Simulation {
         }
         System.out.printf(", COST: %.4f\n", bestCost);
 
-        return bestSolution;
+        //return bestSolution;
+        return orders;
     }
 
     public void heapSort(int a[])

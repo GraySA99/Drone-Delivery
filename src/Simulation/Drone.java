@@ -9,7 +9,7 @@ public class Drone {
     private ArrayList<Order> loadedOrdersList;
     private double weightCapacity, currentWeight;
     private Waypoint currentPosition;
-    private ArrayList<Waypoint> targetPositions;
+    private ArrayList<Waypoint> targetPositions; //may not be needed if we just rearrange the list of orders
     private int turnAroundTime;
     public ArrayList<Double> deliveryTimes;
 
