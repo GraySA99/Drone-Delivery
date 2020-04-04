@@ -17,7 +17,7 @@ public class TopBar extends ToolBar {
     private Button MiniWindowBtn;
     private final Styles myStyles = new Styles();
 
-    public TopBar(Stage PS) {
+    public TopBar() {
 
         super();
         CloseWindowBtn = new Button("X");
@@ -67,7 +67,7 @@ public class TopBar extends ToolBar {
         MiniWindowBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
-                PS.setIconified(true);
+                Values.primaryStage.setIconified(true);
             }
         });
     }

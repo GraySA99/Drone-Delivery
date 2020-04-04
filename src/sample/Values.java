@@ -1,6 +1,13 @@
 package sample;
 
+import javafx.scene.Parent;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+
 public class Values {
+
+    public static Stage primaryStage;
+    public static BorderPane rootPage;
 
     public static final double foodScrollFrameHeight = Double.MAX_VALUE * .70;
 

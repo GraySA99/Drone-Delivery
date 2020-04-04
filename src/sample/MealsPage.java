@@ -85,7 +85,6 @@ public class MealsPage extends BorderPane {
 
                     for (Food food : foodItems.keySet()) {
 
-                        // foodFrameRow.getChildren().addAll(isItemIn, foodName, ES, qtyLabel, qtyEnt);
                         if (((CheckBox)foodItems.get(food).getChildren().get(0)).isSelected()) {
 
                             int qty = Integer.parseInt(
@@ -100,10 +99,8 @@ public class MealsPage extends BorderPane {
 
                     HBox frame = new HBox();
                     Text frameName = new Text(name);
-                    HBox emptySpace = new HBox();
-                    HBox.setHgrow(emptySpace, Priority.ALWAYS);
                     Text frameProb = new Text(prob + "%");
-                    frame.getChildren().addAll(frameName, emptySpace, frameProb);
+                    frame.getChildren().addAll(frameName, new ESHBox(), frameProb);
 
                     if (mealsList.getItems().size() == 1 && mealsList.getItems().get(0).getChildren().isEmpty()) {
 
@@ -168,17 +165,14 @@ public class MealsPage extends BorderPane {
                 HBox foodFrameRow = new HBox();
                 HBox.setHgrow(foodFrameRow, Priority.ALWAYS);
                 foodFrameRow.setStyle(Styles.foodFrameRow);
-                HBox.setHgrow(foodFrameRow, Priority.ALWAYS);
                 CheckBox isItemIn = new CheckBox();
                 Text foodName = new Text(food.getName().substring(0,1).toUpperCase()
                         .concat(food.getName().substring(1,food.getName().length())));
-                HBox ES = new HBox();
-                HBox.setHgrow(ES, Priority.ALWAYS);
                 Text qtyLabel = new Text("Qty");
                 TextField qtyEnt = new TextField();
                 qtyEnt.setPromptText("0");
                 qtyEnt.setPrefSize(35, 20);
-                foodFrameRow.getChildren().addAll(isItemIn, foodName, ES, qtyLabel, qtyEnt);
+                foodFrameRow.getChildren().addAll(isItemIn, foodName, new ESHBox(), qtyLabel, qtyEnt);
                 foodItems.put(food, foodFrameRow);
 
                 qtyEnt.clear();

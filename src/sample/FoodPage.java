@@ -60,10 +60,8 @@ public class FoodPage extends BorderPane {
 
                 HBox foodItemFrame = new HBox();
                 Text foodItemName = new Text(name);
-                HBox emptySpace = new HBox();
-                HBox.setHgrow(emptySpace, Priority.ALWAYS);
                 Text foodItemWeight = new Text(weight + " oz.");
-                foodItemFrame.getChildren().addAll(foodItemName, emptySpace, foodItemWeight);
+                foodItemFrame.getChildren().addAll(foodItemName, new ESHBox(), foodItemWeight);
                 foodItemFrame.setOnMouseClicked(evt -> {
 
                     String foodName = ((Text)foodItemFrame.getChildren().get(0)).getText();
