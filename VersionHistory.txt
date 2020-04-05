@@ -11,6 +11,15 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
+Version 1.17.0 4/5/20
+-Added a setCurrentPosition method to the drone class (Patrick)
+-Added to the simulation resetting the drones position before each simulation (Patrick)
+-Added the speed attribute to the drone class and its getter method (Patrick)
+-Added the addDeliveryTime method to the drone class (Patrick)
+-Added getOrderList and setOrderList methods to the drone class (Patrick)
+-Added the distance method to simulation for calculating the distance between two points (Josh)
+-Disabled the target positions list in the drone class as it has been deemed unnecessary for the moment (Patrick)
+
 Version 1.16.0 4/4/20
 -Cleaned Up code and make some sub classes so that the main pages were easier to read - will look into doing that more in the future. (Spencer)
 -Results page can be found under the Results button in the hamburger menu; however, once you go there you can go back yet (Spencer)

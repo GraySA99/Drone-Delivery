@@ -17,7 +17,7 @@ public class Simulation {
     private Map simMap;
 
     //Creation of drone for testing purposes at this point
-    public Drone drone = new Drone();
+    public Drone drone;
 
     public Simulation(){
         ArrayList<Waypoint> testPoints = new ArrayList<Waypoint>();
@@ -25,6 +25,7 @@ public class Simulation {
         testPoints.add(new Waypoint("Point 2", 2, 1, true));
         testPoints.add(new Waypoint("Point 3", 3, 1, true));
         simMap = new Map(new Waypoint("Starting", 0, 0, true), testPoints);
+        drone = new Drone();
         orderQueue = new ArrayList<Order>();
         mealList = new ArrayList<Meal>();
         currentOrderQueue = new ArrayList<Order>();
@@ -64,6 +65,7 @@ public class Simulation {
         orderQueue = new ArrayList<Order>();
         mealList = new ArrayList<Meal>();
         currentOrderQueue = new ArrayList<Order>();
+        drone = new Drone();
 
         numShifts = 4;
         ordersPerHour = new int[numShifts];
@@ -110,10 +112,12 @@ public class Simulation {
             generateOrderQueue();
             copyOrderQueue();
 
+            drone.setCurrentPosition(simMap.getStartingPoint());
             //runFIFO();
 
             copyOrderQueue();
 
+            drone.setCurrentPosition(simMap.getStartingPoint());
             //runKnapsack();
         }
 
@@ -176,10 +180,15 @@ public class Simulation {
         }
     }
 
+    //To-do:
+    //Add back turn around time
+    //Calls to distance method
+    //20 min travel limit in one charge
+    //Waiting for corrected distance calcs in tsp and distance method
     private void runFIFO(){
         //runs FIFO simulations
-        //at start, wait for 5 min or until full
-        double currentTime = 0;
+
+        double currentTime = 0, tripTime = 0, calcTime;
         int currentOrder = 0;
         boolean launched = false, canLoad = true;
         //currentOrder tracks the current order. Will be used with the times array for checking
@@ -188,7 +197,8 @@ public class Simulation {
             if(drone.getCurrentPosition().isStarting()){
                 launched = false;
                 canLoad = true;
-                if(drone.getTurnAroundTime() == 0){
+                tripTime = 0;
+                //if(drone.getTurnAroundTime() == 0){
 
                     //when the drone is at the starting point and it's within the first five minutes of the simulation
                     if(currentTime <= 5){
@@ -199,9 +209,15 @@ public class Simulation {
                                 currentOrderQueue.remove(0);
                                 currentOrder++;
                             } else { //launch
-                                //calculate tsp, remaining transit, then add the time it takes to get to the destination with current time
-                                //set the drones current location to the orders waypoint
-                                //adds the calculated delivery time to the delivery times list
+                                //add a time tracker for the current trip to make sure it won't surpass 20 min. Should check next route time and time to get home
+
+                                drone.setOrdersList(sortOrders(drone.getOrdersList()));
+                                calcTime = 60 * ((1/*distance*/ * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -5)) )) + .5;
+                                drone.addDeliveryTime(calcTime);
+                                currentTime += calcTime;
+                                tripTime += calcTime;
+                                drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
+                                drone.removeOrderFromDrone(0);
                                 launched = true;
                             }
                         }
@@ -218,26 +234,48 @@ public class Simulation {
                             }
                         }
                         if(drone.getCurrentWeight() > 0){
-                            //calculate tsp, remaining transit, then add the time it takes to get to the destination with current time
-                            //set the drones current location to the orders waypoint
-                            //adds the calculated delivery time to the delivery times list
+                            //add a time tracker for the current trip to make sure it won't surpass 20 min. Should check next route time and time to get home
+
+                            drone.setOrdersList(sortOrders(drone.getOrdersList()));
+                            calcTime = 60 * ((1/*distance*/ * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -5)) )) + .5;
+                            drone.addDeliveryTime(calcTime);
+                            currentTime += calcTime;
+                            tripTime += calcTime;
+                            drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
+                            drone.removeOrderFromDrone(0);
                         }
 
                         //when the drone is not at the starting position but is at a waypoint
                     }
-                } else {
+                /*} else {
                     currentTime += drone.getTurnAroundTime();
                     drone.setTurnAroundTime(0);
-                }
+                }*/
             } else {
-                //if the drone is carrying nothing then it returns home (Calculate distance to home)
-                //else call tsp/a list of destinations already found by tsp to get the drones next route
-                //reset the drones target destination and the distance to get there
-                //deliver the order (add appropriate time)
+                //the drone is not home and is empty
+                if(drone.getNumOrders() == 0){
+                    //add a time tracker for the current trip to make sure it won't surpass 20 min. Should check next route time and time to get home
+
+                    calcTime = 60 * ((1/*distance*/ * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -5)) )) + .5;
+                    currentTime += calcTime;
+                    tripTime += calcTime;
+                    drone.setCurrentPosition(simMap.getStartingPoint());
+                } else { //the drone is not home and has orders
+                    //add a time tracker for the current trip to make sure it won't surpass 20 min. Should check next route time and time to get home
+
+                    calcTime = 60 * ((1/*distance*/ * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -5)) )) + .5;
+                    drone.addDeliveryTime(calcTime);
+                    currentTime += calcTime;
+                    tripTime += calcTime;
+                    drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
+                    drone.removeOrderFromDrone(0);
+                }
             }
         }
     }
 
+    //To-do:
+    //Create loading method
     private void runKnapsack(){
         //runs knapsack simulations
         int currentTime = 0;
