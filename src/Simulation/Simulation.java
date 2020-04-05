@@ -359,13 +359,9 @@ public class Simulation {
     //This uses the TSP algorithm to find the best possible route
     //returns: an ordered version of the "orders" arraylist passed in
     private ArrayList<Order> sortOrders(ArrayList<Order> orders) {
-        //will use the drones current location and current orders to solve the traveling salesman problem
-        //This is the same as my main in BackTrackingTSP.java - Josh
-
-        // I'll need to automatically put the SAC as the starting point
-        Waypoint sac = new Waypoint("SAC", 41.154870, -80.077945, true);
-        orders.add(0, new Order(new Meal(), sac));
-
+        // I need to first set the starting point, statically set to the SAC temporarily
+        Waypoint start = new Waypoint("SAC", 41.154870, -80.077945, true);
+        orders.add(0, new Order(new Meal(), start));
 
         int numNodes = orders.size();
         double[][] graph = new double[numNodes][numNodes];
@@ -373,16 +369,7 @@ public class Simulation {
         //Now that I have the points, I need to make the graph
         for(int node = 0; node < orders.size(); node++) {
             for(int otherNode = 0; otherNode < orders.size(); otherNode++) {
-                // First get difference in longitude
-                double deltaX = orders.get(node).getDestination().getLongitude() -
-                        orders.get(otherNode).getDestination().getLongitude();
-                // Then get difference in latitude
-                double deltaY = orders.get(node).getDestination().getLatitude() -
-                        orders.get(otherNode).getDestination().getLatitude();
-                double powX = Math.pow(deltaX, 2.0);
-                double powY = Math.pow(deltaY, 2.0);
-                //The distance between the points using the pythagorean theorem
-                graph[node][otherNode] = (Math.sqrt(powX + powY));
+                graph[node][otherNode] = distance(orders.get(node).getDestination(), orders.get(otherNode).getDestination());
             }
         }
 
@@ -410,6 +397,22 @@ public class Simulation {
 
         return sortedOrders;
 
+    }
+
+    // returns the distance in meters between wp1 and wp2
+    public double distance(Waypoint wp1, Waypoint wp2) {
+        int earthRadius = 6371000;
+        double lat1 = Math.toRadians(wp1.getLatitude());
+        double lat2 = Math.toRadians(wp2.getLatitude());
+        double dLat = Math.toRadians(wp2.getLatitude() - wp1.getLatitude());
+        double dLong = Math.toRadians(wp2.getLongitude() - wp1.getLongitude());
+
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1) * Math.cos(lat2) *
+                        Math.sin(dLong/2) * Math.sin(dLong/2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return earthRadius * c;
     }
 
     public void heapSort(int a[])
