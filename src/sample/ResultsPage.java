@@ -31,6 +31,7 @@ public class ResultsPage extends VBox {
         resultsBarChart.setTitle("Results");
         XYChart.Series<String, Number> FIFOSeries = new XYChart.Series<>();
         FIFOSeries.setName("FIFO");
+        //For loop iterating over the FIFO delivery times and adding each of them to the series
         int FIFOIndex = 1;
         FIFOSeries.getData().addAll(
                 new XYChart.Data<String, Number>(Integer.toString(FIFOIndex++), 12),
@@ -39,11 +40,12 @@ public class ResultsPage extends VBox {
         );
         XYChart.Series<String, Number> KSSeries = new XYChart.Series<>();
         KSSeries.setName("Knapsack");
+        //For loop iterating all over the knapsack delivery times and adding each one to the series
         int KSIndex = 1;
         KSSeries.getData().addAll(
-                new XYChart.Data<String, Number>(Integer.toString(KSIndex++), 24),
-                new XYChart.Data<String, Number>(Integer.toString(KSIndex++), 15),
-                new XYChart.Data<String, Number>(Integer.toString(KSIndex), 45)
+                new XYChart.Data<String, Number>(Double.toString(KSIndex++), 24),
+                new XYChart.Data<String, Number>(Double.toString(KSIndex++), 15),
+                new XYChart.Data<String, Number>(Double.toString(KSIndex), 45)
         );
         resultsBarChart.getData().addAll(FIFOSeries, KSSeries);
         resultsBarChartFrame.getChildren().add(resultsBarChart);
@@ -52,15 +54,19 @@ public class ResultsPage extends VBox {
         VBox resultsDataFrame = new VBox();
         VBox FIFODataFrame = new VBox();
         Text FIFOLabel = new Text("FIFO: ");
-        Text FIFOAverageTime = new Text("Average Time: " + Integer.toString(10));
-        Text FIFOWorstTime = new Text("Worst Time: " + Integer.toString(10));
+        //Put FIFODeliveryTimes.getAverage in Double.toString
+        Text FIFOAverageTime = new Text("Average Time: " + Double.toString(10));
+        //Put FIFODeliveryTimes.getWorst in Double.toString
+        Text FIFOWorstTime = new Text("Worst Time: " + Double.toString(10));
         FIFODataFrame.getChildren().addAll(
             FIFOLabel, FIFOAverageTime, FIFOWorstTime
         );
         VBox KSDataFrame = new VBox();
         Text KSLabel = new Text("Knapsack: ");
-        Text KSAverageTime = new Text("Average Time: " + Integer.toString(10));
-        Text KSWorstTime = new Text("Worst Time: " + Integer.toString(10));
+        //Put KnapsackDeliveryTimes.getAverage in Double.toString
+        Text KSAverageTime = new Text("Average Time: " + Double.toString(10));
+        //Put KnapsackDeliveryTimes.getAverage in Double.toString
+        Text KSWorstTime = new Text("Worst Time: " + Double.toString(10));
         KSDataFrame.getChildren().addAll(
                 KSLabel, KSAverageTime, KSWorstTime
         );
