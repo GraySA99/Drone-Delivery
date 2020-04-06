@@ -9,11 +9,12 @@ import Mapping.Waypoint;
 import java.util.ArrayList;
 
 public class Simulation {
-    private ArrayList<Order> orderQueue;
+    private ArrayList<Order> orderQueue; //stores the order queue for a pair of simulations
     private ArrayList<Meal> mealList; //stores all different possible meals. Will be passed on constructor
     private ArrayList<Order> currentOrderQueue; //for knapsack, skipped orders are prioritized and to a priority list
     private int numShifts, timesToBeRan; //passed in constructor, stores number of hours to do the simulation and number of dif sims
-    public int[] ordersPerHour, times;
+    public int[] ordersPerHour;
+    public ArrayList<Integer> times, skipped;
     private Map simMap;
 
     //Creation of drone for testing purposes at this point
@@ -38,7 +39,8 @@ public class Simulation {
         ordersPerHour[2] = 22;
         ordersPerHour[3] = 15;
 
-        times = new int[ordersPerHour[0] + ordersPerHour[1] + ordersPerHour[2] + ordersPerHour[3]];
+        times = new ArrayList<Integer>();
+        skipped = new ArrayList<Integer>();
 
         ArrayList<Food> temp = new ArrayList<Food>();
         temp.add(new Food("Hamburger", 0.375));
@@ -75,7 +77,8 @@ public class Simulation {
         ordersPerHour[2] = 22;
         ordersPerHour[3] = 15;
 
-        times = new int[ordersPerHour[0] + ordersPerHour[1] + ordersPerHour[2] + ordersPerHour[3]];
+        times = new ArrayList<Integer>();
+        skipped = new ArrayList<Integer>();
 
         ArrayList<Food> temp = new ArrayList<Food>();
         temp.add(new Food("Hamburger", 0.375));
@@ -113,13 +116,11 @@ public class Simulation {
             copyOrderQueue();
 
             drone.setCurrentPosition(simMap.getStartingPoint());
-            //reset drone's stored times maybe
             runFIFO();
 
             copyOrderQueue();
 
             drone.setCurrentPosition(simMap.getStartingPoint());
-            //reset drone's stored times maybe
             //runKnapsack();
         }
 
@@ -138,6 +139,16 @@ public class Simulation {
         //clears out the previous order queue
         for(int r = orderQueue.size(); r > 0; r--){
             orderQueue.remove(r - 1);
+        }
+
+        //clear out times list
+        for(int r = times.size(); r > 0; r--){
+            times.remove(r - 1);
+        }
+
+        //clear out skipped list
+        for(int r = skipped.size(); r > 0; r--){
+            skipped.remove(r - 1);
         }
 
         for(int i = 0; i < numShifts; i++){
@@ -160,7 +171,8 @@ public class Simulation {
                 //finds a random delivery location to give an order based off of the current map
                 mapPos = ((int) (Math.random()*(simMap.getSize())));
                 orderQueue.add(new Order(mealList.get(curPos), simMap.getMapPoint(mapPos)));
-                times[count] = (i * 60) + (int) (1 + Math.random() * ((60 - 1) + 1));
+                times.add((i * 60) + (int) (1 + Math.random() * ((60 - 1) + 1)));
+                skipped.add(0);
                 count++;
             }
         }
@@ -205,15 +217,14 @@ public class Simulation {
                 if(currentTime <= 5){
                     //the drone will add any available orders if it can. If the drone is full then it will launch
                     while(!launched){
-                        while(times[currentOrder] <= currentTime && !launched){
+                        while(times.get(currentOrder) <= currentTime && !launched){
                             if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
-                                drone.addOrderToDrone(currentOrderQueue.get(0));
-                                currentOrderQueue.remove(0);
+                                loadOrder(currentTime);
                                 currentOrder++;
                             } else { //launch
                                 drone.setOrdersList(sortOrders(drone.getOrdersList()));
-                                calcTime = 60 * ((distance(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination()) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) )) + .5;
-                                drone.addDeliveryTime(calcTime);
+                                calcTime = calculateTime(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination());
+                                drone.addFIFODeliveryTime(drone.getOrderOnDrone(0).getPickUpTime() - currentTime);
                                 currentTime += calcTime;
                                 tripTime += calcTime;
                                 drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
@@ -222,7 +233,7 @@ public class Simulation {
                             }
                         }
 
-                        if(times[currentOrder] > currentTime && !launched){
+                        if(times.get(currentOrder) > currentTime && !launched){//increment time if not full
                             currentTime++;
                             waitedTime++;
                             if(waitedTime >= 3){//may need changed depending on what Valentine wants
@@ -234,10 +245,9 @@ public class Simulation {
                     //when the drone is at the starting position and it's not within the first five minutes of the simulation
                 } else {
                     while(canLoad){
-                        while(times[currentOrder] <= currentTime && canLoad){
+                        while(times.get(currentOrder) <= currentTime && canLoad){//loads available orders until weight capacity is hit
                             if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
-                                drone.addOrderToDrone(currentOrderQueue.get(0));
-                                currentOrderQueue.remove(0);
+                                loadOrder(currentTime);
                                 currentOrder++;
                             } else {
                                 canLoad = false;
@@ -247,7 +257,7 @@ public class Simulation {
                         //the drone will launch if it has anything on it
                         if(drone.getCurrentWeight() > 0){
                             canLoad = false;
-                        } else if(times[currentOrder] > currentTime && canLoad){ //the drone will wait for more orders
+                        } else if(times.get(currentOrder) > currentTime && canLoad){ //the drone will wait for more orders
                             currentTime++;
                             waitedTime++;
                             if(waitedTime >= 3){ //may need changed depending on what Valentine wants
@@ -258,7 +268,7 @@ public class Simulation {
 
 
                     drone.setOrdersList(sortOrders(drone.getOrdersList()));
-                    calcTime = 60 * ((distance(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination()) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) )) + .5;
+                    calcTime = calculateTime(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination());
 
                     //checks if the drone will be able to make it to the next destination and back with its remaining flight time
                     //adds the turnAroundTime if the drone won't make it
@@ -266,11 +276,10 @@ public class Simulation {
                         currentTime += drone.getTurnAroundTime();
                         tripTime = 0;
                     }
-                    drone.addDeliveryTime(calcTime);
+                    drone.addFIFODeliveryTime(drone.getOrderOnDrone(0).getPickUpTime() - currentTime);
                     currentTime += calcTime;
                     tripTime += calcTime;
-                    drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
-                    drone.removeOrderFromDrone(0);
+                    deliverOrder();
 
                 }
             } else {
@@ -278,27 +287,26 @@ public class Simulation {
                 if(drone.getNumOrders() == 0){
                     //add a time tracker for the current trip to make sure it won't surpass 20 min. Should check next route time and time to get home
 
-                    calcTime = 60 * ((distance(drone.getCurrentPosition(), simMap.getStartingPoint()) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) )) + .5;
+                    calcTime = calculateTime(drone.getCurrentPosition(), simMap.getStartingPoint());
                     currentTime += calcTime;
                     tripTime += calcTime;
                     drone.setCurrentPosition(simMap.getStartingPoint());
                 } else { //the drone is not home and has orders
                     //the drone figures out if it can make it to its next destination and home if it needs to charge
-                    calcTime = 60 * ((distance(drone.getCurrentPosition(), drone.getOrderOnDrone(0).getDestination()) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) )) + .5;
-                    homeTime = 60 * ((distance(drone.getOrderOnDrone(0).getDestination(), simMap.getStartingPoint()) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) ));
+                    calcTime = calculateTime(drone.getCurrentPosition(), drone.getOrderOnDrone(0).getDestination());
+                    homeTime = calculateTime(drone.getOrderOnDrone(0).getDestination(), simMap.getStartingPoint());
 
                     //the drone returns home
                     if(tripTime + calcTime + homeTime > drone.getMaxFlightTime() - 0.5){
-                        calcTime = 60 * ((distance(drone.getCurrentPosition(), simMap.getStartingPoint()) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) ));
+                        calcTime = calculateTime(drone.getCurrentPosition(), simMap.getStartingPoint());
                         currentTime += calcTime + 3;
                         drone.setCurrentPosition(simMap.getStartingPoint());
                         tripTime = 0;
                     } else { //the drone continues its current delivery path
-                        drone.addDeliveryTime(calcTime);
+                        drone.addFIFODeliveryTime(drone.getOrderOnDrone(0).getPickUpTime() - currentTime);
                         currentTime += calcTime;
                         tripTime += calcTime;
-                        drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
-                        drone.removeOrderFromDrone(0);
+                        deliverOrder();
                     }
                 }
             }
@@ -315,6 +323,22 @@ public class Simulation {
         while (currentTime < numShifts * 60){
             //fifo
         }
+    }
+
+    //||-----------Shared Utility Methods Between FIFO and Knapsack-----------||
+    private void loadOrder(double currentTime){
+        currentOrderQueue.get(0).setPickUpTime(currentTime);
+        drone.addOrderToDrone(currentOrderQueue.get(0));
+        currentOrderQueue.remove(0);
+    }
+
+    private double calculateTime(Waypoint a, Waypoint b){
+        return 60 * ((distance(a, b) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) )) + .5;
+    }
+
+    private void deliverOrder(){
+        drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
+        drone.removeOrderFromDrone(0);
     }
 
     //The TSP Route Calculator - Josh
@@ -483,9 +507,9 @@ public class Simulation {
         return earthRadius * c;
     }
 
-    public void heapSort(int a[])
+    public void heapSort(ArrayList<Integer> a)
     {
-        int size = a.length;
+        int size = a.size();
 
         for (int j = size/2 - 1; j >= 0; j--) {
             createHeap(a, j, size);
@@ -493,29 +517,29 @@ public class Simulation {
         int temp;
 
         for (int i = size - 1; i >= 0; i--) {
-            temp = a[0];
-            a[0] = a[i];
-            a[i] = temp;
+            temp = a.get(0);
+            a.set(0, a.get(i));
+            a.set(i, temp);
 
             createHeap(a, 0, i);
         }
 
     }
 
-    void createHeap(int a[], int root, int size)
+    void createHeap(ArrayList<Integer> a, int root, int size)
     {
         int largest = root, left = 2 * root + 1, right = 2 * root + 2;
 
-        if (left < size && a[left] > a[largest]){
+        if (left < size && a.get(left) > a.get(largest)){
             largest = left;
         }
-        if (right < size && a[right] > a[largest]){
+        if (right < size && a.get(right) > a.get(largest)){
             largest = right;
         }
         if (largest != root){
-            int temp = a[root];
-            a[root] = a[largest];
-            a[largest] = temp;
+            int temp = a.get(root);
+            a.set(root, a.get(largest));
+            a.set(largest, temp);
             createHeap(a, largest, size);
         }
     }

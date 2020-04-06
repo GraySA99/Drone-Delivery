@@ -11,7 +11,7 @@ public class Drone {
     private Waypoint currentPosition;
     //private ArrayList<Waypoint> targetPositions; //may not be needed if we just rearrange the list of orders
     private int turnAroundTime, speed, maxFlightTime;
-    public ArrayList<Double> deliveryTimes; //might make a fifo and knapsack list
+    public ArrayList<Double> FIFODeliveryTimes, KnapsackDeliveryTimes; //might make a fifo and knapsack list
 
     public Drone(){ //for a default drone
         loadedOrdersList  = new ArrayList<Order>();
@@ -20,7 +20,8 @@ public class Drone {
         currentPosition = null;
         //targetPositions = new ArrayList<Waypoint>();
         turnAroundTime = 3;
-        deliveryTimes = new ArrayList<Double>();
+        FIFODeliveryTimes = new ArrayList<Double>();
+        KnapsackDeliveryTimes = new ArrayList<Double>();
         speed = 20;
         maxFlightTime = 20;
     }
@@ -32,7 +33,8 @@ public class Drone {
         currentPosition = s;
         //targetPositions = new ArrayList<Waypoint>();
         turnAroundTime = 3;
-        deliveryTimes = new ArrayList<Double>();
+        FIFODeliveryTimes = new ArrayList<Double>();
+        KnapsackDeliveryTimes = new ArrayList<Double>();
         speed = 20;
         maxFlightTime = 20;
     }
@@ -108,8 +110,12 @@ public class Drone {
         return speed;
     }
 
-    public void addDeliveryTime(double b){
-        deliveryTimes.add(b);
+    public void addFIFODeliveryTime(double b){
+        FIFODeliveryTimes.add(b);
+    }
+
+    public void addKnapsackDeliveryTime(double b){
+        KnapsackDeliveryTimes.add(b);
     }
 
     public int getMaxFlightTime(){

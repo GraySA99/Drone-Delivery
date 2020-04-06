@@ -21,6 +21,11 @@ Version 1.17.0 4/5/20 The FIFO Update
 -Added maxFlightTime and its getter method to the drone class (Patrick)
 -Added to the FIFO simualtion: TSP calls, distance calculations, orders being removed, location updates, delivery times being managed,
 allowing time to pass so more orders show up if the drone is at home and empty, turn around times, delivery times (Patrick)
+-Added pickUpTime, as well as its getter and setter to the order class (Patrick)
+-Added the skipped arraylist to store the number of times each order has been skipped (Patrick)
+-Added the KnapsackDeliveryTimes list and addKnapsackDeliveryTime method to the drone class (Patrick)
+-Added the loadOrder, deliver, and calculateTime method to the simulation class (Patrick)
+-Changed times in simulation to an arraylist in preperation of knapsack (Patrick)
 -Fully Implemented the FIFO simulation (Untested) (Patrick)
 -Disabled the target positions list in the drone class as it has been deemed unnecessary for the moment (Patrick)
 
