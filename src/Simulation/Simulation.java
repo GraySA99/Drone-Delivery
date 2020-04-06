@@ -113,11 +113,13 @@ public class Simulation {
             copyOrderQueue();
 
             drone.setCurrentPosition(simMap.getStartingPoint());
-            //runFIFO();
+            //reset drone's stored times maybe
+            runFIFO();
 
             copyOrderQueue();
 
             drone.setCurrentPosition(simMap.getStartingPoint());
+            //reset drone's stored times maybe
             //runKnapsack();
         }
 
@@ -181,38 +183,36 @@ public class Simulation {
     }
 
     //To-do:
-    //Add back turn around time
-    //Calls to distance method
-    //20 min travel limit in one charge
-    //Waiting for corrected distance calcs in tsp and distance method
+    //Waiting for corrected distance calcs in tsp
+    //Ask about charging and turn around
+
+    //made assuming that a drone charge must occur all at one time
     private void runFIFO(){
         //runs FIFO simulations
 
-        double currentTime = 0, tripTime = 0, calcTime;
-        int currentOrder = 0;
+        double currentTime = 0, tripTime = 0, calcTime, waitedTime, homeTime;
+        int currentOrder = 0; //tracks the current order in currentOrderQueue
         boolean launched = false, canLoad = true;
-        //currentOrder tracks the current order. Will be used with the times array for checking
 
         while (currentOrderQueue.size() > 0 || drone.getNumOrders() > 0){
             if(drone.getCurrentPosition().isStarting()){
                 launched = false;
                 canLoad = true;
                 tripTime = 0;
-                //if(drone.getTurnAroundTime() == 0){
+                waitedTime = 0;
 
-                    //when the drone is at the starting point and it's within the first five minutes of the simulation
-                    if(currentTime <= 5){
-                        //the drone will add any available orders if it can. If the drone is full then it will launch
+                //when the drone is at the starting point and it's within the first five minutes of the simulation
+                if(currentTime <= 5){
+                    //the drone will add any available orders if it can. If the drone is full then it will launch
+                    while(!launched){
                         while(times[currentOrder] <= currentTime && !launched){
                             if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
                                 drone.addOrderToDrone(currentOrderQueue.get(0));
                                 currentOrderQueue.remove(0);
                                 currentOrder++;
                             } else { //launch
-                                //add a time tracker for the current trip to make sure it won't surpass 20 min. Should check next route time and time to get home
-
                                 drone.setOrdersList(sortOrders(drone.getOrdersList()));
-                                calcTime = 60 * ((1/*distance*/ * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -5)) )) + .5;
+                                calcTime = 60 * ((distance(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination()) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) )) + .5;
                                 drone.addDeliveryTime(calcTime);
                                 currentTime += calcTime;
                                 tripTime += calcTime;
@@ -222,8 +222,18 @@ public class Simulation {
                             }
                         }
 
-                        //when the drone is at the starting position and it's not within the first five minutes of the simulation
-                    } else {
+                        if(times[currentOrder] > currentTime && !launched){
+                            currentTime++;
+                            waitedTime++;
+                            if(waitedTime >= 3){//may need changed depending on what Valentine wants
+                                tripTime = 0;
+                            }
+                        }
+                    }
+
+                    //when the drone is at the starting position and it's not within the first five minutes of the simulation
+                } else {
+                    while(canLoad){
                         while(times[currentOrder] <= currentTime && canLoad){
                             if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
                                 drone.addOrderToDrone(currentOrderQueue.get(0));
@@ -233,42 +243,63 @@ public class Simulation {
                                 canLoad = false;
                             }
                         }
+
+                        //the drone will launch if it has anything on it
                         if(drone.getCurrentWeight() > 0){
-                            //add a time tracker for the current trip to make sure it won't surpass 20 min. Should check next route time and time to get home
-
-                            drone.setOrdersList(sortOrders(drone.getOrdersList()));
-                            calcTime = 60 * ((1/*distance*/ * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -5)) )) + .5;
-                            drone.addDeliveryTime(calcTime);
-                            currentTime += calcTime;
-                            tripTime += calcTime;
-                            drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
-                            drone.removeOrderFromDrone(0);
+                            canLoad = false;
+                        } else if(times[currentOrder] > currentTime && canLoad){ //the drone will wait for more orders
+                            currentTime++;
+                            waitedTime++;
+                            if(waitedTime >= 3){ //may need changed depending on what Valentine wants
+                                tripTime = 0;
+                            }
                         }
-
-                        //when the drone is not at the starting position but is at a waypoint
                     }
-                /*} else {
-                    currentTime += drone.getTurnAroundTime();
-                    drone.setTurnAroundTime(0);
-                }*/
-            } else {
-                //the drone is not home and is empty
-                if(drone.getNumOrders() == 0){
-                    //add a time tracker for the current trip to make sure it won't surpass 20 min. Should check next route time and time to get home
 
-                    calcTime = 60 * ((1/*distance*/ * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -5)) )) + .5;
-                    currentTime += calcTime;
-                    tripTime += calcTime;
-                    drone.setCurrentPosition(simMap.getStartingPoint());
-                } else { //the drone is not home and has orders
-                    //add a time tracker for the current trip to make sure it won't surpass 20 min. Should check next route time and time to get home
 
-                    calcTime = 60 * ((1/*distance*/ * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -5)) )) + .5;
+                    drone.setOrdersList(sortOrders(drone.getOrdersList()));
+                    calcTime = 60 * ((distance(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination()) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) )) + .5;
+
+                    //checks if the drone will be able to make it to the next destination and back with its remaining flight time
+                    //adds the turnAroundTime if the drone won't make it
+                    if(tripTime + (calcTime * 2) > drone.getMaxFlightTime()){
+                        currentTime += drone.getTurnAroundTime();
+                        tripTime = 0;
+                    }
                     drone.addDeliveryTime(calcTime);
                     currentTime += calcTime;
                     tripTime += calcTime;
                     drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
                     drone.removeOrderFromDrone(0);
+
+                }
+            } else {
+                //the drone is not home and is empty
+                if(drone.getNumOrders() == 0){
+                    //add a time tracker for the current trip to make sure it won't surpass 20 min. Should check next route time and time to get home
+
+                    calcTime = 60 * ((distance(drone.getCurrentPosition(), simMap.getStartingPoint()) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) )) + .5;
+                    currentTime += calcTime;
+                    tripTime += calcTime;
+                    drone.setCurrentPosition(simMap.getStartingPoint());
+                } else { //the drone is not home and has orders
+                    //the drone figures out if it can make it to its next destination and home if it needs to charge
+                    calcTime = 60 * ((distance(drone.getCurrentPosition(), drone.getOrderOnDrone(0).getDestination()) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) )) + .5;
+                    homeTime = 60 * ((distance(drone.getOrderOnDrone(0).getDestination(), simMap.getStartingPoint()) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) ));
+
+                    //the drone returns home
+                    if(tripTime + calcTime + homeTime > drone.getMaxFlightTime() - 0.5){
+                        calcTime = 60 * ((distance(drone.getCurrentPosition(), simMap.getStartingPoint()) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) ));
+                        currentTime += calcTime + 3;
+                        drone.setCurrentPosition(simMap.getStartingPoint());
+                        tripTime = 0;
+                    } else { //the drone continues its current delivery path
+                        drone.addDeliveryTime(calcTime);
+                        currentTime += calcTime;
+                        tripTime += calcTime;
+                        drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
+                        drone.removeOrderFromDrone(0);
+                    }
                 }
             }
         }
