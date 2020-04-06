@@ -1,5 +1,6 @@
 package sample;
 
+import Simulation.Drone;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.chart.BarChart;
@@ -14,6 +15,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class ResultsPage extends VBox {
+
+    //Figure out how to get the most recent of each drone and bring them into this page
+    Drone droneforresults;
 
     public ResultsPage() {
 
@@ -33,7 +37,7 @@ public class ResultsPage extends VBox {
         FIFOSeries.setName("FIFO");
         //For loop iterating over the FIFO delivery times and adding each of them to the series
         /*
-        for(int FIFOIndex = 1; FIFOIndex<=FIFODeliveryTimes.length; FIFOIndex++){
+        for(int FIFOIndex = 1; FIFOIndex<=droneForResults.FIFODeliveryTimes.size(); FIFOIndex++){
             FIFOSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(FIFOIndex, FIFODeliveryTimes[FIFOIndex-1]);
         }
          */
@@ -48,7 +52,7 @@ public class ResultsPage extends VBox {
         int KSIndex = 1;
         //For loop iterating all over the knapsack delivery times and adding each one to the series
         /*
-        for(int KSIndex = 1; KSIndex<=KSDeliveryTimes.length; KSIndex++){
+        for(int KSIndex = 1; KSIndex<=droneForResults.KSDeliveryTimes.size(); KSIndex++){
             KSSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(KSIndex, KSDeliveryTimes[KSIndex-1]);
         }
          */
