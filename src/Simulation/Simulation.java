@@ -396,7 +396,6 @@ public class Simulation {
         }
 
         return sortedOrders;
-
     }
 
     // returns the distance in meters between wp1 and wp2
