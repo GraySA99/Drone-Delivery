@@ -1,4 +1,4 @@
-package Graphing;
+/*package Graphing;
 
 import Simulation.Simulation;
 import javafx.application.Application;
@@ -26,7 +26,7 @@ public class ResultsGraph extends Application {
         CategoryAxis xAxis = new CategoryAxis();
         ObservableList<String> array = FXCollections.observableArrayList();
         Simulation test = new Simulation();
-        for(int i = 1; i<=test.times.length; i++) {
+        for(int i = 1; i<=test.times.size(); i++) {
             array.add("" + i);
         }
         xAxis.setCategories(array);
@@ -42,7 +42,7 @@ public class ResultsGraph extends Application {
         XYChart.Series<String, Number> series1 = new XYChart.Series<>();
         series1.setName("FIFO");
 
-        for(int i = 0; i<test.times.length; i++){
+        for(int i = 0; i<test.drone.deliveryTimes.size(); i++){
             Random rand = new Random();
             Double newDouble = rand.nextDouble();
             test.drone.deliveryTimes.add(newDouble);
@@ -68,3 +68,4 @@ public class ResultsGraph extends Application {
         primaryStage.show();
     }
 }
+*/

@@ -53,9 +53,9 @@ public class ResultsPage extends VBox {
         }
          */
         KSSeries.getData().addAll(
-                new XYChart.Data<String, Number>(Double.toString(KSIndex++), 24),
-                new XYChart.Data<String, Number>(Double.toString(KSIndex++), 15),
-                new XYChart.Data<String, Number>(Double.toString(KSIndex), 45)
+                new XYChart.Data<String, Number>(Integer.toString(KSIndex++), 24),
+                new XYChart.Data<String, Number>(Integer.toString(KSIndex++), 15),
+                new XYChart.Data<String, Number>(Integer.toString(KSIndex), 45)
         );
         resultsBarChart.getData().addAll(FIFOSeries, KSSeries);
         resultsBarChartFrame.getChildren().add(resultsBarChart);
