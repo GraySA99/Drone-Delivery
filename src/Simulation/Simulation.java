@@ -400,7 +400,7 @@ public class Simulation {
 
     // returns the distance in meters between wp1 and wp2
     public double distance(Waypoint wp1, Waypoint wp2) {
-        int earthRadius = 6371000;
+        int earthRadius = 6371000; // distance in meters
         double lat1 = Math.toRadians(wp1.getLatitude());
         double lat2 = Math.toRadians(wp2.getLatitude());
         double dLat = Math.toRadians(wp2.getLatitude() - wp1.getLatitude());
