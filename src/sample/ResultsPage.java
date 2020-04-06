@@ -32,6 +32,11 @@ public class ResultsPage extends VBox {
         XYChart.Series<String, Number> FIFOSeries = new XYChart.Series<>();
         FIFOSeries.setName("FIFO");
         //For loop iterating over the FIFO delivery times and adding each of them to the series
+        /*
+        for(int FIFOIndex = 1; FIFOIndex<=FIFODeliveryTimes.length; FIFOIndex++){
+            FIFOSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(FIFOIndex, FIFODeliveryTimes[FIFOIndex-1]);
+        }
+         */
         int FIFOIndex = 1;
         FIFOSeries.getData().addAll(
                 new XYChart.Data<String, Number>(Integer.toString(FIFOIndex++), 12),
@@ -40,8 +45,13 @@ public class ResultsPage extends VBox {
         );
         XYChart.Series<String, Number> KSSeries = new XYChart.Series<>();
         KSSeries.setName("Knapsack");
-        //For loop iterating all over the knapsack delivery times and adding each one to the series
         int KSIndex = 1;
+        //For loop iterating all over the knapsack delivery times and adding each one to the series
+        /*
+        for(int KSIndex = 1; KSIndex<=KSDeliveryTimes.length; KSIndex++){
+            KSSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(KSIndex, KSDeliveryTimes[KSIndex-1]);
+        }
+         */
         KSSeries.getData().addAll(
                 new XYChart.Data<String, Number>(Double.toString(KSIndex++), 24),
                 new XYChart.Data<String, Number>(Double.toString(KSIndex++), 15),
@@ -65,7 +75,7 @@ public class ResultsPage extends VBox {
         Text KSLabel = new Text("Knapsack: ");
         //Put KnapsackDeliveryTimes.getAverage in Double.toString
         Text KSAverageTime = new Text("Average Time: " + Double.toString(10));
-        //Put KnapsackDeliveryTimes.getAverage in Double.toString
+        //Put KnapsackDeliveryTimes.getWorst in Double.toString
         Text KSWorstTime = new Text("Worst Time: " + Double.toString(10));
         KSDataFrame.getChildren().addAll(
                 KSLabel, KSAverageTime, KSWorstTime
@@ -111,5 +121,26 @@ public class ResultsPage extends VBox {
         restartBtn.setAlignment(Pos.CENTER);
         saveResultsBtn.setAlignment(Pos.CENTER);
         finishBtn.setAlignment(Pos.CENTER);
+    }
+
+    //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
+    //public Double average = getAverage(drone.deliveryTimes);
+    //public Double worst = getWorst(drone.deliveryTimes);
+
+    public static Double getAverage(Double [] times){
+        double sum = 0;
+        for(int i = 0; i<times.length; i++){
+            sum += times[i];
+        }
+        return sum/times.length;
+    }
+    public static Double getWorst(Double [] times){
+        double worst = 0;
+        for(int i = 0; i<times.length; i++){
+            if(times[i]>worst){
+                worst = times[i];
+            }
+        }
+        return worst;
     }
 }
