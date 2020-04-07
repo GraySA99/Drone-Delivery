@@ -11,6 +11,25 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
+Version 1.18.1 4/7/20 FIFO Fixes Update
+-Added the getFIFODeliveryTime and getNumFIFODeliveryTimes to the drone class (Patrick)
+-Added delivery times of -1 to split the delivery times by the number of hours (Patrick)
+-Added gitignore file (Paul)
+-Switched around calculation of delivery times and added Java14SDK again (Paul)
+-Refactored results showing, getAverage, and getWorst (Paul)
+-Fixed several issues with the FIFO simulation. This includes delivery times being calculated incorrectly, deliver times being added at the wrong time, a bug with the
+first five minutes of orders loop going past five minutes, a bug where the program would crash after the last order is added, a bug where the drone would not
+get the last order, and a bug where the simulation would not end on its own. (Patrick)
+-Fixed the delivery times during the first 5 min of the simulation (Patrick)
+
+Version 1.18.0 4/6/20
+-Transferred getAverage and getWorst to results page calculation and Created Comment For Loop on how to show results (Paul)
+-Commented out ResultsGraph and changed More Types in ResultsPage (Paul)
+-Changed stuff around in the commented for loop (Paul)
+-Commented out Sample.fxml (Paul)
+-Moved GetAverage and GetWorst to the results page and got test data to work on graphs (Paul)
+-Deleted test data and added a Simulation global class variable to the results page (Paul)
+
 Version 1.17.0 4/5/20 The FIFO Update
 -Added a setCurrentPosition method to the drone class (Patrick)
 -Added to the simulation resetting the drones position before each simulation (Patrick)

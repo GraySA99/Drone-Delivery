@@ -114,6 +114,14 @@ public class Drone {
         FIFODeliveryTimes.add(b);
     }
 
+    public double getFIFODeliveryTime(int i){
+        return FIFODeliveryTimes.get(i);
+    }
+
+    public int getNumFIFODeliveryTimes(){
+        return FIFODeliveryTimes.size();
+    }
+
     public void addKnapsackDeliveryTime(double b){
         KnapsackDeliveryTimes.add(b);
     }
