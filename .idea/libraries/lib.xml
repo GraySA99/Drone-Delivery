@@ -7,10 +7,7 @@
     <SOURCES>
       <root url="file://$PROJECT_DIR$/javafx-sdk-14/lib" />
     </SOURCES>
-
-    <jarDirectory url="file://$USER_HOME$/Desktop/javafx-sdk-14/lib" recursive="false" />
-    <jarDirectory url="file://C:/Program Files/Java/javafx-sdk-14/lib" recursive="false" />
-    <jarDirectory url="file://$USER_HOME$/Desktop/javafx-sdk-14/lib" recursive="false" type="SOURCES" />
-    <jarDirectory url="file://C:/Program Files/Java/javafx-sdk-14/lib" recursive="false" type="SOURCES" />
+    <jarDirectory url="file://$PROJECT_DIR$/javafx-sdk-14/lib" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/javafx-sdk-14/lib" recursive="false" type="SOURCES" />
   </library>
 </component>
