@@ -29,10 +29,15 @@ public class ResultsPage extends VBox {
 
     public static Double getAverage(ArrayList<Double> times){
         double sum = 0;
+        int negativeCounter = 0;
         for(int i = 0; i<times.size(); i++){
-            sum += times.get(i);
+            if(times.get(i) == -1){
+                negativeCounter++;
+            }else {
+                sum += times.get(i);
+            }
         }
-        return sum/times.size();
+        return sum/(times.size() - negativeCounter);
     }
     public static Double getWorst(ArrayList<Double> times){
         double worst = 0;
@@ -62,18 +67,49 @@ public class ResultsPage extends VBox {
         resultsBarChart.setTitle("Results");
         XYChart.Series<String, Number> FIFOSeries = new XYChart.Series<>();
         FIFOSeries.setName("FIFO");
-        //For loop iterating over the FIFO delivery times and adding each of them to the series
 
-        for(int FIFOIndex = 1; FIFOIndex<=droneforresults.FIFODeliveryTimes.size(); FIFOIndex++){
-            FIFOSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(FIFOIndex), droneforresults.FIFODeliveryTimes.get(FIFOIndex-1)));
+        //Hour Counter for For Loops
+        int currentHour = 0;
+        int [] hourCounter = new int [recentSimulation.getNumShifts()];
+        for(int i = 0; i<hourCounter.length; i++){
+            hourCounter[i] = 0;
+        }
+
+        //For loop iterating over the FIFO delivery times and adding each of them to the hour counter
+        for(int FIFOIndex = 0; FIFOIndex<droneforresults.FIFODeliveryTimes.size(); FIFOIndex++){
+            if(droneforresults.FIFODeliveryTimes.get(FIFOIndex) == -1){
+                currentHour++;
+            }else {
+                hourCounter[currentHour]++;
+            }
+        }
+
+        //For loop adding the hour counter to the graph
+        for(int i = 0; i<hourCounter.length; i++){
+            FIFOSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(i+1), hourCounter[i]));
         }
 
         XYChart.Series<String, Number> KSSeries = new XYChart.Series<>();
         KSSeries.setName("Knapsack");
-        //For loop iterating all over the knapsack delivery times and adding each one to the series
 
-        for(int KSIndex = 1; KSIndex<=droneforresults.KnapsackDeliveryTimes.size(); KSIndex++){
-            KSSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(KSIndex), droneforresults.KnapsackDeliveryTimes.get(KSIndex-1)));
+        //Reset Variables
+        currentHour = 0;
+        for(int i = 0; i<hourCounter.length; i++){
+            hourCounter[i] = 0;
+        }
+
+        //For loop iterating over the Knapsack delivery times and adding each of them to the hour counter
+        for(int KSIndex = 0; KSIndex<droneforresults.KnapsackDeliveryTimes.size(); KSIndex++){
+            if(droneforresults.KnapsackDeliveryTimes.get(KSIndex) == -1){
+                currentHour++;
+            }else {
+                hourCounter[currentHour]++;
+            }
+        }
+
+        //For loop adding the hour counter to the graph
+        for(int i = 0; i<hourCounter.length; i++){
+            KSSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(i+1), hourCounter[i]));
         }
 
         resultsBarChart.getData().addAll(FIFOSeries, KSSeries);

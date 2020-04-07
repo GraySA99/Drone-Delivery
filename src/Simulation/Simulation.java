@@ -20,6 +20,11 @@ public class Simulation {
     //Creation of drone for testing purposes at this point
     public Drone drone;
 
+    //Getter for numShifts
+    public int getNumShifts(){
+        return numShifts;
+    }
+
     public Simulation(){
         ArrayList<Waypoint> testPoints = new ArrayList<Waypoint>();
         testPoints.add(new Waypoint("Point 1", 1, 1, true));
