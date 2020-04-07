@@ -224,7 +224,7 @@ public class Simulation {
                             } else { //launch
                                 drone.setOrdersList(sortOrders(drone.getOrdersList()));
                                 calcTime = calculateTime(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination());
-                                drone.addFIFODeliveryTime(drone.getOrderOnDrone(0).getPickUpTime() - currentTime);
+                                drone.addFIFODeliveryTime(currentTime - drone.getOrderOnDrone(0).getPickUpTime());
                                 currentTime += calcTime;
                                 tripTime += calcTime;
                                 drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
@@ -246,7 +246,7 @@ public class Simulation {
                 } else {
                     while(canLoad){
                         //don't look for current orders if currentOrder is passed times length
-                        while(times.get(currentOrder) <= currentTime && canLoad){//loads available orders until weight capacity is hit
+                        while(times.get(currentOrder-1) <= currentTime && canLoad){//loads available orders until weight capacity is hit
                             if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
                                 loadOrder(currentTime);
                                 currentOrder++;
@@ -277,7 +277,7 @@ public class Simulation {
                         currentTime += drone.getTurnAroundTime();
                         tripTime = 0;
                     }
-                    drone.addFIFODeliveryTime(drone.getOrderOnDrone(0).getPickUpTime() - currentTime);
+                    drone.addFIFODeliveryTime(currentTime - drone.getOrderOnDrone(0).getPickUpTime());
                     currentTime += calcTime;
                     tripTime += calcTime;
                     deliverOrder();
@@ -304,7 +304,7 @@ public class Simulation {
                         drone.setCurrentPosition(simMap.getStartingPoint());
                         tripTime = 0;
                     } else { //the drone continues its current delivery path
-                        drone.addFIFODeliveryTime(drone.getOrderOnDrone(0).getPickUpTime() - currentTime);
+                        drone.addFIFODeliveryTime( currentTime - drone.getOrderOnDrone(0).getPickUpTime());
                         currentTime += calcTime;
                         tripTime += calcTime;
                         deliverOrder();
