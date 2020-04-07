@@ -1,34 +1,14 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.Orientation;
 import javafx.geometry.Rectangle2D;
-import javafx.geometry.VPos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import java.util.ArrayList;
-import java.util.Dictionary;
+
 import java.util.HashMap;
 
 public class Main extends Application {
@@ -42,7 +22,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         // Setup
-        Parent root1 = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        //Parent root1 = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Team Azure Drones");
         BorderPane root = new BorderPane();
         MapPage mapPage = new MapPage();
