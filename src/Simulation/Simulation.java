@@ -20,6 +20,11 @@ public class Simulation {
     //Creation of drone for testing purposes at this point
     public Drone drone;
 
+    //Getter for numShifts
+    public int getNumShifts(){
+        return numShifts;
+    }
+
     public Simulation(){
         ArrayList<Waypoint> testPoints = new ArrayList<Waypoint>();
         testPoints.add(new Waypoint("Point 1", 1, 1, true));
@@ -603,24 +608,5 @@ public class Simulation {
         }
     }
 
-    //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
-    //public Double average = getAverage(drone.deliveryTimes);
-    //public Double worst = getWorst(drone.deliveryTimes);
 
-    public static Double getAverage(Double [] times){
-        double sum = 0;
-        for(int i = 0; i<times.length; i++){
-            sum += times[i];
-        }
-        return sum/times.length;
-    }
-    public static Double getWorst(Double [] times){
-        double worst = 0;
-        for(int i = 0; i<times.length; i++){
-            if(times[i]>worst){
-                worst = times[i];
-            }
-        }
-        return worst;
-    }
 }
