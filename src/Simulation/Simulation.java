@@ -245,6 +245,7 @@ public class Simulation {
                     //when the drone is at the starting position and it's not within the first five minutes of the simulation
                 } else {
                     while(canLoad){
+                        //don't look for current orders if currentOrder is passed times length
                         while(times.get(currentOrder) <= currentTime && canLoad){//loads available orders until weight capacity is hit
                             if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
                                 loadOrder(currentTime);
