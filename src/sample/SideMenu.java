@@ -15,9 +15,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -148,8 +152,18 @@ public class SideMenu extends ToolBar {
 
             save.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
+                    FileChooser fileChooser = new FileChooser();
 
-                    DataTransfer.debugToString();
+                    //If we want we can set extension filters for text files
+                    FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+                    fileChooser.getExtensionFilters().add(filter);
+
+                    //Show save file dialogue // NEED TO MAKE SURE I HAVE THE RIGHT STAGE!
+                    File file = fileChooser.showSaveDialog(Values.primaryStage);
+
+                    if(file != null) {
+                        writeTextToFile("RESULTS", file);
+                    }
                 }
             });
 
@@ -183,6 +197,17 @@ public class SideMenu extends ToolBar {
                     this.swapMenues();
                 }
             });
+        }
+    }
+
+    private void writeTextToFile(String str, File file)
+    {
+        try {
+            PrintWriter writer = new PrintWriter(file);
+            writer.println(str);
+            writer.close();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
