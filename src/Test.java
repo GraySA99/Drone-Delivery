@@ -8,6 +8,10 @@ public class Test {
             System.out.println(prob);
         }*/
 
+        //int a = 3/2, b = 4/2, c = 5/2;
+        //1, 2, 2
+        //System.out.println(a + " " + b + " " + c);
+
         Simulation sim = new Simulation();
         sim.runSimulation();
     }
