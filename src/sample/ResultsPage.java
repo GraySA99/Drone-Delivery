@@ -14,14 +14,44 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class ResultsPage extends VBox {
 
     //Figure out how to get the most recent of each drone and bring them into this page
-    Drone droneforresults;
+    Drone droneforresults = new Drone();
+
+    //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
+    //public Double average = getAverage(drone.deliveryTimes);
+    //public Double worst = getWorst(drone.deliveryTimes);
+
+    public static Double getAverage(ArrayList<Double> times){
+        double sum = 0;
+        for(int i = 0; i<times.size(); i++){
+            sum += times.get(i);
+        }
+        return sum/times.size();
+    }
+    public static Double getWorst(ArrayList<Double> times){
+        double worst = 0;
+        for(int i = 0; i<times.size(); i++){
+            if(times.get(i)>worst){
+                worst = times.get(i);
+            }
+        }
+        return worst;
+    }
 
     public ResultsPage() {
 
         super();
+
+        Random rand = new Random();
+        for(int i = 0; i<60; i++){
+            droneforresults.FIFODeliveryTimes.add(rand.nextDouble());
+            droneforresults.KnapsackDeliveryTimes.add(rand.nextDouble());
+        }
 
         HBox resultsContainer = new HBox();
 
@@ -36,37 +66,19 @@ public class ResultsPage extends VBox {
         XYChart.Series<String, Number> FIFOSeries = new XYChart.Series<>();
         FIFOSeries.setName("FIFO");
         //For loop iterating over the FIFO delivery times and adding each of them to the series
-<<<<<<< HEAD
-        /*
-        for(int FIFOIndex = 1; FIFOIndex<=droneForResults.FIFODeliveryTimes.size(); FIFOIndex++){
-            FIFOSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(FIFOIndex, FIFODeliveryTimes[FIFOIndex-1]);
+
+        for(int FIFOIndex = 1; FIFOIndex<=droneforresults.FIFODeliveryTimes.size(); FIFOIndex++){
+            FIFOSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(FIFOIndex), droneforresults.FIFODeliveryTimes.get(FIFOIndex-1)));
         }
-         */
-=======
->>>>>>> parent of 3d34c95... Transfered getAverage and getWorst to results page calculation and Created Comment For Loop on how to show results
-        int FIFOIndex = 1;
-        FIFOSeries.getData().addAll(
-                new XYChart.Data<String, Number>(Integer.toString(FIFOIndex++), 12),
-                new XYChart.Data<String, Number>(Integer.toString(FIFOIndex++), 65),
-                new XYChart.Data<String, Number>(Integer.toString(FIFOIndex), 33)
-        );
+
         XYChart.Series<String, Number> KSSeries = new XYChart.Series<>();
         KSSeries.setName("Knapsack");
         //For loop iterating all over the knapsack delivery times and adding each one to the series
-<<<<<<< HEAD
-        /*
-        for(int KSIndex = 1; KSIndex<=droneForResults.KSDeliveryTimes.size(); KSIndex++){
-            KSSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(KSIndex, KSDeliveryTimes[KSIndex-1]);
+
+        for(int KSIndex = 1; KSIndex<=droneforresults.KnapsackDeliveryTimes.size(); KSIndex++){
+            KSSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(KSIndex), droneforresults.KnapsackDeliveryTimes.get(KSIndex-1)));
         }
-         */
-=======
-        int KSIndex = 1;
->>>>>>> parent of 3d34c95... Transfered getAverage and getWorst to results page calculation and Created Comment For Loop on how to show results
-        KSSeries.getData().addAll(
-                new XYChart.Data<String, Number>(Integer.toString(KSIndex++), 24),
-                new XYChart.Data<String, Number>(Integer.toString(KSIndex++), 15),
-                new XYChart.Data<String, Number>(Integer.toString(KSIndex), 45)
-        );
+
         resultsBarChart.getData().addAll(FIFOSeries, KSSeries);
         resultsBarChartFrame.getChildren().add(resultsBarChart);
 
@@ -75,18 +87,18 @@ public class ResultsPage extends VBox {
         VBox FIFODataFrame = new VBox();
         Text FIFOLabel = new Text("FIFO: ");
         //Put FIFODeliveryTimes.getAverage in Double.toString
-        Text FIFOAverageTime = new Text("Average Time: " + Double.toString(10));
+        Text FIFOAverageTime = new Text("Average Time: " + Double.toString(getAverage(droneforresults.FIFODeliveryTimes)));
         //Put FIFODeliveryTimes.getWorst in Double.toString
-        Text FIFOWorstTime = new Text("Worst Time: " + Double.toString(10));
+        Text FIFOWorstTime = new Text("Worst Time: " + Double.toString(getWorst(droneforresults.FIFODeliveryTimes)));
         FIFODataFrame.getChildren().addAll(
             FIFOLabel, FIFOAverageTime, FIFOWorstTime
         );
         VBox KSDataFrame = new VBox();
         Text KSLabel = new Text("Knapsack: ");
         //Put KnapsackDeliveryTimes.getAverage in Double.toString
-        Text KSAverageTime = new Text("Average Time: " + Double.toString(10));
+        Text KSAverageTime = new Text("Average Time: " + Double.toString(getAverage(droneforresults.KnapsackDeliveryTimes)));
         //Put KnapsackDeliveryTimes.getAverage in Double.toString
-        Text KSWorstTime = new Text("Worst Time: " + Double.toString(10));
+        Text KSWorstTime = new Text("Worst Time: " + Double.toString(getWorst(droneforresults.KnapsackDeliveryTimes)));
         KSDataFrame.getChildren().addAll(
                 KSLabel, KSAverageTime, KSWorstTime
         );
@@ -131,5 +143,7 @@ public class ResultsPage extends VBox {
         restartBtn.setAlignment(Pos.CENTER);
         saveResultsBtn.setAlignment(Pos.CENTER);
         finishBtn.setAlignment(Pos.CENTER);
+
+
     }
 }
