@@ -9,18 +9,19 @@ public class Drone {
     private ArrayList<Order> loadedOrdersList;
     private double weightCapacity, currentWeight;
     private Waypoint currentPosition;
-    private ArrayList<Waypoint> targetPositions; //may not be needed if we just rearrange the list of orders
-    private int turnAroundTime;
+    //private ArrayList<Waypoint> targetPositions; //may not be needed if we just rearrange the list of orders
+    private int turnAroundTime, speed;
     public ArrayList<Double> deliveryTimes;
 
     public Drone(){ //for a default drone
         loadedOrdersList  = new ArrayList<Order>();
         weightCapacity = 12;
         currentWeight = 0;
-        //waypoints at start need set
-        targetPositions = new ArrayList<Waypoint>();
+        currentPosition = null;
+        //targetPositions = new ArrayList<Waypoint>();
         turnAroundTime = 3;
         deliveryTimes = new ArrayList<Double>();
+        speed = 20;
     }
 
     public Drone(Waypoint s){ //for a default drone with a given starting point
@@ -28,9 +29,10 @@ public class Drone {
         weightCapacity = 12;
         currentWeight = 0;
         currentPosition = s;
-        targetPositions = new ArrayList<Waypoint>();
+        //targetPositions = new ArrayList<Waypoint>();
         turnAroundTime = 3;
         deliveryTimes = new ArrayList<Double>();
+        speed = 20;
     }
 
     //Create array for delivery times with the sum of the number of orders in all of the shifts.
@@ -41,6 +43,21 @@ public class Drone {
 
     public Order getOrderOnDrone(int i){
         return loadedOrdersList.get(i);
+    }
+
+    public ArrayList<Order> getOrdersList(){
+        return loadedOrdersList;
+    }
+
+    public void setOrdersList(ArrayList<Order> o){
+        //clears out old orders list
+        for(int r = loadedOrdersList.size(); r > 0; r--){
+            loadedOrdersList.remove(r - 1);
+        }
+
+        for(int i = 0; i < o.size(); i++){
+            loadedOrdersList.add(o.get(i));
+        }
     }
 
     public void addOrderToDrone(Order o){
@@ -69,9 +86,9 @@ public class Drone {
         return currentPosition;
     }
 
-    public Waypoint getCurrentTargetPosition(){
+    /*public Waypoint getCurrentTargetPosition(){
         return targetPositions.get(0);
-    }
+    }*/
 
     public int getTurnAroundTime(){
         return turnAroundTime;
@@ -79,6 +96,18 @@ public class Drone {
 
     public void setTurnAroundTime(int t){
         turnAroundTime = t;
+    }
+
+    public void setCurrentPosition(Waypoint w){
+        currentPosition = w;
+    }
+
+    public int getSpeed(){
+        return speed;
+    }
+
+    public void addDeliveryTime(double b){
+        deliveryTimes.add(b);
     }
 
 }
