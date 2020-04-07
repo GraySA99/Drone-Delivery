@@ -10,8 +10,8 @@ public class Drone {
     private double weightCapacity, currentWeight;
     private Waypoint currentPosition;
     //private ArrayList<Waypoint> targetPositions; //may not be needed if we just rearrange the list of orders
-    private int turnAroundTime, speed;
-    public ArrayList<Double> deliveryTimes;
+    private int turnAroundTime, speed, maxFlightTime;
+    public ArrayList<Double> FIFODeliveryTimes, KnapsackDeliveryTimes; //might make a fifo and knapsack list
 
     public Drone(){ //for a default drone
         loadedOrdersList  = new ArrayList<Order>();
@@ -20,8 +20,10 @@ public class Drone {
         currentPosition = null;
         //targetPositions = new ArrayList<Waypoint>();
         turnAroundTime = 3;
-        deliveryTimes = new ArrayList<Double>();
+        FIFODeliveryTimes = new ArrayList<Double>();
+        KnapsackDeliveryTimes = new ArrayList<Double>();
         speed = 20;
+        maxFlightTime = 20;
     }
 
     public Drone(Waypoint s){ //for a default drone with a given starting point
@@ -31,8 +33,10 @@ public class Drone {
         currentPosition = s;
         //targetPositions = new ArrayList<Waypoint>();
         turnAroundTime = 3;
-        deliveryTimes = new ArrayList<Double>();
+        FIFODeliveryTimes = new ArrayList<Double>();
+        KnapsackDeliveryTimes = new ArrayList<Double>();
         speed = 20;
+        maxFlightTime = 20;
     }
 
     //Create array for delivery times with the sum of the number of orders in all of the shifts.
@@ -94,9 +98,9 @@ public class Drone {
         return turnAroundTime;
     }
 
-    public void setTurnAroundTime(int t){
+    /*public void setTurnAroundTime(int t){
         turnAroundTime = t;
-    }
+    }*/
 
     public void setCurrentPosition(Waypoint w){
         currentPosition = w;
@@ -106,8 +110,16 @@ public class Drone {
         return speed;
     }
 
-    public void addDeliveryTime(double b){
-        deliveryTimes.add(b);
+    public void addFIFODeliveryTime(double b){
+        FIFODeliveryTimes.add(b);
+    }
+
+    public void addKnapsackDeliveryTime(double b){
+        KnapsackDeliveryTimes.add(b);
+    }
+
+    public int getMaxFlightTime(){
+        return maxFlightTime;
     }
 
 }
