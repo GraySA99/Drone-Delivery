@@ -48,6 +48,8 @@ public class ResultsPage extends VBox {
 
         super();
 
+        recentSimulation.runSimulation();
+
         HBox resultsContainer = new HBox();
 
         // Left
