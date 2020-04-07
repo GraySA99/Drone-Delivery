@@ -1,6 +1,7 @@
 package sample;
 
 import Simulation.Drone;
+import Simulation.Simulation;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.chart.BarChart;
@@ -15,12 +16,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class ResultsPage extends VBox {
 
     //Figure out how to get the most recent of each drone and bring them into this page
-    Drone droneforresults = new Drone();
+    Simulation recentSimulation = new Simulation();
+    Drone droneforresults = recentSimulation.drone;
 
     //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
     //public Double average = getAverage(drone.deliveryTimes);
@@ -46,12 +47,6 @@ public class ResultsPage extends VBox {
     public ResultsPage() {
 
         super();
-
-        Random rand = new Random();
-        for(int i = 0; i<60; i++){
-            droneforresults.FIFODeliveryTimes.add(rand.nextDouble());
-            droneforresults.KnapsackDeliveryTimes.add(rand.nextDouble());
-        }
 
         HBox resultsContainer = new HBox();
 
