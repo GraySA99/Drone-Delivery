@@ -2,6 +2,7 @@ package sample;
 
 import Food.Food;
 
+import Mapping.Waypoint;
 import Simulation.DataTransfer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,10 +13,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.Set;
 
 public class FoodPage extends BorderPane {
+
+    private ListView<HBox> foodList;
+    private TextField foodNameEnt;
+    private TextField foodWeightEnt;
 
     public FoodPage() {
 
@@ -27,7 +35,7 @@ public class FoodPage extends BorderPane {
         // Left Side - The List of Entered Food
         StackPane foodListContainer = new StackPane();
         foodListContainer.setStyle(Styles.foodListContainer);
-        ListView<HBox> foodList = new ListView<HBox>();
+        foodList = new ListView<HBox>();
         foodList.setPrefWidth(Values.foodListWidth);
         foodList.setStyle(Styles.foodList);
         foodList.getItems().add(new HBox());
@@ -37,9 +45,9 @@ public class FoodPage extends BorderPane {
         GridPane foodItemEntry = new GridPane(); // Container for right side
         Text foodNameLabel = new Text("Name");
         Text foodWeightLabel = new Text("Weight");
-        TextField foodNameEnt = new TextField();
+        foodNameEnt = new TextField();
         foodNameEnt.setPromptText("ex. Burger");
-        TextField foodWeightEnt = new TextField();
+        foodWeightEnt = new TextField();
         foodWeightEnt.setPromptText("ex. 10");
         Button foodAddItemBtn = new Button("Add");
         Button foodRemoveItemBtn = new Button("Remove");
@@ -123,6 +131,8 @@ public class FoodPage extends BorderPane {
         this.setRight(foodItemEntry);
         this.setLeft(foodListContainer);
         this.setTop(pageTitle);
+
+        initFromFile();
     }
 
     // Function: isNumeric
@@ -139,6 +149,54 @@ public class FoodPage extends BorderPane {
         } catch (NumberFormatException e) {
 
             return false;
+        }
+    }
+
+    private void initFromFile() {
+
+        try {
+
+            FileInputStream fis = new FileInputStream(Values.defaultFoodFileName);
+            Scanner fileIn = new Scanner(fis);
+            if (!fileIn.hasNextLine()) { return; }
+            String fileLine = fileIn.nextLine();
+
+            while (fileIn.hasNextLine() && !fileLine.equals("@Food")) { fileLine = fileIn.nextLine(); }
+            if (!fileIn.hasNextLine()) { return; }
+
+            fileLine = fileIn.nextLine();
+            foodList.getItems().clear();
+            while (fileIn.hasNextLine()) {
+
+                if (fileLine.strip().equals("@/Food")) { break; }
+
+                String name = fileLine.strip().split("&")[0];
+                String weight = fileLine.strip().split("&")[1];
+
+                HBox foodItemFrame = new HBox();
+                Text foodItemName = new Text(name);
+                Text foodItemWeight = new Text(weight + " oz.");
+                foodItemFrame.getChildren().addAll(foodItemName, new ESHBox(), foodItemWeight);
+                foodItemFrame.setOnMouseClicked(evt -> {
+
+                    String foodName = ((Text)foodItemFrame.getChildren().get(0)).getText();
+                    String foodWeight = ((Text)foodItemFrame.getChildren().get(2)).getText()
+                            .replaceAll(" oz.", "");
+
+                    foodNameEnt.setText(foodName);
+                    foodWeightEnt.setText(foodWeight);
+                });
+
+                foodList.getItems().add(foodItemFrame);
+
+                DataTransfer.addFood(new Food(name, Double.parseDouble(weight)));
+
+                fileLine = fileIn.nextLine();
+            }
+        } catch (FileNotFoundException e) {
+
+            System.out.println("Problem With File");
+            e.printStackTrace();
         }
     }
 }

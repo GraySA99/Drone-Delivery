@@ -10,15 +10,15 @@ public class Waypoint {
     private String name;
 
     public Waypoint(String n, double latitude, double longitude, boolean isStarting) {
-        latitude = latitude;
-        longitude = longitude;
+        this.latitude = latitude;
+        this.longitude = longitude;
         isStartingPoint = isStarting;
         name = n;
     }
 
     public Waypoint(String n, double latitude, double longitude) {
-        latitude = latitude;
-        longitude = longitude;
+        this.latitude = latitude;
+        this.longitude = longitude;
         isStartingPoint = false;
         name = n;
     }

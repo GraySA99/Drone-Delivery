@@ -1,4 +1,7 @@
-@WayPoint
+Format:
+Name&Lat,Lng
+
+@Waypoint
 SAC (root)&41.15483,-80.07793
 HAL&41.15466,-80.07750
 PLC&41.15584,-80.07746

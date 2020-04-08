@@ -10,13 +10,17 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class MealsPage extends BorderPane {
 
     private VBox foodFrame;
     private HashMap<Food, HBox> foodItems;
+    private ListView<HBox> mealsList;
 
     public MealsPage() {
 
@@ -30,7 +34,7 @@ public class MealsPage extends BorderPane {
         // Left Side
         StackPane mealsListContainer = new StackPane();
         mealsListContainer.setStyle(Styles.foodListContainer);
-        ListView<HBox> mealsList = new ListView<>();
+        mealsList = new ListView<>();
         mealsList.setPrefWidth(550);
         mealsList.setStyle(Styles.mealsList);
         mealsList.getItems().add(new HBox());
@@ -152,6 +156,8 @@ public class MealsPage extends BorderPane {
         this.setRight(mealEntry);
         this.setLeft(mealsList);
         this.setTop(pageTitle);
+
+        initFromFile();
     }
 
     public void setFoodFrame() {
@@ -203,6 +209,69 @@ public class MealsPage extends BorderPane {
         } catch (NumberFormatException e) {
 
             return false;
+        }
+    }
+
+    private void initFromFile() {
+
+        try {
+
+            FileInputStream fis = new FileInputStream(Values.defaultMealsFileName);
+            Scanner fileIn = new Scanner(fis);
+            if (!fileIn.hasNextLine()) { return; }
+            String fileLine = fileIn.nextLine();
+
+            while (fileIn.hasNextLine() && !fileLine.equals("@Meals")) { fileLine = fileIn.nextLine(); }
+            if (!fileIn.hasNextLine()) { return; }
+
+            fileLine = fileIn.nextLine();
+            mealsList.getItems().clear();
+
+            String name = "";
+            String prob = "";
+            HashMap<Food, Integer> tempFoodList = null;
+
+            while (fileIn.hasNextLine()) {
+
+                boolean workedWithFood = false;
+
+                if (fileLine.strip().equals("@/Meals")) { break; }
+
+                if (!fileLine.contains("*")) {
+                    name = fileLine.strip().split("&")[0];
+                    prob = fileLine.strip().split("&")[1];
+                    tempFoodList = new HashMap<>();
+                } else {
+
+                    while (fileLine.contains("*")) {
+
+                        fileLine = fileLine.replace("*", "");
+                        Food tempFood = DataTransfer.getFood(fileLine.strip().split("&")[0]);
+                        int qty = Integer.parseInt(fileLine.strip().split("&")[1]);
+
+                        tempFoodList.put(tempFood, qty);
+
+                        fileLine = fileIn.nextLine();
+                    }
+
+                    HBox frame = new HBox();
+                    Text frameName = new Text(name);
+                    Text frameProb = new Text(prob + "%");
+                    frame.getChildren().addAll(frameName, new ESHBox(), frameProb);
+
+                    mealsList.getItems().add(frame);
+                    DataTransfer.addMeal(new Meal(name, tempFoodList, Double.parseDouble(prob)));
+
+                    workedWithFood = true;
+                }
+
+                if (!workedWithFood)
+                    fileLine = fileIn.nextLine();
+            }
+        } catch (FileNotFoundException e) {
+
+            System.out.println("Problem With File");
+            e.printStackTrace();
         }
     }
 }

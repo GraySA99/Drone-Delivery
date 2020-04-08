@@ -14,6 +14,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
@@ -22,6 +23,8 @@ public class MapPage extends BorderPane {
     private JSObject javascriptConnector;
     private JavaConnector javaConnector = new JavaConnector();
     private Text currentPointLabel;
+    private TextField nameEnt;
+    private ListView<HBox> DPList;
 
     public MapPage() {
 
@@ -32,7 +35,7 @@ public class MapPage extends BorderPane {
         // Left Side - Point List
         StackPane DPListContainer = new StackPane();
         DPListContainer.setStyle(Styles.DPListContainer);
-        ListView<HBox> DPList = new ListView<>();
+        DPList = new ListView<>();
         DPList.setStyle(Styles.DPList);
         DPList.setPrefWidth(600);
         DPList.getItems().add(new HBox());
@@ -43,7 +46,7 @@ public class MapPage extends BorderPane {
 
         HBox nameContainer = new HBox();
         Text nameLabel = new Text("Name:");
-        TextField nameEnt = new TextField();
+        nameEnt = new TextField();
         nameEnt.setPromptText("ex. Home");
         nameContainer.getChildren().addAll(new ESHBox(), nameLabel, nameEnt, new ESHBox());
 
@@ -159,6 +162,7 @@ public class MapPage extends BorderPane {
         this.setLeft(DPListContainer);
 
         webEngine.loadContent(Values.googleMapsJavaScript);
+        initFromFile();
     }
 
     public class JavaConnector {
@@ -176,17 +180,46 @@ public class MapPage extends BorderPane {
 
     private void initFromFile() {
 
-        Scanner fileIn = new Scanner(Values.defaultFileName);
-        if (!fileIn.hasNextLine()) { return; }
-        String fileLine = fileIn.nextLine();
+        try {
 
-        while (fileIn.hasNextLine() && !fileLine.equals("@WayPoint")) { fileLine = fileIn.nextLine(); }
-        if (!fileIn.hasNextLine()) { return; }
+            FileInputStream fis = new FileInputStream(Values.defaultWaypointFileName);
+            Scanner fileIn = new Scanner(fis);
+            if (!fileIn.hasNextLine()) { return; }
+            String fileLine = fileIn.nextLine();
 
-        fileLine = fileIn.nextLine();
-        while (fileIn.hasNextLine() && !fileLine.equals("@/WayPoint")) {
+            while (fileIn.hasNextLine() && !fileLine.equals("@Waypoint")) { fileLine = fileIn.nextLine(); }
+            if (!fileIn.hasNextLine()) { return; }
 
+            fileLine = fileIn.nextLine();
+            DPList.getItems().clear();
+            while (fileIn.hasNextLine()) {
 
+                if (fileLine.strip().equals("@/Waypoint")) { break; }
+
+                String name = fileLine.strip().split("&")[0];
+                double lat = Double.parseDouble(fileLine.strip().split("&")[1].split(",")[0]);
+                double lng = Double.parseDouble(fileLine.strip().split("&")[1].split(",")[1]);
+
+                HBox frame = new HBox();
+                Text frameName = new Text(name);
+                Text frameData = new Text(String.format("(%.5f, %.5f)", lat, lng));
+                frame.getChildren().addAll(frameName, new ESHBox(), frameData);
+
+                frame.setOnMouseClicked(evt -> {
+
+                    nameEnt.setText(((Text)frame.getChildren().get(0)).getText());
+                    currentPointLabel.setText(((Text)frame.getChildren().get(2)).getText());
+                });
+
+                DPList.getItems().add(frame);
+
+                DataTransfer.addWaypoint(new Waypoint(name, lat, lng, DPList.getItems().isEmpty()));
+                fileLine = fileIn.nextLine();
+            }
+        } catch (FileNotFoundException e) {
+
+            System.out.println("Problem With File");
+            e.printStackTrace();
         }
     }
 }
