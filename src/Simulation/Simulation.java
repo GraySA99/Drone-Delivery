@@ -17,6 +17,12 @@ public class Simulation {
     public ArrayList<Integer> times, skipped;
     private Map simMap;
 
+    //Public variables for average time and worst time in the simulation, calculated at results
+    public Double FIFOaverageTime;
+    public Double KSaverageTime;
+    public Double FIFOworstTime;
+    public Double KSworstTime;
+
     //Creation of drone for testing purposes at this point
     public Drone drone;
 
@@ -24,6 +30,7 @@ public class Simulation {
     public int getNumShifts(){
         return numShifts;
     }
+
 
     public Simulation(){
         ArrayList<Waypoint> testPoints = new ArrayList<Waypoint>();

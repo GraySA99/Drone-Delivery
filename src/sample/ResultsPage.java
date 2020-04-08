@@ -117,19 +117,26 @@ public class ResultsPage extends VBox {
         VBox resultsDataFrame = new VBox();
         VBox FIFODataFrame = new VBox();
         Text FIFOLabel = new Text("FIFO: ");
+
+        //Calculate results times and put in simulation
+        recentSimulation.FIFOaverageTime = getAverage(droneforresults.FIFODeliveryTimes);
+        recentSimulation.FIFOworstTime = getWorst(droneforresults.FIFODeliveryTimes);
+        recentSimulation.KSaverageTime = getAverage(droneforresults.KnapsackDeliveryTimes);
+        recentSimulation.KSworstTime = getWorst(droneforresults.KnapsackDeliveryTimes);
+
         //Put FIFODeliveryTimes.getAverage in Double.toString
-        Text FIFOAverageTime = new Text("Average Time: " + Double.toString(getAverage(droneforresults.FIFODeliveryTimes)));
+        Text FIFOAverageTime = new Text("Average Time: " + Double.toString(recentSimulation.FIFOaverageTime));
         //Put FIFODeliveryTimes.getWorst in Double.toString
-        Text FIFOWorstTime = new Text("Worst Time: " + Double.toString(getWorst(droneforresults.FIFODeliveryTimes)));
+        Text FIFOWorstTime = new Text("Worst Time: " + Double.toString(recentSimulation.FIFOworstTime));
         FIFODataFrame.getChildren().addAll(
             FIFOLabel, FIFOAverageTime, FIFOWorstTime
         );
         VBox KSDataFrame = new VBox();
         Text KSLabel = new Text("Knapsack: ");
         //Put KnapsackDeliveryTimes.getAverage in Double.toString
-        Text KSAverageTime = new Text("Average Time: " + Double.toString(getAverage(droneforresults.KnapsackDeliveryTimes)));
+        Text KSAverageTime = new Text("Average Time: " + Double.toString(recentSimulation.KSaverageTime));
         //Put KnapsackDeliveryTimes.getAverage in Double.toString
-        Text KSWorstTime = new Text("Worst Time: " + Double.toString(getWorst(droneforresults.KnapsackDeliveryTimes)));
+        Text KSWorstTime = new Text("Worst Time: " + Double.toString(recentSimulation.KSworstTime));
         KSDataFrame.getChildren().addAll(
                 KSLabel, KSAverageTime, KSWorstTime
         );
