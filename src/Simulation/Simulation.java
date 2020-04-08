@@ -31,13 +31,13 @@ public class Simulation {
         return numShifts;
     }
 
-
     public Simulation(){
-        ArrayList<Waypoint> testPoints = new ArrayList<Waypoint>();
-        testPoints.add(new Waypoint("Point 1", 1, 1, true));
-        testPoints.add(new Waypoint("Point 2", 2, 1, true));
-        testPoints.add(new Waypoint("Point 3", 3, 1, true));
-        simMap = new Map(new Waypoint("Starting", 0, 0, true), testPoints);
+        Waypoint starting = DataTransfer.getWaypoint(0);
+        assert DataTransfer.getWaypoints() != null;
+        simMap = new Map(starting, DataTransfer.getWaypoints());
+        simMap.removeWaypoint(0);
+        simMap.getStartingPoint().setStartingPoint(true);
+
         drone = new Drone();
         orderQueue = new ArrayList<Order>();
         mealList = new ArrayList<Meal>();
@@ -70,52 +70,6 @@ public class Simulation {
 
         temp.add(new Food("Hamburger", 0.375));
         mealList.add(new Meal("Two Burgers and a Drink", temp, 0.15));
-    }
-
-    //the check for adding the probabilities needs to be somewhere. Should be outside of this class
-    //for simulations with default settings ie sprint 1
-    public Simulation(Map m){
-        simMap = m;
-        orderQueue = new ArrayList<Order>();
-        mealList = new ArrayList<Meal>();
-        currentOrderQueue = new ArrayList<Order>();
-        drone = new Drone();
-
-        numShifts = 4;
-        ordersPerHour = new int[numShifts];
-        timesToBeRan = 1;
-        ordersPerHour[0] = 15;
-        ordersPerHour[1] = 17;
-        ordersPerHour[2] = 22;
-        ordersPerHour[3] = 15;
-
-        times = new ArrayList<Integer>();
-        skipped = new ArrayList<Integer>();
-
-        ArrayList<Food> temp = new ArrayList<Food>();
-        temp.add(new Food("Hamburger", 0.375));
-        temp.add(new Food("Drink", 0.875));
-        temp.add(new Food("Fries", 0.25));
-
-        mealList.add(new Meal(temp, 0.55));
-
-        temp.add(new Food("Hamburger", 0.375));
-        mealList.add(new Meal(temp, 0.1));
-
-        temp.remove(2);
-        temp.remove(2);
-        mealList.add(new Meal(temp, 0.2));
-
-        temp.add(new Food("Hamburger", 0.375));
-        mealList.add(new Meal(temp, 0.15));
-    }
-
-    public Simulation(int numberOfShifts, int timesToRun, ArrayList<Meal> listOfMeals, int[] avgOrdersEachHour, Map m){
-        //this will be used when we start having settings for the simulation
-        numShifts = numberOfShifts;
-        timesToBeRan = timesToRun;
-        //deep copy of meals list
-
     }
 
     public void runSimulation(){
@@ -223,7 +177,7 @@ public class Simulation {
         int currentOrder = 0, prevResult = 1; //tracks the current order in currentOrderQueue
         boolean launched = false, canLoad = true;
 
-        while (currentOrderQueue.size() > 0 || drone.getNumOrders() > 0){
+        while ((currentOrderQueue.size() > 0 || drone.getNumOrders() > 0)){
             System.out.println("The queue size is " + currentOrderQueue.size() + "\tThe number of orders on the drone is " + drone.getNumOrders());
             if(drone.getCurrentPosition().isStarting()){
                 launched = false;
@@ -257,9 +211,6 @@ public class Simulation {
                             } else { //launch
                                 drone.setOrdersList(sortOrders(drone.getOrdersList()));
                                 //resets the pickup times as the drone did not really leave until this point
-                                for(int i = 0; i < drone.getNumOrders(); i++){
-                                    drone.getOrderOnDrone(i).setPickUpTime(currentTime);
-                                }
                                 System.out.print("Began launch sequence. TSP has been called.");
                                 calcTime = calculateTime(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination());
                                 System.out.print(" The calculated time is " + calcTime + " while old current time is " + currentTime);
@@ -278,9 +229,6 @@ public class Simulation {
                             System.out.println("The drone waited a minute for more orders to appear.");
                             currentTime++;
                             waitedTime++;
-                            /*if(waitedTime >= 3){//may need changed depending on what Valentine wants
-                                tripTime = 0;
-                            }*/
                         }
                     }
 
@@ -323,9 +271,6 @@ public class Simulation {
                             System.out.println("The drone waited a minute for more orders to appear.");
                             currentTime++;
                             waitedTime++;
-                            /*if(waitedTime >= 3){ //may need changed depending on what Valentine wants
-                                tripTime = 0;
-                            }*/
                         }
                     }
 
@@ -338,7 +283,6 @@ public class Simulation {
                     tripTime += calcTime;
                     System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
                     deliverOrder(currentTime);
-
                 }
             } else {
                 //the drone is not home and is empty
@@ -398,7 +342,7 @@ public class Simulation {
 
     private double calculateTime(Waypoint a, Waypoint b){
         System.out.println("The Calculated distance it " + distance(a, b));
-        return 60 * ((distance(a, b) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) )) + .5;
+        return ((distance(a, b) * 1) / (drone.getSpeed() * 1609.34)) / 60 + .5;
     }
 
     private void deliverOrder(double currentTime){
