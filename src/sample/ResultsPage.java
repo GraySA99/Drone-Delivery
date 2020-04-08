@@ -67,7 +67,7 @@ public class ResultsPage extends VBox {
             CategoryAxis resultsXAxis = new CategoryAxis();
             resultsXAxis.setLabel("Hours");
             NumberAxis resultsYAxis = new NumberAxis();
-            resultsYAxis.setLabel("Delivery Times");
+            resultsYAxis.setLabel("Number of Orders Delivered");
             BarChart<String, Number> resultsBarChart = new BarChart<String, Number>(resultsXAxis, resultsYAxis);
             resultsBarChart.setTitle("Results");
             XYChart.Series<String, Number> FIFOSeries = new XYChart.Series<>();
@@ -132,18 +132,18 @@ public class ResultsPage extends VBox {
             recentSimulation.KSworstTime = getWorst(droneforresults.KnapsackDeliveryTimes);
 
             //Put FIFODeliveryTimes.getAverage in Double.toString
-            Text FIFOAverageTime = new Text("Average Time: " + Double.toString(recentSimulation.FIFOaverageTime));
+            Text FIFOAverageTime = new Text("Average Time: " + Double.toString(Math.floor(recentSimulation.FIFOaverageTime)) + " minutes");
             //Put FIFODeliveryTimes.getWorst in Double.toString
-            Text FIFOWorstTime = new Text("Worst Time: " + Double.toString(recentSimulation.FIFOworstTime));
+            Text FIFOWorstTime = new Text("Worst Time: " + Double.toString(Math.floor(recentSimulation.FIFOworstTime)) + " minutes");
             FIFODataFrame.getChildren().addAll(
                     FIFOLabel, FIFOAverageTime, FIFOWorstTime
             );
             VBox KSDataFrame = new VBox();
             Text KSLabel = new Text("Knapsack: ");
             //Put KnapsackDeliveryTimes.getAverage in Double.toString
-            Text KSAverageTime = new Text("Average Time: " + Double.toString(recentSimulation.KSaverageTime));
+            Text KSAverageTime = new Text("Average Time: " + Double.toString(Math.floor(recentSimulation.KSaverageTime))+" minutes");
             //Put KnapsackDeliveryTimes.getAverage in Double.toString
-            Text KSWorstTime = new Text("Worst Time: " + Double.toString(recentSimulation.KSworstTime));
+            Text KSWorstTime = new Text("Worst Time: " + Double.toString(Math.floor(recentSimulation.KSworstTime))+" minutes");
             KSDataFrame.getChildren().addAll(
                     KSLabel, KSAverageTime, KSWorstTime
             );
@@ -204,7 +204,7 @@ public class ResultsPage extends VBox {
             CategoryAxis resultsXAxis = new CategoryAxis();
             resultsXAxis.setLabel("Hours");
             NumberAxis resultsYAxis = new NumberAxis();
-            resultsYAxis.setLabel("Delivery Times");
+            resultsYAxis.setLabel("Number of Orders Delivered");
             BarChart<String, Number> resultsBarChart = new BarChart<String, Number>(resultsXAxis, resultsYAxis);
             resultsBarChart.setTitle("Results");
             XYChart.Series<String, Number> FIFOSeries = new XYChart.Series<>();
