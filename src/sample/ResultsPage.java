@@ -210,7 +210,6 @@ public class ResultsPage extends VBox {
             FIFOSeries.setName("FIFO");
 
             //Hour Counter for For Loops
-            int currentHour = 0;
             int [] hourCounter = new int [4];
             for(int i = 0; i<hourCounter.length; i++){
                 hourCounter[i] = 0;
@@ -225,7 +224,6 @@ public class ResultsPage extends VBox {
             KSSeries.setName("Knapsack");
 
             //Reset Variables
-            currentHour = 0;
             for(int i = 0; i<hourCounter.length; i++){
                 hourCounter[i] = 0;
             }
