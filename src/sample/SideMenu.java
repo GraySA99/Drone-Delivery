@@ -162,11 +162,11 @@ public class SideMenu extends ToolBar {
                     FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
                     fileChooser.getExtensionFilters().add(filter);
 
-                    //Show save file dialogue // NEED TO MAKE SURE I HAVE THE RIGHT STAGE!
+                    //Show save file dialogue
                     File file = fileChooser.showSaveDialog(Values.primaryStage);
 
                     if(file != null) {
-                        writeTextToFile("RESULTS", file);
+                        writeTextToFile(getResultsStr(), file);
                     }
                 }
             });
@@ -203,6 +203,13 @@ public class SideMenu extends ToolBar {
                 }
             });
         }
+    }
+
+    private String getResultsStr() {
+        String ret = "";
+
+
+        return ret;
     }
 
     private void writeTextToFile(String str, File file)
