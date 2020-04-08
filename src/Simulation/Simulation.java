@@ -178,7 +178,7 @@ public class Simulation {
         boolean launched = false, canLoad = true;
 
         while ((currentOrderQueue.size() > 0 || drone.getNumOrders() > 0)){
-            System.out.println("The queue size is " + currentOrderQueue.size() + "\tThe number of orders on the drone is " + drone.getNumOrders());
+            //System.out.println("The queue size is " + currentOrderQueue.size() + "\tThe number of orders on the drone is " + drone.getNumOrders());
             if(drone.getCurrentPosition().isStarting()){
                 launched = false;
                 canLoad = true;
