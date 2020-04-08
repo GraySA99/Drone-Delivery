@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class ResultsPage extends VBox {
 
 
-
+    int tempTime;
 
 
     //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
@@ -132,18 +132,22 @@ public class ResultsPage extends VBox {
             recentSimulation.KSworstTime = getWorst(droneforresults.KnapsackDeliveryTimes);
 
             //Put FIFODeliveryTimes.getAverage in Double.toString
-            Text FIFOAverageTime = new Text("Average Time: " + Double.toString(Math.floor(recentSimulation.FIFOaverageTime)) + " minutes");
+            tempTime = (int)Math.floor(recentSimulation.FIFOaverageTime);
+            Text FIFOAverageTime = new Text("Average Time: " + tempTime + " minutes");
             //Put FIFODeliveryTimes.getWorst in Double.toString
-            Text FIFOWorstTime = new Text("Worst Time: " + Double.toString(Math.floor(recentSimulation.FIFOworstTime)) + " minutes");
+            tempTime = (int)Math.floor(recentSimulation.FIFOworstTime);
+            Text FIFOWorstTime = new Text("Worst Time: " + tempTime + " minutes");
             FIFODataFrame.getChildren().addAll(
                     FIFOLabel, FIFOAverageTime, FIFOWorstTime
             );
             VBox KSDataFrame = new VBox();
             Text KSLabel = new Text("Knapsack: ");
             //Put KnapsackDeliveryTimes.getAverage in Double.toString
-            Text KSAverageTime = new Text("Average Time: " + Double.toString(Math.floor(recentSimulation.KSaverageTime))+" minutes");
+            tempTime = (int)Math.floor(recentSimulation.KSaverageTime);
+            Text KSAverageTime = new Text("Average Time: " + tempTime +" minutes");
             //Put KnapsackDeliveryTimes.getAverage in Double.toString
-            Text KSWorstTime = new Text("Worst Time: " + Double.toString(Math.floor(recentSimulation.KSworstTime))+" minutes");
+            tempTime = (int)Math.floor(recentSimulation.KSworstTime);
+            Text KSWorstTime = new Text("Worst Time: " + tempTime +" minutes");
             KSDataFrame.getChildren().addAll(
                     KSLabel, KSAverageTime, KSWorstTime
             );
