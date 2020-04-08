@@ -228,8 +228,13 @@ public class Simulation {
             if(drone.getCurrentPosition().isStarting()){
                 launched = false;
                 canLoad = true;
-                tripTime = 0;
                 waitedTime = 0;
+
+                if(tripTime > 0){
+                    currentTime += drone.getTurnAroundTime();
+                    tripTime = 0;
+                    System.out.println("Upon returning to the start the drone needed 3 min to recharge and load. The current time is " + currentTime);
+                }
 
                 //when the drone is at the starting point and it's within the first five minutes of the simulation
                 if(currentTime <= 5){
@@ -273,9 +278,9 @@ public class Simulation {
                             System.out.println("The drone waited a minute for more orders to appear.");
                             currentTime++;
                             waitedTime++;
-                            if(waitedTime >= 3){//may need changed depending on what Valentine wants
+                            /*if(waitedTime >= 3){//may need changed depending on what Valentine wants
                                 tripTime = 0;
-                            }
+                            }*/
                         }
                     }
 
@@ -318,9 +323,9 @@ public class Simulation {
                             System.out.println("The drone waited a minute for more orders to appear.");
                             currentTime++;
                             waitedTime++;
-                            if(waitedTime >= 3){ //may need changed depending on what Valentine wants
+                            /*if(waitedTime >= 3){ //may need changed depending on what Valentine wants
                                 tripTime = 0;
-                            }
+                            }*/
                         }
                     }
 
@@ -332,11 +337,11 @@ public class Simulation {
 
                     //checks if the drone will be able to make it to the next destination and back with its remaining flight time
                     //adds the turnAroundTime if the drone won't make it
-                    if(tripTime + (calcTime * 2) > drone.getMaxFlightTime()){
+                    /*if(tripTime + (calcTime * 2) > drone.getMaxFlightTime()){
                         System.out.print(" The drone had to wait to recharge before leaving. The trip time was " + tripTime);
                         currentTime += drone.getTurnAroundTime();
                         tripTime = 0;
-                    }
+                    }*/
                     currentTime += calcTime;
                     tripTime += calcTime;
                     System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
@@ -363,8 +368,8 @@ public class Simulation {
                     if(tripTime + calcTime + homeTime > drone.getMaxFlightTime() - 0.5){
                         System.out.print("After " + tripTime + " min of trip time, the drone has decided to return home.");
                         calcTime = calculateTime(drone.getCurrentPosition(), simMap.getStartingPoint());
-                        System.out.print("The calc time was" + calcTime + " the old current time is " + currentTime);
-                        currentTime += calcTime + 3;
+                        System.out.print("The calc time was" + calcTime + " the old current time is " + currentTime + "\n");
+                        currentTime += calcTime;
                         System.out.print(" And the new current time is " + currentTime);
                         drone.setCurrentPosition(simMap.getStartingPoint());
                         tripTime = 0;
@@ -524,7 +529,8 @@ public class Simulation {
     //returns: an ordered version of the "orders" arraylist passed in
     private ArrayList<Order> sortOrders(ArrayList<Order> orders) {
         // I need to first set the starting point, statically set to the SAC temporarily
-        Waypoint start = new Waypoint("SAC", 41.154870, -80.077945, true);
+        //Waypoint start = new Waypoint("SAC", 41.154870, -80.077945, true);
+        Waypoint start = simMap.getStartingPoint();
         orders.add(0, new Order(new Meal(), start));
 
         int numNodes = orders.size();
