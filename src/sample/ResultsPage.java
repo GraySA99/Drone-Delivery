@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class ResultsPage extends VBox {
 
     //Figure out how to get the most recent of each drone and bring them into this page
-    Simulation recentSimulation = new Simulation();
+    Simulation recentSimulation = Values.simulation;
     Drone droneforresults = recentSimulation.drone;
 
     //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
