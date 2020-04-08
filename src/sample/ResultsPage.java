@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class ResultsPage extends VBox {
 
     //Figure out how to get the most recent of each drone and bring them into this page
-    Simulation recentSimulation = new Simulation();
+    Simulation recentSimulation = Values.simulation;
     Drone droneforresults = recentSimulation.drone;
 
     //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
@@ -54,8 +54,6 @@ public class ResultsPage extends VBox {
     public ResultsPage() {
 
         super();
-
-        recentSimulation.runSimulation();
 
         HBox resultsContainer = new HBox();
 
@@ -121,19 +119,26 @@ public class ResultsPage extends VBox {
         VBox resultsDataFrame = new VBox();
         VBox FIFODataFrame = new VBox();
         Text FIFOLabel = new Text("FIFO: ");
+
+        //Calculate results times and put in simulation
+        recentSimulation.FIFOaverageTime = getAverage(droneforresults.FIFODeliveryTimes);
+        recentSimulation.FIFOworstTime = getWorst(droneforresults.FIFODeliveryTimes);
+        recentSimulation.KSaverageTime = getAverage(droneforresults.KnapsackDeliveryTimes);
+        recentSimulation.KSworstTime = getWorst(droneforresults.KnapsackDeliveryTimes);
+
         //Put FIFODeliveryTimes.getAverage in Double.toString
-        Text FIFOAverageTime = new Text("Average Time: " + Double.toString(getAverage(droneforresults.FIFODeliveryTimes)));
+        Text FIFOAverageTime = new Text("Average Time: " + Double.toString(recentSimulation.FIFOaverageTime));
         //Put FIFODeliveryTimes.getWorst in Double.toString
-        Text FIFOWorstTime = new Text("Worst Time: " + Double.toString(getWorst(droneforresults.FIFODeliveryTimes)));
+        Text FIFOWorstTime = new Text("Worst Time: " + Double.toString(recentSimulation.FIFOworstTime));
         FIFODataFrame.getChildren().addAll(
             FIFOLabel, FIFOAverageTime, FIFOWorstTime
         );
         VBox KSDataFrame = new VBox();
         Text KSLabel = new Text("Knapsack: ");
         //Put KnapsackDeliveryTimes.getAverage in Double.toString
-        Text KSAverageTime = new Text("Average Time: " + Double.toString(getAverage(droneforresults.KnapsackDeliveryTimes)));
+        Text KSAverageTime = new Text("Average Time: " + Double.toString(recentSimulation.KSaverageTime));
         //Put KnapsackDeliveryTimes.getAverage in Double.toString
-        Text KSWorstTime = new Text("Worst Time: " + Double.toString(getWorst(droneforresults.KnapsackDeliveryTimes)));
+        Text KSWorstTime = new Text("Worst Time: " + Double.toString(recentSimulation.KSworstTime));
         KSDataFrame.getChildren().addAll(
                 KSLabel, KSAverageTime, KSWorstTime
         );
