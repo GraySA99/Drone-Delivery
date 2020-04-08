@@ -16,6 +16,10 @@ Version 1.19.0 4/8/20
 -Refactored Results Page to not include test simulation (Paul)
 -Refactored allowing for a blank results page if no simulation has been run (Paul)
 -Eliminated unused currentHour variables (Paul)
+-Defaults now load into the GUI and into the proper values in DataTransfer.java (Spencer)
+-Four .txt files were made that list the default items in the simulation. They are defaults given in the project outline (Spencer)
+-Formatting for each default file is given at the top (although there shouldn't be a reason to change them unless I got something wrong) (Spencer)
+-Uncommented out the start buttons functionality so that works again (Spencer)
 
 Version 1.18.1 4/7/20 FIFO Fixes Update
 -Added the getFIFODeliveryTime and getNumFIFODeliveryTimes to the drone class (Patrick)

@@ -5,12 +5,15 @@ import Food.Meal;
 import Mapping.Waypoint;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DataTransfer {
 
     private static ArrayList<Waypoint> deliveryPoints = new ArrayList<>();
     private static ArrayList<Food> foodItems = new ArrayList<>();
     private static ArrayList<Meal> meals = new ArrayList<>();
+    private static HashMap<Integer, Integer> shifts = new HashMap<>();
+    private static int numSims = -1;
 
     public static void debugToString() {
 
@@ -36,6 +39,65 @@ public class DataTransfer {
                         meal.getFoodItemQty(food)));
             }
         }
+
+        System.out.println("\n\nShifts: ");
+        for (int i : shifts.keySet()) {
+
+            System.out.println(String.format("%d %d", i, shifts.get(i)));
+        }
+    }
+
+    public static boolean addShift(Integer index, Integer numOrder) {
+
+        // Replace if exists
+        if (shifts.get(index) != null) {
+
+            shifts.replace(index, numOrder);
+        } else {
+
+            shifts.put(index, numOrder);
+        }
+
+        return true;
+    }
+
+    public static Integer removeShift(Integer index) {
+
+        if (shifts.get(index) != null)
+            return shifts.remove(index);
+        return null;
+    }
+
+    public static Integer getNumShifts() {
+
+        return shifts.size();
+    }
+
+    public static int getNumSimulations() {
+
+        return numSims;
+    }
+
+    public static void setNumSimulations(int num) {
+
+        numSims = num;
+    }
+
+    public static Integer getShift(Integer index) {
+
+        return shifts.get(index);
+    }
+
+    public static int[] getShifts() {
+
+        int[] list = new int[shifts.size()];
+
+        int index = 0;
+        for (int i : shifts.values()) {
+            list[index++] = i;
+        }
+
+        return list;
     }
 
     public static boolean addMeal(Meal meal) {

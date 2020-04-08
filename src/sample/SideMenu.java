@@ -151,6 +151,7 @@ public class SideMenu extends ToolBar {
 
                     Values.simulation = new Simulation();
                     Values.simulation.runSimulation();
+
                 }
             });
 

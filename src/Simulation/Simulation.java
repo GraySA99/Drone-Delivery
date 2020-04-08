@@ -228,8 +228,13 @@ public class Simulation {
             if(drone.getCurrentPosition().isStarting()){
                 launched = false;
                 canLoad = true;
-                tripTime = 0;
                 waitedTime = 0;
+
+                if(tripTime > 0){
+                    currentTime += drone.getTurnAroundTime();
+                    tripTime = 0;
+                    System.out.println("Upon returning to the start the drone needed 3 min to recharge and load. The current time is " + currentTime);
+                }
 
                 //when the drone is at the starting point and it's within the first five minutes of the simulation
                 if(currentTime <= 5){
@@ -247,7 +252,7 @@ public class Simulation {
                                     prevResult = a;
                                 }
                                 System.out.println("\n" + a + "\n");
-                                loadOrder(currentTime);
+                                loadOrder(currentOrder);
                                 currentOrder++;
                             } else { //launch
                                 drone.setOrdersList(sortOrders(drone.getOrdersList()));
@@ -273,9 +278,9 @@ public class Simulation {
                             System.out.println("The drone waited a minute for more orders to appear.");
                             currentTime++;
                             waitedTime++;
-                            if(waitedTime >= 3){//may need changed depending on what Valentine wants
+                            /*if(waitedTime >= 3){//may need changed depending on what Valentine wants
                                 tripTime = 0;
-                            }
+                            }*/
                         }
                     }
 
@@ -283,8 +288,8 @@ public class Simulation {
                 } else {
                     //resets the pickup times for the orders that were loaded before the five minute mark
                     if(currentTime < 7){
-                        for(int i = 0; i < drone.getNumOrders(); i++){
-                            drone.getOrderOnDrone(i).setPickUpTime(currentTime);
+                        if(drone.getCurrentWeight() > 0){
+                            canLoad = false;
                         }
                     }
                     while(canLoad && currentOrder <= times.size() - 1){
@@ -300,7 +305,7 @@ public class Simulation {
                                     prevResult = a;
                                 }
                                 System.out.println("\n" + a + "\n");
-                                loadOrder(currentTime);
+                                loadOrder(currentOrder);
                                 currentOrder++;
                                 if(currentOrder >= times.size() - 1){
                                     canLoad = false;
@@ -318,9 +323,9 @@ public class Simulation {
                             System.out.println("The drone waited a minute for more orders to appear.");
                             currentTime++;
                             waitedTime++;
-                            if(waitedTime >= 3){ //may need changed depending on what Valentine wants
+                            /*if(waitedTime >= 3){ //may need changed depending on what Valentine wants
                                 tripTime = 0;
-                            }
+                            }*/
                         }
                     }
 
@@ -329,14 +334,6 @@ public class Simulation {
                     System.out.print("Began launch sequence. TSP has been called.");
                     calcTime = calculateTime(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination());
                     System.out.print(" The calculated time is " + calcTime + " while old current time is " + currentTime);
-
-                    //checks if the drone will be able to make it to the next destination and back with its remaining flight time
-                    //adds the turnAroundTime if the drone won't make it
-                    if(tripTime + (calcTime * 2) > drone.getMaxFlightTime()){
-                        System.out.print(" The drone had to wait to recharge before leaving. The trip time was " + tripTime);
-                        currentTime += drone.getTurnAroundTime();
-                        tripTime = 0;
-                    }
                     currentTime += calcTime;
                     tripTime += calcTime;
                     System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
@@ -363,8 +360,8 @@ public class Simulation {
                     if(tripTime + calcTime + homeTime > drone.getMaxFlightTime() - 0.5){
                         System.out.print("After " + tripTime + " min of trip time, the drone has decided to return home.");
                         calcTime = calculateTime(drone.getCurrentPosition(), simMap.getStartingPoint());
-                        System.out.print("The calc time was" + calcTime + " the old current time is " + currentTime);
-                        currentTime += calcTime + 3;
+                        System.out.print("The calc time was" + calcTime + " the old current time is " + currentTime + "\n");
+                        currentTime += calcTime;
                         System.out.print(" And the new current time is " + currentTime);
                         drone.setCurrentPosition(simMap.getStartingPoint());
                         tripTime = 0;
@@ -392,14 +389,15 @@ public class Simulation {
     }
 
     //||-----------Shared Utility Methods Between FIFO and Knapsack-----------||
-    private void loadOrder(double currentTime){
-        currentOrderQueue.get(0).setPickUpTime(currentTime);
+    private void loadOrder(int currentOrder){
+        currentOrderQueue.get(0).setPickUpTime(times.get(currentOrder));
         System.out.print("Set Pickup time for order " + currentOrderQueue.get(0).getMeal().getName() + " as " + currentOrderQueue.get(0).getPickUpTime() + "\n");
         drone.addOrderToDrone(currentOrderQueue.get(0));
         currentOrderQueue.remove(0);
     }
 
     private double calculateTime(Waypoint a, Waypoint b){
+        System.out.println("The Calculated distance it " + distance(a, b));
         return 60 * ((distance(a, b) * 1) / (drone.getSpeed() * 63360 * 2.54 * (1 * Math.pow(10, -3)) )) + .5;
     }
 
