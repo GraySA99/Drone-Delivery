@@ -1,10 +1,13 @@
 package sample;
 
+import Simulation.Simulation;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class Values {
+
+    public static Simulation simulation;
 
     public static Stage primaryStage;
     public static BorderPane rootPage;
