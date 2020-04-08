@@ -208,9 +208,10 @@ public class SideMenu extends ToolBar {
     private String getResultsStr() {
         String ret = "Your Results:\n";
         // Need to actually get the simulation data
-        ret += ""
+        ret += "";
+        DataTransfer.getShifts();
 
-        DataTransfer.getNumShifts()  DataTransfer.getShifts()
+        //DataTransfer.getNumShifts()  DataTransfer.getShifts()
 
         return ret;
     }
