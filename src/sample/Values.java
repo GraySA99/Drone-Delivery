@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 public class Values {
 
-    public static final String defaultFileName = "defaults.txt";
+    //public static final String defaultFileName = "defaults.txt";
 
     public static Simulation simulation;
 
