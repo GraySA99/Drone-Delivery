@@ -21,9 +21,9 @@ import java.util.ArrayList;
 
 public class ResultsPage extends VBox {
 
-    //Figure out how to get the most recent of each drone and bring them into this page
-    Simulation recentSimulation = Values.simulation;
-    Drone droneforresults = recentSimulation.drone;
+
+
+
 
     //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
     //public Double average = getAverage(drone.deliveryTimes);
@@ -55,141 +55,260 @@ public class ResultsPage extends VBox {
 
         super();
 
-        HBox resultsContainer = new HBox();
+        //Figure out how to get the most recent of each drone and bring them into this page
+        if(Values.simulation != null){
+            Simulation recentSimulation = Values.simulation;
+            Drone droneforresults = recentSimulation.drone;
 
-        // Left
-        VBox resultsBarChartFrame = new VBox();
-        CategoryAxis resultsXAxis = new CategoryAxis();
-        resultsXAxis.setLabel("Hours");
-        NumberAxis resultsYAxis = new NumberAxis();
-        resultsYAxis.setLabel("Delivery Times");
-        BarChart<String, Number> resultsBarChart = new BarChart<String, Number>(resultsXAxis, resultsYAxis);
-        resultsBarChart.setTitle("Results");
-        XYChart.Series<String, Number> FIFOSeries = new XYChart.Series<>();
-        FIFOSeries.setName("FIFO");
+            HBox resultsContainer = new HBox();
 
-        //Hour Counter for For Loops
-        int currentHour = 0;
-        int [] hourCounter = new int [recentSimulation.getNumShifts()];
-        for(int i = 0; i<hourCounter.length; i++){
-            hourCounter[i] = 0;
-        }
+            // Left
+            VBox resultsBarChartFrame = new VBox();
+            CategoryAxis resultsXAxis = new CategoryAxis();
+            resultsXAxis.setLabel("Hours");
+            NumberAxis resultsYAxis = new NumberAxis();
+            resultsYAxis.setLabel("Delivery Times");
+            BarChart<String, Number> resultsBarChart = new BarChart<String, Number>(resultsXAxis, resultsYAxis);
+            resultsBarChart.setTitle("Results");
+            XYChart.Series<String, Number> FIFOSeries = new XYChart.Series<>();
+            FIFOSeries.setName("FIFO");
 
-        //For loop iterating over the FIFO delivery times and adding each of them to the hour counter
-        for(int FIFOIndex = 0; FIFOIndex<droneforresults.FIFODeliveryTimes.size(); FIFOIndex++){
-            if(droneforresults.FIFODeliveryTimes.get(FIFOIndex) == -1){
-                currentHour++;
-            }else {
-                hourCounter[currentHour]++;
+            //Hour Counter for For Loops
+            int currentHour = 0;
+            int [] hourCounter = new int [recentSimulation.getNumShifts()];
+            for(int i = 0; i<hourCounter.length; i++){
+                hourCounter[i] = 0;
             }
-        }
 
-        //For loop adding the hour counter to the graph
-        for(int i = 0; i<hourCounter.length; i++){
-            FIFOSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(i+1), hourCounter[i]));
-        }
-
-        XYChart.Series<String, Number> KSSeries = new XYChart.Series<>();
-        KSSeries.setName("Knapsack");
-
-        //Reset Variables
-        currentHour = 0;
-        for(int i = 0; i<hourCounter.length; i++){
-            hourCounter[i] = 0;
-        }
-
-        //For loop iterating over the Knapsack delivery times and adding each of them to the hour counter
-        for(int KSIndex = 0; KSIndex<droneforresults.KnapsackDeliveryTimes.size(); KSIndex++){
-            if(droneforresults.KnapsackDeliveryTimes.get(KSIndex) == -1){
-                currentHour++;
-            }else {
-                hourCounter[currentHour]++;
+            //For loop iterating over the FIFO delivery times and adding each of them to the hour counter
+            for(int FIFOIndex = 0; FIFOIndex<droneforresults.FIFODeliveryTimes.size(); FIFOIndex++){
+                if(droneforresults.FIFODeliveryTimes.get(FIFOIndex) == -1){
+                    currentHour++;
+                }else {
+                    hourCounter[currentHour]++;
+                }
             }
-        }
 
-        //For loop adding the hour counter to the graph
-        for(int i = 0; i<hourCounter.length; i++){
-            KSSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(i+1), hourCounter[i]));
-        }
-
-        resultsBarChart.getData().addAll(FIFOSeries, KSSeries);
-        resultsBarChartFrame.getChildren().add(resultsBarChart);
-
-        // Right
-        VBox resultsDataFrame = new VBox();
-        VBox FIFODataFrame = new VBox();
-        Text FIFOLabel = new Text("FIFO: ");
-
-        //Calculate results times and put in simulation
-        recentSimulation.FIFOaverageTime = getAverage(droneforresults.FIFODeliveryTimes);
-        recentSimulation.FIFOworstTime = getWorst(droneforresults.FIFODeliveryTimes);
-        recentSimulation.KSaverageTime = getAverage(droneforresults.KnapsackDeliveryTimes);
-        recentSimulation.KSworstTime = getWorst(droneforresults.KnapsackDeliveryTimes);
-
-        //Put FIFODeliveryTimes.getAverage in Double.toString
-        Text FIFOAverageTime = new Text("Average Time: " + Double.toString(recentSimulation.FIFOaverageTime));
-        //Put FIFODeliveryTimes.getWorst in Double.toString
-        Text FIFOWorstTime = new Text("Worst Time: " + Double.toString(recentSimulation.FIFOworstTime));
-        FIFODataFrame.getChildren().addAll(
-            FIFOLabel, FIFOAverageTime, FIFOWorstTime
-        );
-        VBox KSDataFrame = new VBox();
-        Text KSLabel = new Text("Knapsack: ");
-        //Put KnapsackDeliveryTimes.getAverage in Double.toString
-        Text KSAverageTime = new Text("Average Time: " + Double.toString(recentSimulation.KSaverageTime));
-        //Put KnapsackDeliveryTimes.getAverage in Double.toString
-        Text KSWorstTime = new Text("Worst Time: " + Double.toString(recentSimulation.KSworstTime));
-        KSDataFrame.getChildren().addAll(
-                KSLabel, KSAverageTime, KSWorstTime
-        );
-        resultsDataFrame.getChildren().addAll(FIFODataFrame, new Separator(Orientation.HORIZONTAL), KSDataFrame);
-
-        // Bottom
-        HBox resultsButtonFrame = new HBox();
-        Button restartBtn = new Button("Restart");
-        Button saveResultsBtn = new Button("Save Results");
-        Button finishBtn = new Button("Finish");
-        resultsButtonFrame.getChildren().addAll(
-            new ESHBox(), restartBtn, new ESHBox(), saveResultsBtn, new ESHBox(), finishBtn, new ESHBox()
-        );
-
-        finishBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-
-                Values.primaryStage.getScene().setRoot(Values.rootPage);
+            //For loop adding the hour counter to the graph
+            for(int i = 0; i<hourCounter.length; i++){
+                FIFOSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(i+1), hourCounter[i]));
             }
-        });
 
-        // Root Assembly
-        resultsContainer.getChildren().addAll(resultsBarChartFrame, resultsDataFrame);
-        this.getChildren().setAll(resultsContainer, resultsButtonFrame);
+            XYChart.Series<String, Number> KSSeries = new XYChart.Series<>();
+            KSSeries.setName("Knapsack");
 
-        // Styles
-        FIFODataFrame.setStyle(Styles.FIFODataFrame);
-        FIFOLabel.setStyle(Styles.resultsDeliveryTypeLabel);
-        FIFOAverageTime.setStyle(Styles.resultsDeliveryTime);
-        FIFOWorstTime.setStyle(Styles.resultsDeliveryTime);
-        KSLabel.setStyle(Styles.resultsDeliveryTypeLabel);
-        KSAverageTime.setStyle(Styles.resultsDeliveryTime);
-        KSWorstTime.setStyle(Styles.resultsDeliveryTime);
-        resultsButtonFrame.setStyle(Styles.resultsButtonFrame);
-        resultsDataFrame.setStyle(Styles.resultsDataFrame);
+            //Reset Variables
+            currentHour = 0;
+            for(int i = 0; i<hourCounter.length; i++){
+                hourCounter[i] = 0;
+            }
 
-        // Growth
-        VBox.setVgrow(resultsContainer, Priority.ALWAYS);
-        VBox.setVgrow(resultsButtonFrame, Priority.ALWAYS);
-        VBox.setVgrow(resultsBarChart, Priority.ALWAYS);
-        VBox.setVgrow(resultsDataFrame, Priority.ALWAYS);
+            //For loop iterating over the Knapsack delivery times and adding each of them to the hour counter
+            for(int KSIndex = 0; KSIndex<droneforresults.KnapsackDeliveryTimes.size(); KSIndex++){
+                if(droneforresults.KnapsackDeliveryTimes.get(KSIndex) == -1){
+                    currentHour++;
+                }else {
+                    hourCounter[currentHour]++;
+                }
+            }
 
-        // Dimensions
-        resultsBarChart.setPrefWidth(1200);
-        resultsButtonFrame.setMaxHeight(150);
+            //For loop adding the hour counter to the graph
+            for(int i = 0; i<hourCounter.length; i++){
+                KSSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(i+1), hourCounter[i]));
+            }
 
-        // Alignment
-        resultsDataFrame.setAlignment(Pos.CENTER_LEFT);
-        restartBtn.setAlignment(Pos.CENTER);
-        saveResultsBtn.setAlignment(Pos.CENTER);
-        finishBtn.setAlignment(Pos.CENTER);
+            resultsBarChart.getData().addAll(FIFOSeries, KSSeries);
+            resultsBarChartFrame.getChildren().add(resultsBarChart);
+
+            // Right
+            VBox resultsDataFrame = new VBox();
+            VBox FIFODataFrame = new VBox();
+            Text FIFOLabel = new Text("FIFO: ");
+
+            //Calculate results times and put in simulation
+            recentSimulation.FIFOaverageTime = getAverage(droneforresults.FIFODeliveryTimes);
+            recentSimulation.FIFOworstTime = getWorst(droneforresults.FIFODeliveryTimes);
+            recentSimulation.KSaverageTime = getAverage(droneforresults.KnapsackDeliveryTimes);
+            recentSimulation.KSworstTime = getWorst(droneforresults.KnapsackDeliveryTimes);
+
+            //Put FIFODeliveryTimes.getAverage in Double.toString
+            Text FIFOAverageTime = new Text("Average Time: " + Double.toString(recentSimulation.FIFOaverageTime));
+            //Put FIFODeliveryTimes.getWorst in Double.toString
+            Text FIFOWorstTime = new Text("Worst Time: " + Double.toString(recentSimulation.FIFOworstTime));
+            FIFODataFrame.getChildren().addAll(
+                    FIFOLabel, FIFOAverageTime, FIFOWorstTime
+            );
+            VBox KSDataFrame = new VBox();
+            Text KSLabel = new Text("Knapsack: ");
+            //Put KnapsackDeliveryTimes.getAverage in Double.toString
+            Text KSAverageTime = new Text("Average Time: " + Double.toString(recentSimulation.KSaverageTime));
+            //Put KnapsackDeliveryTimes.getAverage in Double.toString
+            Text KSWorstTime = new Text("Worst Time: " + Double.toString(recentSimulation.KSworstTime));
+            KSDataFrame.getChildren().addAll(
+                    KSLabel, KSAverageTime, KSWorstTime
+            );
+            resultsDataFrame.getChildren().addAll(FIFODataFrame, new Separator(Orientation.HORIZONTAL), KSDataFrame);
+
+            // Bottom
+            HBox resultsButtonFrame = new HBox();
+            Button restartBtn = new Button("Restart");
+            Button saveResultsBtn = new Button("Save Results");
+            Button finishBtn = new Button("Finish");
+            resultsButtonFrame.getChildren().addAll(
+                    new ESHBox(), restartBtn, new ESHBox(), saveResultsBtn, new ESHBox(), finishBtn, new ESHBox()
+            );
+
+            finishBtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+
+                    Values.primaryStage.getScene().setRoot(Values.rootPage);
+                }
+            });
+
+            // Root Assembly
+            resultsContainer.getChildren().addAll(resultsBarChartFrame, resultsDataFrame);
+            this.getChildren().setAll(resultsContainer, resultsButtonFrame);
+
+            // Styles
+            FIFODataFrame.setStyle(Styles.FIFODataFrame);
+            FIFOLabel.setStyle(Styles.resultsDeliveryTypeLabel);
+            FIFOAverageTime.setStyle(Styles.resultsDeliveryTime);
+            FIFOWorstTime.setStyle(Styles.resultsDeliveryTime);
+            KSLabel.setStyle(Styles.resultsDeliveryTypeLabel);
+            KSAverageTime.setStyle(Styles.resultsDeliveryTime);
+            KSWorstTime.setStyle(Styles.resultsDeliveryTime);
+            resultsButtonFrame.setStyle(Styles.resultsButtonFrame);
+            resultsDataFrame.setStyle(Styles.resultsDataFrame);
+
+            // Growth
+            VBox.setVgrow(resultsContainer, Priority.ALWAYS);
+            VBox.setVgrow(resultsButtonFrame, Priority.ALWAYS);
+            VBox.setVgrow(resultsBarChart, Priority.ALWAYS);
+            VBox.setVgrow(resultsDataFrame, Priority.ALWAYS);
+
+            // Dimensions
+            resultsBarChart.setPrefWidth(1200);
+            resultsButtonFrame.setMaxHeight(150);
+
+            // Alignment
+            resultsDataFrame.setAlignment(Pos.CENTER_LEFT);
+            restartBtn.setAlignment(Pos.CENTER);
+            saveResultsBtn.setAlignment(Pos.CENTER);
+            finishBtn.setAlignment(Pos.CENTER);
+        }else {
+            HBox resultsContainer = new HBox();
+
+            // Left
+            VBox resultsBarChartFrame = new VBox();
+            CategoryAxis resultsXAxis = new CategoryAxis();
+            resultsXAxis.setLabel("Hours");
+            NumberAxis resultsYAxis = new NumberAxis();
+            resultsYAxis.setLabel("Delivery Times");
+            BarChart<String, Number> resultsBarChart = new BarChart<String, Number>(resultsXAxis, resultsYAxis);
+            resultsBarChart.setTitle("Results");
+            XYChart.Series<String, Number> FIFOSeries = new XYChart.Series<>();
+            FIFOSeries.setName("FIFO");
+
+            //Hour Counter for For Loops
+            int currentHour = 0;
+            int [] hourCounter = new int [4];
+            for(int i = 0; i<hourCounter.length; i++){
+                hourCounter[i] = 0;
+            }
+
+            //For loop adding the hour counter to the graph
+            for(int i = 0; i<hourCounter.length; i++){
+                FIFOSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(i+1), hourCounter[i]));
+            }
+
+            XYChart.Series<String, Number> KSSeries = new XYChart.Series<>();
+            KSSeries.setName("Knapsack");
+
+            //Reset Variables
+            currentHour = 0;
+            for(int i = 0; i<hourCounter.length; i++){
+                hourCounter[i] = 0;
+            }
+
+            //For loop adding the hour counter to the graph
+            for(int i = 0; i<hourCounter.length; i++){
+                KSSeries.getData().add(new XYChart.Data<String,Number>(Integer.toString(i+1), hourCounter[i]));
+            }
+
+            resultsBarChart.getData().addAll(FIFOSeries, KSSeries);
+            resultsBarChartFrame.getChildren().add(resultsBarChart);
+
+            // Right
+            VBox resultsDataFrame = new VBox();
+            VBox FIFODataFrame = new VBox();
+            Text FIFOLabel = new Text("FIFO: ");
+
+            //Put FIFODeliveryTimes.getAverage in Double.toString
+            Text FIFOAverageTime = new Text("Average Time: " + Double.toString(0));
+            //Put FIFODeliveryTimes.getWorst in Double.toString
+            Text FIFOWorstTime = new Text("Worst Time: " + Double.toString(0));
+            FIFODataFrame.getChildren().addAll(
+                    FIFOLabel, FIFOAverageTime, FIFOWorstTime
+            );
+            VBox KSDataFrame = new VBox();
+            Text KSLabel = new Text("Knapsack: ");
+            //Put KnapsackDeliveryTimes.getAverage in Double.toString
+            Text KSAverageTime = new Text("Average Time: " + Double.toString(0));
+            //Put KnapsackDeliveryTimes.getAverage in Double.toString
+            Text KSWorstTime = new Text("Worst Time: " + Double.toString(0));
+            KSDataFrame.getChildren().addAll(
+                    KSLabel, KSAverageTime, KSWorstTime
+            );
+            resultsDataFrame.getChildren().addAll(FIFODataFrame, new Separator(Orientation.HORIZONTAL), KSDataFrame);
+
+            // Bottom
+            HBox resultsButtonFrame = new HBox();
+            Button restartBtn = new Button("Restart");
+            Button saveResultsBtn = new Button("Save Results");
+            Button finishBtn = new Button("Finish");
+            resultsButtonFrame.getChildren().addAll(
+                    new ESHBox(), restartBtn, new ESHBox(), saveResultsBtn, new ESHBox(), finishBtn, new ESHBox()
+            );
+
+            finishBtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+
+                    Values.primaryStage.getScene().setRoot(Values.rootPage);
+                }
+            });
+
+            // Root Assembly
+            resultsContainer.getChildren().addAll(resultsBarChartFrame, resultsDataFrame);
+            this.getChildren().setAll(resultsContainer, resultsButtonFrame);
+
+            // Styles
+            FIFODataFrame.setStyle(Styles.FIFODataFrame);
+            FIFOLabel.setStyle(Styles.resultsDeliveryTypeLabel);
+            FIFOAverageTime.setStyle(Styles.resultsDeliveryTime);
+            FIFOWorstTime.setStyle(Styles.resultsDeliveryTime);
+            KSLabel.setStyle(Styles.resultsDeliveryTypeLabel);
+            KSAverageTime.setStyle(Styles.resultsDeliveryTime);
+            KSWorstTime.setStyle(Styles.resultsDeliveryTime);
+            resultsButtonFrame.setStyle(Styles.resultsButtonFrame);
+            resultsDataFrame.setStyle(Styles.resultsDataFrame);
+
+            // Growth
+            VBox.setVgrow(resultsContainer, Priority.ALWAYS);
+            VBox.setVgrow(resultsButtonFrame, Priority.ALWAYS);
+            VBox.setVgrow(resultsBarChart, Priority.ALWAYS);
+            VBox.setVgrow(resultsDataFrame, Priority.ALWAYS);
+
+            // Dimensions
+            resultsBarChart.setPrefWidth(1200);
+            resultsButtonFrame.setMaxHeight(150);
+
+            // Alignment
+            resultsDataFrame.setAlignment(Pos.CENTER_LEFT);
+            restartBtn.setAlignment(Pos.CENTER);
+            saveResultsBtn.setAlignment(Pos.CENTER);
+            finishBtn.setAlignment(Pos.CENTER);
+        }
+
 
 
     }
