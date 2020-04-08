@@ -522,7 +522,8 @@ public class Simulation {
     //returns: an ordered version of the "orders" arraylist passed in
     private ArrayList<Order> sortOrders(ArrayList<Order> orders) {
         // I need to first set the starting point, statically set to the SAC temporarily
-        Waypoint start = new Waypoint("SAC", 41.154870, -80.077945, true);
+        //Waypoint start = new Waypoint("SAC", 41.154870, -80.077945, true);
+        Waypoint start = simMap.getStartingPoint();
         orders.add(0, new Order(new Meal(), start));
 
         int numNodes = orders.size();
