@@ -162,7 +162,7 @@ public class SideMenu extends ToolBar {
                     File file = fileChooser.showSaveDialog(Values.primaryStage);
 
                     if(file != null) {
-                        writeTextToFile("RESULTS", file);
+                        writeTextToFile(getResultsStr(), file);
                     }
                 }
             });
@@ -198,6 +198,12 @@ public class SideMenu extends ToolBar {
                 }
             });
         }
+    }
+
+    private String getResultsStr() {
+        String ret = "";
+
+        return ret;
     }
 
     private void writeTextToFile(String str, File file)
