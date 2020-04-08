@@ -149,8 +149,10 @@ public class SideMenu extends ToolBar {
 //                    dialog.show();
 //                    //dialog.close();
 
-                    Values.simulation = new Simulation();
-                    Values.simulation.runSimulation();
+//                    Values.simulation = new Simulation();
+//                    Values.simulation.runSimulation();
+
+                    DataTransfer.debugToString();
                 }
             });
 

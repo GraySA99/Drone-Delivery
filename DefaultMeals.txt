@@ -1,0 +1,21 @@
+Format:
+Name:Probability
+*FoodName&Quantity
+*...
+
+@Meals
+All Three&55
+*Burger&1
+*Fries&1
+*Drink&1
+All Three - Double Burger&10
+*Burger&2
+*Fries&1
+*Drink&1
+Burger + Fries&20
+*Burger&1
+*Fries&1
+Two Burgers + Fries&15
+*Burger&2
+*Fries&1
+@/Meals

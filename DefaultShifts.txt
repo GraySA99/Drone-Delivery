@@ -1,0 +1,12 @@
+Format:
+Shift Hours&Number of Simulations
+*shiftHour&Number of Orders
+*...
+
+@Shifts
+4&50
+*1&15
+*2&17
+*3&22
+*4&15
+@/Shifts
