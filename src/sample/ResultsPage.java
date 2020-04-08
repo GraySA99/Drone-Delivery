@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class ResultsPage extends VBox {
 
 
-    int tempTime;
+    double tempTime;
 
 
     //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
