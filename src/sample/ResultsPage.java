@@ -2,6 +2,8 @@ package sample;
 
 import Simulation.Drone;
 import Simulation.Simulation;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.chart.BarChart;
@@ -150,6 +152,13 @@ public class ResultsPage extends VBox {
         resultsButtonFrame.getChildren().addAll(
             new ESHBox(), restartBtn, new ESHBox(), saveResultsBtn, new ESHBox(), finishBtn, new ESHBox()
         );
+
+        finishBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+
+                Values.primaryStage.getScene().setRoot(Values.rootPage);
+            }
+        });
 
         // Root Assembly
         resultsContainer.getChildren().addAll(resultsBarChartFrame, resultsDataFrame);
