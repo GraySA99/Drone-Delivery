@@ -2,6 +2,7 @@ package sample;
 
 import Mapping.Waypoint;
 import Simulation.DataTransfer;
+import Simulation.Simulation;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
@@ -136,17 +137,20 @@ public class SideMenu extends ToolBar {
             start.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
 
-                    final Stage dialog = new Stage();
-                    dialog.initModality(Modality.APPLICATION_MODAL);
-                    //dialog.initOwner(rootMenu);
+//                    final Stage dialog = new Stage();
+//                    dialog.initModality(Modality.APPLICATION_MODAL);
+//                    //dialog.initOwner(rootMenu);
+//
+//                    BorderPane subRoot = new BorderPane();
+//                    Text dialogText = new Text("Simulation is Running Please Wait");
+//                    subRoot.setCenter(dialogText);
+//                    Scene dialogScene = new Scene(subRoot, 300, 200);
+//                    dialog.setScene(dialogScene);
+//                    dialog.show();
+//                    //dialog.close();
 
-                    BorderPane subRoot = new BorderPane();
-                    Text dialogText = new Text("Simulation is Running Please Wait");
-                    subRoot.setCenter(dialogText);
-                    Scene dialogScene = new Scene(subRoot, 300, 200);
-                    dialog.setScene(dialogScene);
-                    dialog.show();
-                    //dialog.close();
+                    Values.simulation = new Simulation();
+                    Values.simulation.runSimulation();
                 }
             });
 
@@ -171,6 +175,7 @@ public class SideMenu extends ToolBar {
                 @Override public void handle(ActionEvent e) {
 
                     Values.primaryStage.getScene().setRoot(new ResultsPage());
+                    swapMenues();
                 }
             });
 
