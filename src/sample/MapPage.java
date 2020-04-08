@@ -14,6 +14,9 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 public class MapPage extends BorderPane {
 
     private JSObject javascriptConnector;
@@ -168,6 +171,22 @@ public class MapPage extends BorderPane {
                         Double.parseDouble(lat),
                         Double.parseDouble(lon)));
             }
+        }
+    }
+
+    private void initFromFile() {
+
+        Scanner fileIn = new Scanner(Values.defaultFileName);
+        if (!fileIn.hasNextLine()) { return; }
+        String fileLine = fileIn.nextLine();
+
+        while (fileIn.hasNextLine() && !fileLine.equals("@WayPoint")) { fileLine = fileIn.nextLine(); }
+        if (!fileIn.hasNextLine()) { return; }
+
+        fileLine = fileIn.nextLine();
+        while (fileIn.hasNextLine() && !fileLine.equals("@/WayPoint")) {
+
+
         }
     }
 }
