@@ -205,7 +205,6 @@ public class SideMenu extends ToolBar {
 
     private String getResultsStr() {
         String ret = "Your Results:\n";
-        // Need to actually get the simulation data
         ret += "FIFO Avg Time: " + Values.simulation.FIFOaverageTime.toString() + "\n";
         ret += "FIFO Worst Time: " + Values.simulation.FIFOworstTime.toString() + "\n\n";
         ret += "KS Avg Time:" + Values.simulation.KSaverageTime.toString() + "\n";
