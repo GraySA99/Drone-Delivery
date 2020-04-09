@@ -13,6 +13,11 @@ public class Drone {
     private int turnAroundTime, speed, maxFlightTime;
     public ArrayList<Double> FIFODeliveryTimes, KnapsackDeliveryTimes; //might make a fifo and knapsack list
 
+    //public ArrayList<ArrayList<Double>> TheAbomination = new ArrayList<ArrayList<Double>>();
+    //TheAbomination.add(list); //adds list as a list in TheAbomination
+    //TheAbomination.get(0).add(i) //adds i as an element of list in TheAbomination
+    //TheAbomination.get(0).get(0); //gets the first element of list in TheAbomination
+
     public Drone(){ //for a default drone
         loadedOrdersList  = new ArrayList<Order>();
         weightCapacity = 12;
