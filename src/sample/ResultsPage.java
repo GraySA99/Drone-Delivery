@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class ResultsPage extends VBox {
 
 
-    int tempTime;
+    double tempTime;
 
 
     //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
@@ -132,10 +132,10 @@ public class ResultsPage extends VBox {
             recentSimulation.KSworstTime = getWorst(droneforresults.KnapsackDeliveryTimes);
 
             //Put FIFODeliveryTimes.getAverage in Double.toString
-            tempTime = (int)Math.floor(recentSimulation.FIFOaverageTime);
+            tempTime = Math.round(recentSimulation.FIFOaverageTime*100)/100.0;
             Text FIFOAverageTime = new Text("Average Time: " + tempTime + " minutes");
             //Put FIFODeliveryTimes.getWorst in Double.toString
-            tempTime = (int)Math.floor(recentSimulation.FIFOworstTime);
+            tempTime = Math.round(recentSimulation.FIFOworstTime*100)/100.0;
             Text FIFOWorstTime = new Text("Worst Time: " + tempTime + " minutes");
             FIFODataFrame.getChildren().addAll(
                     FIFOLabel, FIFOAverageTime, FIFOWorstTime
@@ -143,10 +143,10 @@ public class ResultsPage extends VBox {
             VBox KSDataFrame = new VBox();
             Text KSLabel = new Text("Knapsack: ");
             //Put KnapsackDeliveryTimes.getAverage in Double.toString
-            tempTime = (int)Math.floor(recentSimulation.KSaverageTime);
+            tempTime = Math.round(recentSimulation.KSaverageTime * 100)/100.0;
             Text KSAverageTime = new Text("Average Time: " + tempTime +" minutes");
             //Put KnapsackDeliveryTimes.getAverage in Double.toString
-            tempTime = (int)Math.floor(recentSimulation.KSworstTime);
+            tempTime = Math.round(recentSimulation.KSworstTime * 100)/100.0;
             Text KSWorstTime = new Text("Worst Time: " + tempTime +" minutes");
             KSDataFrame.getChildren().addAll(
                     KSLabel, KSAverageTime, KSWorstTime
