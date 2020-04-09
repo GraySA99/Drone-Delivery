@@ -104,13 +104,19 @@ public class Simulation {
             //break;
         }
 
-        /*for(int i = 0; i < drone.getNumFIFODeliveryTimes(); i++){
-            System.out.print(drone.getFIFODeliveryTime(i) + " ");
+        for(int i = 0; i < drone.getNumFIFODeliveryTimes(); i++){
+            for(int j = 0; j < drone.getNumFIFODeliveryTimes(i); j++){
+                System.out.print(drone.getFIFODeliveryTime(i, j) + " ");
+            }
+            System.out.print("\n");
         }
         System.out.println("\n");
         for(int i = 0; i < drone.getNumKnapsackDeliveryTimes(); i++){
-            System.out.print(drone.getKnapsackDeliveryTime(i) + " ");
-        }*/
+            for(int j = 0; j < drone.getNumKnapsackDeliveryTimes(i); j++){
+                System.out.print(drone.getKnapsackDeliveryTime(i, j) + " ");
+            }
+            System.out.print("\n");
+        }
 
         //System.exit(1);
         //drones must be reset before each simulation
@@ -505,7 +511,7 @@ public class Simulation {
                             }*/
                         }
 
-                        while(skip && skippedList.size() > 0 && start < skippedList.size()){
+                        /*while(skip && skippedList.size() > 0 && start < skippedList.size()){
                             min = start;
                             for(int r = start; r < skippedList.size(); r++){
                                 if(skippedList.get(min).getMeal().getTotalWeight() > skippedList.get(r).getMeal().getTotalWeight() && skipped.get(r).equals(skipped.get(start))){
@@ -514,7 +520,7 @@ public class Simulation {
                             }
 
                             if(drone.getCurrentWeight() + skippedList.get(min).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
-                                System.out.print("Added the order that was skipped at time " + currentTime + "\t");
+                                System.out.print("Added the order that was skipped at time " + currentTime + "\t");*/
                                 /*int a = 1;
                                 while(times.get(currentOrder) - (60 * a) > 0){
                                     a++;
@@ -524,7 +530,7 @@ public class Simulation {
                                     prevResult = a;
                                 }
                                 System.out.println("\n" + a + "\n");*/
-                                drone.addOrderToDrone(skippedList.get(min));
+                                /*drone.addOrderToDrone(skippedList.get(min));
                                 skippedList.remove(min);
                                 if(currentOrder >= times.size() - 1){
                                     canLoad = false;
@@ -537,7 +543,7 @@ public class Simulation {
                             if(skippedList.size() == 0){
                                 skip = false;
                             }
-                        }
+                        }*/
 
                         //the drone will launch if it has anything on it
                         if(drone.getCurrentWeight() > 0){
