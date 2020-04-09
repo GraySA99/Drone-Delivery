@@ -33,23 +33,24 @@ public class ResultsPage extends VBox {
     //public Double average = getAverage(drone.deliveryTimes);
     //public Double worst = getWorst(drone.deliveryTimes);
 
-    public static Double getAverage(ArrayList<Double> times){
+    public static Double getAverage(ArrayList<ArrayList<Double>> times){
         double sum = 0;
-        int negativeCounter = 0;
+        int numberOfTimes = 0;
         for(int i = 0; i<times.size(); i++){
-            if(times.get(i) == -1){
-                negativeCounter++;
-            }else {
-                sum += times.get(i);
+            numberOfTimes+=times.get(i).size();
+            for(int j = 0; j<times.get(i).size(); j++){
+                sum += times.get(i).get(j);
             }
         }
-        return sum/(times.size() - negativeCounter);
+        return sum/numberOfTimes;
     }
-    public static Double getWorst(ArrayList<Double> times){
+    public static Double getWorst(ArrayList<ArrayList<Double>> times){
         double worst = 0;
         for(int i = 0; i<times.size(); i++){
-            if(times.get(i)>worst){
-                worst = times.get(i);
+            for(int j = 0; j<times.get(i).size(); j++){
+                if(times.get(i).get(j) > worst){
+                    worst = times.get(i).get(j);
+                }
             }
         }
         return worst;
@@ -102,7 +103,6 @@ public class ResultsPage extends VBox {
             FIFOSeries.setName("FIFO");
 
             //Hour Counter for For Loops
-            int currentHour = 0;
             int[] hourCounter = new int[recentSimulation.getNumShifts()];
             for (int i = 0; i < hourCounter.length; i++) {
                 hourCounter[i] = 0;
@@ -110,10 +110,8 @@ public class ResultsPage extends VBox {
 
             //For loop iterating over the FIFO delivery times and adding each of them to the hour counter
             for (int FIFOIndex = 0; FIFOIndex < droneforresults.FIFODeliveryTimes.size(); FIFOIndex++) {
-                if (droneforresults.FIFODeliveryTimes.get(FIFOIndex) == -1) {
-                    currentHour++;
-                } else {
-                    hourCounter[currentHour]++;
+                for(int i = 0; i<droneforresults.FIFODeliveryTimes.get(FIFOIndex).size(); i++){
+                    hourCounter[FIFOIndex]++;
                 }
             }
 
@@ -126,17 +124,14 @@ public class ResultsPage extends VBox {
             KSSeries.setName("Knapsack");
 
             //Reset Variables
-            currentHour = 0;
             for (int i = 0; i < hourCounter.length; i++) {
                 hourCounter[i] = 0;
             }
 
             //For loop iterating over the Knapsack delivery times and adding each of them to the hour counter
             for (int KSIndex = 0; KSIndex < droneforresults.KnapsackDeliveryTimes.size(); KSIndex++) {
-                if (droneforresults.KnapsackDeliveryTimes.get(KSIndex) == -1) {
-                    currentHour++;
-                } else {
-                    hourCounter[currentHour]++;
+                for(int i = 0; i<droneforresults.KnapsackDeliveryTimes.get(KSIndex).size(); i++){
+                    hourCounter[KSIndex]++;
                 }
             }
 
