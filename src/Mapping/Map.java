@@ -18,6 +18,17 @@ public class Map {
         size = mapPoints.size();
     }
 
+    public Map(Waypoint s, Waypoint[] list){
+        startingPoint = s;
+        startingPoint.setStartingPoint(true);
+        mapPoints = new ArrayList<Waypoint>();
+        for(int i = 0; i < list.length; i++){
+            mapPoints.add(list[i]);
+            mapPoints.get(i).setStartingPoint(false);
+        }
+        size = mapPoints.size();
+    }
+
     public Waypoint getStartingPoint(){
         return startingPoint;
     }
@@ -28,6 +39,11 @@ public class Map {
 
     public int getSize(){
         return size;
+    }
+
+    public void removeWaypoint(int i){
+        mapPoints.remove(i);
+        size = mapPoints.size();
     }
 }
 
