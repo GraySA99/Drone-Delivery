@@ -24,6 +24,10 @@ public class Simulation {
     public Double FIFOworstTime;
     public Double KSworstTime;
 
+    public int getNumShifts(){
+        return numShifts;
+    }
+
     public Simulation(){
         //creation of the sim map
         Waypoint starting = DataTransfer.getWaypoint(0);
