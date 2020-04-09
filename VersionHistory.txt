@@ -13,7 +13,12 @@ Version Version# Month/Day/Year
 
 Version 1.20.0 4/9/20
 -Added new variations of getNumFIFODeliveryTimes and getNumKnapsackDeliveryTimes that give the size for a specific hour (Patrick))
+-Added restart button functionality (Paul)
 -Changed the delivery times lists to be a list of lists where each list in the main list is a particular hour (Patrick)
+-Changed back to one load order method in the simulation class (Patrick)
+-Fixed incorrect Knapsack delivery times (Patrick)
+-Cleaning up of unused variables, useless comments, changes from public to private, and duplicate methods in the simulation class (Patrick)
+-Removed the getNumShifts method from the simulation class (Patrick)
 
 Version 1.19.0 The Knapsack Update 4/8/20-4/9/20
 -Added the map and number of shifts stored in the DataTransfer class to be used in the simulation (Patrick)
