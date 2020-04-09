@@ -11,7 +11,7 @@ public class Drone {
     private Waypoint currentPosition;
     //private ArrayList<Waypoint> targetPositions; //may not be needed if we just rearrange the list of orders
     private int turnAroundTime, speed, maxFlightTime;
-    public ArrayList<Double> FIFODeliveryTimes, KnapsackDeliveryTimes; //might make a fifo and knapsack list
+    public ArrayList<ArrayList<Double>> FIFODeliveryTimes, KnapsackDeliveryTimes; //might make a fifo and knapsack list
 
     //public ArrayList<ArrayList<Double>> TheAbomination = new ArrayList<ArrayList<Double>>();
     //TheAbomination.add(list); //adds list as a list in TheAbomination
@@ -25,8 +25,8 @@ public class Drone {
         currentPosition = null;
         //targetPositions = new ArrayList<Waypoint>();
         turnAroundTime = 3;
-        FIFODeliveryTimes = new ArrayList<Double>();
-        KnapsackDeliveryTimes = new ArrayList<Double>();
+        FIFODeliveryTimes = new ArrayList<ArrayList<Double>>();
+        KnapsackDeliveryTimes = new ArrayList<ArrayList<Double>>();
         speed = 20;
         maxFlightTime = 20;
     }
@@ -38,8 +38,8 @@ public class Drone {
         currentPosition = s;
         //targetPositions = new ArrayList<Waypoint>();
         turnAroundTime = 3;
-        FIFODeliveryTimes = new ArrayList<Double>();
-        KnapsackDeliveryTimes = new ArrayList<Double>();
+        FIFODeliveryTimes = new ArrayList<ArrayList<Double>>();
+        KnapsackDeliveryTimes = new ArrayList<ArrayList<Double>>();
         speed = 20;
         maxFlightTime = 20;
     }
@@ -115,28 +115,44 @@ public class Drone {
         return speed;
     }
 
-    public void addFIFODeliveryTime(double b){
-        FIFODeliveryTimes.add(b);
+    public void addFIFODeliveryTime(int i, double b){
+        FIFODeliveryTimes.get(i).add(b);
     }
 
-    public double getFIFODeliveryTime(int i){
-        return FIFODeliveryTimes.get(i);
+    public double getFIFODeliveryTime(int i, int j){
+        return FIFODeliveryTimes.get(i).get(j);
     }
 
-    public double getKnapsackDeliveryTime(int i){
-        return KnapsackDeliveryTimes.get(i);
+    public double getKnapsackDeliveryTime(int i, int j){
+        return KnapsackDeliveryTimes.get(i).get(j);
     }
 
     public int getNumFIFODeliveryTimes(){
         return FIFODeliveryTimes.size();
     }
 
+    public int getNumFIFODeliveryTimes(int i){
+        return FIFODeliveryTimes.get(i).size();
+    }
+
     public int getNumKnapsackDeliveryTimes(){
         return KnapsackDeliveryTimes.size();
     }
 
-    public void addKnapsackDeliveryTime(double b){
-        KnapsackDeliveryTimes.add(b);
+    public int getNumKnapsackDeliveryTimes(int i){
+        return KnapsackDeliveryTimes.get(i).size();
+    }
+
+    public void addKnapsackDeliveryTime(int i, double b){
+        KnapsackDeliveryTimes.get(i).add(b);
+    }
+
+    public ArrayList<ArrayList<Double>> getFIFODeliveryTimesList(){
+        return FIFODeliveryTimes;
+    }
+
+    public ArrayList<ArrayList<Double>> getKnapsackDeliveryTimesList(){
+        return KnapsackDeliveryTimes;
     }
 
     public int getMaxFlightTime(){

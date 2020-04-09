@@ -85,27 +85,32 @@ public class Simulation {
             generateOrderQueue();
             copyOrderQueue();
 
+            for(int j = 0; j < numShifts; j++){
+                drone.getFIFODeliveryTimesList().add(new ArrayList<Double>());
+                drone.getKnapsackDeliveryTimesList().add(new ArrayList<Double>());
+            }
+
             drone.setCurrentPosition(simMap.getStartingPoint());
-            runFIFO();
-            drone.addFIFODeliveryTime(-1);
+            runFIFO(i);
+            //drone.addFIFODeliveryTime(-1);
 
             copyOrderQueue();
 
             System.out.println("\n\n\nKnapSack\n");
             drone.setCurrentPosition(simMap.getStartingPoint());
-            runKnapsack();
-            drone.addKnapsackDeliveryTime(-1);
+            runKnapsack(i);
+            //drone.addKnapsackDeliveryTime(-1);
 
             //break;
         }
 
-        for(int i = 0; i < drone.getNumFIFODeliveryTimes(); i++){
+        /*for(int i = 0; i < drone.getNumFIFODeliveryTimes(); i++){
             System.out.print(drone.getFIFODeliveryTime(i) + " ");
         }
         System.out.println("\n");
         for(int i = 0; i < drone.getNumKnapsackDeliveryTimes(); i++){
             System.out.print(drone.getKnapsackDeliveryTime(i) + " ");
-        }
+        }*/
 
         //System.exit(1);
         //drones must be reset before each simulation
@@ -177,7 +182,7 @@ public class Simulation {
         }
     }
 
-    private void runFIFO(){
+    private void runFIFO(int iteration){
         //runs FIFO simulations
 
         double currentTime = 0, tripTime = 0, calcTime, homeTime;
@@ -203,14 +208,14 @@ public class Simulation {
                         while(times.get(currentOrder) <= currentTime && !launched && currentTime <= 5){
                             if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
                                 //System.out.print("Added order to drone that was available at time " + times.get(currentOrder) + " at time " + currentTime + "\t");
-                                int a = 1;
+                                /*int a = 1;
                                 while(times.get(currentOrder) - (60 * a) > 0){
                                     a++;
                                 }
                                 if(a != prevResult){
                                     drone.addFIFODeliveryTime(-1);
                                     prevResult = a;
-                                }
+                                }*/
                                 //System.out.println("\n" + a + "\n");
                                 loadOrderFIFO(currentOrder);
                                 currentOrder++;
@@ -223,7 +228,7 @@ public class Simulation {
                                 currentTime += calcTime;
                                 tripTime += calcTime;
                                 //System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
-                                deliverOrderFIFO(currentTime);
+                                deliverOrderFIFO(currentTime, iteration);
                                 launched = true;
                             }
                             if(currentTime == 5){
@@ -249,14 +254,14 @@ public class Simulation {
                         while(times.get(currentOrder) <= currentTime && canLoad){//loads available orders until weight capacity is hit
                             if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
                                 //System.out.print("Added order to drone that was available at time " + times.get(currentOrder) + " at time " + currentTime + "\t");
-                                int a = 1;
+                                /*int a = 1;
                                 while(times.get(currentOrder) - (60 * a) > 0){
                                     a++;
                                 }
                                 if(a != prevResult){
                                     drone.addFIFODeliveryTime(-1);
                                     prevResult = a;
-                                }
+                                }*/
                                 //System.out.println("\n" + a + "\n");
                                 loadOrderFIFO(currentOrder);
                                 currentOrder++;
@@ -286,7 +291,7 @@ public class Simulation {
                     currentTime += calcTime;
                     tripTime += calcTime;
                     //System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
-                    deliverOrderFIFO(currentTime);
+                    deliverOrderFIFO(currentTime, iteration);
                 }
             } else {
                 //the drone is not home and is empty
@@ -317,7 +322,7 @@ public class Simulation {
                         currentTime += calcTime;
                         tripTime += calcTime;
                         //System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
-                        deliverOrderFIFO(currentTime);
+                        deliverOrderFIFO(currentTime, iteration);
                     }
                 }
             }
@@ -326,7 +331,7 @@ public class Simulation {
 
     //To-do:
     //Create loading method
-    private void runKnapsack(){
+    private void runKnapsack(int iteration){
         //runs knapsack simulations
 
         double currentTime = 0, tripTime = 0, calcTime, homeTime;
@@ -380,7 +385,7 @@ public class Simulation {
                                 currentTime += calcTime;
                                 tripTime += calcTime;
                                 System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
-                                deliverOrderKnapsack(currentTime);
+                                deliverOrderKnapsack(currentTime, iteration);
                                 launched = true;
                             }
                             if(currentTime == 5){
@@ -550,7 +555,7 @@ public class Simulation {
                     currentTime += calcTime;
                     tripTime += calcTime;
                     System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
-                    deliverOrderKnapsack(currentTime);
+                    deliverOrderKnapsack(currentTime, iteration);
                 }
             } else {
                 //the drone is not home and is empty
@@ -581,7 +586,7 @@ public class Simulation {
                         currentTime += calcTime;
                         tripTime += calcTime;
                         System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
-                        deliverOrderKnapsack(currentTime);
+                        deliverOrderKnapsack(currentTime, iteration);
                     }
                 }
             }
@@ -608,20 +613,28 @@ public class Simulation {
         return Math.round((((distance(a, b) * 1) / (drone.getSpeed() * 1609.34)) / 60 + .5) * 100.00) / 100.00;
     }
 
-    private void deliverOrderFIFO(double currentTime){
-        drone.addFIFODeliveryTime(currentTime - drone.getOrderOnDrone(0).getPickUpTime());
+    private void deliverOrderFIFO(double currentTime, int iteration){
+        int a = 1;
+        while(drone.getOrderOnDrone(0).getPickUpTime() - (60 * a) > 0){
+            a++;
+        }
+        drone.addFIFODeliveryTime((a - 1) + (numShifts * iteration),currentTime - drone.getOrderOnDrone(0).getPickUpTime());
         drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
         System.out.println("The drone delivered an order of " + drone.getOrderOnDrone(0).getMeal().getName() + " that was picked up at "
-         + drone.getOrderOnDrone(0).getPickUpTime() + " and had a delivery time of " + drone.getFIFODeliveryTime(drone.getNumFIFODeliveryTimes() - 1) + " and has been removed " +
+         + drone.getOrderOnDrone(0).getPickUpTime() + " and had a delivery time of " + drone.getFIFODeliveryTime((a - 1) + (numShifts * iteration),drone.getNumFIFODeliveryTimes((a - 1) + (numShifts * iteration)) - 1) + " and has been removed " +
                 "from the drone.");
         drone.removeOrderFromDrone(0);
     }
 
-    private void deliverOrderKnapsack(double currentTime){
-        drone.addKnapsackDeliveryTime(currentTime - drone.getOrderOnDrone(0).getPickUpTime());
+    private void deliverOrderKnapsack(double currentTime, int iteration){
+        int a = 1;
+        while(drone.getOrderOnDrone(0).getPickUpTime() - (60 * a) > 0){
+            a++;
+        }
+        drone.addKnapsackDeliveryTime((a - 1) + (numShifts * iteration), currentTime - drone.getOrderOnDrone(0).getPickUpTime());
         drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
         System.out.println("The drone delivered an order of " + drone.getOrderOnDrone(0).getMeal().getName() + " that was picked up at "
-                + drone.getOrderOnDrone(0).getPickUpTime() + " and had a delivery time of " + drone.getKnapsackDeliveryTime(drone.getNumKnapsackDeliveryTimes() - 1) + " and has been removed " +
+                + drone.getOrderOnDrone(0).getPickUpTime() + " and had a delivery time of " + drone.getKnapsackDeliveryTime((a - 1) + (numShifts * iteration),drone.getNumKnapsackDeliveryTimes((a - 1) + (numShifts * iteration)) - 1) + " and has been removed " +
                 "from the drone.");
         drone.removeOrderFromDrone(0);
     }
