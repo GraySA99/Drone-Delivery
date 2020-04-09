@@ -2,6 +2,7 @@ package sample;
 
 import Simulation.Drone;
 import Simulation.Simulation;
+import Simulation.DataTransfer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
@@ -27,6 +28,7 @@ public class ResultsPage extends VBox {
 
 
     double tempTime;
+    DataTransfer dataTransfer = new DataTransfer();
 
 
     //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
@@ -103,7 +105,7 @@ public class ResultsPage extends VBox {
             FIFOSeries.setName("FIFO");
 
             //Hour Counter for For Loops
-            int[] hourCounter = new int[recentSimulation.getNumShifts()];
+            int[] hourCounter = new int[dataTransfer.getNumShifts()];
             for (int i = 0; i < hourCounter.length; i++) {
                 hourCounter[i] = 0;
             }
