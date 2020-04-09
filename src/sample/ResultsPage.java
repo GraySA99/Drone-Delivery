@@ -185,6 +185,15 @@ public class ResultsPage extends VBox {
                     new ESHBox(), restartBtn, new ESHBox(), saveResultsBtn, new ESHBox(), finishBtn, new ESHBox()
             );
 
+            restartBtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    Values.simulation = new Simulation();
+                    Values.simulation.runSimulation();
+                    Values.primaryStage.getScene().setRoot(Values.rootPage);
+                }
+            });
+
             finishBtn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
