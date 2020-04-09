@@ -206,10 +206,10 @@ public class SideMenu extends ToolBar {
     private String getResultsStr() {
         String ret = "Your Results:\n";
         // Need to actually get the simulation data
-        ret += "FIFO Avg Time: " + Values.simulation.FIFOaverageTime + "\n";
-        ret += "FIFO Worst Time: " + Values.simulation.FIFOworstTime + "\n\n";
-        ret += "KS Avg Time:" + Values.simulation.KSaverageTime + "\n";
-        ret += "KS Worst Time: " + Values.simulation.KSworstTime + "\n\n";
+        ret += "FIFO Avg Time: " + Values.simulation.FIFOaverageTime.toString() + "\n";
+        ret += "FIFO Worst Time: " + Values.simulation.FIFOworstTime.toString() + "\n\n";
+        ret += "KS Avg Time:" + Values.simulation.KSaverageTime.toString() + "\n";
+        ret += "KS Worst Time: " + Values.simulation.KSworstTime.toString() + "\n\n";
 
         // Need some way to get shift information
         //DataTransfer.getNumShifts()  DataTransfer.getShifts()
