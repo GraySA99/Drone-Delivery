@@ -12,10 +12,16 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 Version Version# Month/Day/Year
 
 Version 1.19.0 4/8/20
--Added the map stores in the DataTransfer class to be used in the simulation (Patrick)
+-Added the map and number of shifts stored in the DataTransfer class to be used in the simulation (Patrick)
 -Added a new constructor to the Map class that takes an array of Waypoints instead of an arrayList (Patrick)
 -Added the removeWaypoint method to the Map class (Patrick)
+-Added the loadOrderKnapsack and deliverOrderKnapsack methods to the simulation class (Patrick)
+-Added the methods getKnapsackDeliveryTime and getNumKnapsackDeliveryTimes to the Drone class (Patrick)
+-Added setDestination and setMeal methods to the order class (Patrick)
+-Implemented the runKnapsack method starting as another FIFO simulation (Patrick)
 -Changed the simulation to do turn around every time the drone returns to the start point and if it's going to hit its flight limit (Patrick)
+-Changed simulation times to round to 2 decimal places (Patrick)
+-Change the loadOrder and deliverOrder methods to loadOrderFIFO and deliverOrderFIFO in the simulation class (Patrick)
 -Results Page now accesses actual simulation (Paul)
 -Refactored Results Page to not include test simulation (Paul)
 -Refactored allowing for a blank results page if no simulation has been run (Paul)

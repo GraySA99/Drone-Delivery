@@ -13,6 +13,12 @@ public class Order{
         pickUpTime = 0;
     }
 
+    public Order(){
+        destination = null;
+        orderMeal = null;
+        pickUpTime = 0;
+    }
+
     public Waypoint getDestination(){
         return destination;
     }
@@ -27,5 +33,13 @@ public class Order{
 
     public void setPickUpTime(double t){
         pickUpTime = t;
+    }
+
+    public void setMeal(Meal m){
+        this.orderMeal = m;
+    }
+
+    public void setDestination(Waypoint destination) {
+        this.destination = destination;
     }
 }

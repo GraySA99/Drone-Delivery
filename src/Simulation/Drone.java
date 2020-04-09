@@ -118,8 +118,16 @@ public class Drone {
         return FIFODeliveryTimes.get(i);
     }
 
+    public double getKnapsackDeliveryTime(int i){
+        return KnapsackDeliveryTimes.get(i);
+    }
+
     public int getNumFIFODeliveryTimes(){
         return FIFODeliveryTimes.size();
+    }
+
+    public int getNumKnapsackDeliveryTimes(){
+        return KnapsackDeliveryTimes.size();
     }
 
     public void addKnapsackDeliveryTime(double b){

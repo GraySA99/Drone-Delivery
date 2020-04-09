@@ -34,7 +34,11 @@ public class Simulation {
     public Simulation(){
         Waypoint starting = DataTransfer.getWaypoint(0);
         assert DataTransfer.getWaypoints() != null;
+        //try{
         simMap = new Map(starting, DataTransfer.getWaypoints());
+        //} catch (AssertionError mlem){
+
+        //}
         simMap.removeWaypoint(0);
         simMap.getStartingPoint().setStartingPoint(true);
 
@@ -43,7 +47,7 @@ public class Simulation {
         mealList = new ArrayList<Meal>();
         currentOrderQueue = new ArrayList<Order>();
 
-        numShifts = 4;
+        numShifts = DataTransfer.getNumShifts();
         ordersPerHour = new int[numShifts];
         timesToBeRan = 1;
         ordersPerHour[0] = 15;
@@ -87,12 +91,18 @@ public class Simulation {
 
             copyOrderQueue();
 
+            System.out.println("\n\n\nKnapSack\n");
             drone.setCurrentPosition(simMap.getStartingPoint());
-            //runKnapsack();
+            runKnapsack();
+            drone.addKnapsackDeliveryTime(-1);
         }
 
         for(int i = 0; i < drone.getNumFIFODeliveryTimes(); i++){
             System.out.print(drone.getFIFODeliveryTime(i) + " ");
+        }
+        System.out.println("\n");
+        for(int i = 0; i < drone.getNumKnapsackDeliveryTimes(); i++){
+            System.out.print(drone.getKnapsackDeliveryTime(i) + " ");
         }
 
         //drones must be reset before each simulation
@@ -165,24 +175,18 @@ public class Simulation {
         }
     }
 
-    //To-do:
-    //Waiting for corrected distance calcs in tsp
-    //Ask about charging and turn around
-
-    //made assuming that a drone charge must occur all at one time
     private void runFIFO(){
         //runs FIFO simulations
 
-        double currentTime = 0, tripTime = 0, calcTime, waitedTime, homeTime;
+        double currentTime = 0, tripTime = 0, calcTime, homeTime;
         int currentOrder = 0, prevResult = 1; //tracks the current order in currentOrderQueue
-        boolean launched = false, canLoad = true;
+        boolean launched, canLoad;
 
         while ((currentOrderQueue.size() > 0 || drone.getNumOrders() > 0)){
-            //System.out.println("The queue size is " + currentOrderQueue.size() + "\tThe number of orders on the drone is " + drone.getNumOrders());
+            System.out.println("The queue size is " + currentOrderQueue.size() + "\tThe number of orders on the drone is " + drone.getNumOrders());
             if(drone.getCurrentPosition().isStarting()){
                 launched = false;
                 canLoad = true;
-                waitedTime = 0;
 
                 if(tripTime > 0){
                     currentTime += drone.getTurnAroundTime();
@@ -206,7 +210,7 @@ public class Simulation {
                                     prevResult = a;
                                 }
                                 System.out.println("\n" + a + "\n");
-                                loadOrder(currentOrder);
+                                loadOrderFIFO(currentOrder);
                                 currentOrder++;
                             } else { //launch
                                 drone.setOrdersList(sortOrders(drone.getOrdersList()));
@@ -217,7 +221,7 @@ public class Simulation {
                                 currentTime += calcTime;
                                 tripTime += calcTime;
                                 System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
-                                deliverOrder(currentTime);
+                                deliverOrderFIFO(currentTime);
                                 launched = true;
                             }
                             if(currentTime == 5){
@@ -228,7 +232,6 @@ public class Simulation {
                         if(times.get(currentOrder) > currentTime && !launched){//increment time if not full
                             System.out.println("The drone waited a minute for more orders to appear.");
                             currentTime++;
-                            waitedTime++;
                         }
                     }
 
@@ -253,7 +256,7 @@ public class Simulation {
                                     prevResult = a;
                                 }
                                 System.out.println("\n" + a + "\n");
-                                loadOrder(currentOrder);
+                                loadOrderFIFO(currentOrder);
                                 currentOrder++;
                                 if(currentOrder >= times.size() - 1){
                                     canLoad = false;
@@ -270,7 +273,6 @@ public class Simulation {
                         } else if(times.get(currentOrder) > currentTime && canLoad){ //the drone will wait for more orders
                             System.out.println("The drone waited a minute for more orders to appear.");
                             currentTime++;
-                            waitedTime++;
                         }
                     }
 
@@ -282,7 +284,7 @@ public class Simulation {
                     currentTime += calcTime;
                     tripTime += calcTime;
                     System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
-                    deliverOrder(currentTime);
+                    deliverOrderFIFO(currentTime);
                 }
             } else {
                 //the drone is not home and is empty
@@ -313,7 +315,7 @@ public class Simulation {
                         currentTime += calcTime;
                         tripTime += calcTime;
                         System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
-                        deliverOrder(currentTime);
+                        deliverOrderFIFO(currentTime);
                     }
                 }
             }
@@ -324,16 +326,221 @@ public class Simulation {
     //Create loading method
     private void runKnapsack(){
         //runs knapsack simulations
-        int currentTime = 0;
-        //assign a value to every order in queue, grab the heaviest and put it in the bag, then next heaviest, then so forth. if it fits, put it in.
-        //skipped me counter, make sure skipped meals are prioritized
-        while (currentTime < numShifts * 60){
-            //fifo
+
+        double currentTime = 0, tripTime = 0, calcTime, homeTime;
+        int currentOrder = 0, prevResult = 1, skipPos = 0; //tracks the current order in currentOrderQueue
+        boolean launched, canLoad, skip = false;
+        ArrayList<Order> skippedList = new ArrayList<Order>();
+
+        while ((currentOrderQueue.size() > 0 || drone.getNumOrders() > 0)){
+            System.out.println("The queue size is " + currentOrderQueue.size() + "\tThe number of orders on the drone is " + drone.getNumOrders());
+            if(drone.getCurrentPosition().isStarting()){
+                launched = false;
+                canLoad = true;
+
+                if(tripTime > 0){
+                    currentTime += drone.getTurnAroundTime();
+                    tripTime = 0;
+                    System.out.println("Upon returning to the start the drone needed 3 min to recharge and load. The current time is " + currentTime);
+                }
+
+                //when the drone is at the starting point and it's within the first five minutes of the simulation
+                if(currentTime <= 5){
+                    //the drone will add any available orders if it can. If the drone is full then it will launch
+                    while(!launched && currentTime <= 5){
+                        while(times.get(currentOrder) <= currentTime && !launched && currentTime <= 5){
+                            if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
+                                System.out.print("Added order to drone that was available at time " + times.get(currentOrder) + " at time " + currentTime + "\t");
+                                int a = 1;
+                                while(times.get(currentOrder) - (60 * a) > 0){
+                                    a++;
+                                }
+                                if(a != prevResult){
+                                    drone.addKnapsackDeliveryTime(-1);
+                                    prevResult = a;
+                                }
+                                System.out.println("\n" + a + "\n");
+                                loadOrderKnapsack(currentOrder);
+                                currentOrder++;
+                            } else { //launch
+                                drone.setOrdersList(sortOrders(drone.getOrdersList()));
+                                //resets the pickup times as the drone did not really leave until this point
+                                System.out.print("Began launch sequence. TSP has been called.");
+                                calcTime = calculateTime(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination());
+                                System.out.print(" The calculated time is " + calcTime + " while old current time is " + currentTime);
+                                currentTime += calcTime;
+                                tripTime += calcTime;
+                                System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
+                                deliverOrderKnapsack(currentTime);
+                                launched = true;
+                            }
+                            if(currentTime == 5){
+                                launched = true;
+                            }
+                        }
+
+                        if(times.get(currentOrder) > currentTime && !launched){//increment time if not full
+                            System.out.println("The drone waited a minute for more orders to appear.");
+                            currentTime++;
+                        }
+                    }
+
+                    //when the drone is at the starting position and it's not within the first five minutes of the simulation
+                } else {
+                    //resets the pickup times for the orders that were loaded before the five minute mark
+                    if(currentTime < 7){
+                        if(drone.getCurrentWeight() > 0){
+                            canLoad = false;
+                        }
+                    }
+                    while(canLoad && currentOrder <= times.size() - 1){
+                        int max = 0;
+                        int c = 0;
+                        //the previous first order was skipped, it will be added automatically
+                        //while(skip && c < skippedList.size()){
+                        if(skip){
+                            if(drone.getCurrentWeight() + skippedList.get(c).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
+                                System.out.print("Added the order that was skipped at time " + currentTime + "\t");
+                                /*int a = 1;
+                                while(times.get(currentOrder) - (60 * a) > 0){
+                                    a++;
+                                }
+                                if(a != prevResult){
+                                    drone.addKnapsackDeliveryTime(-1);
+                                    prevResult = a;
+                                }
+                                System.out.println("\n" + a + "\n");*/
+                                drone.addOrderToDrone(skippedList.get(c));
+                                currentOrderQueue.remove(c);
+                                if(currentOrder >= times.size() - 1){
+                                    canLoad = false;
+                                    break;
+                                }
+                                if(skippedList.size() == 0){
+                                    skip = false;
+                                }
+                            } else {
+                                canLoad = false;
+                            }
+                        }
+                        while(times.get(currentOrder) <= currentTime && canLoad){//loads available orders until weight capacity is hit
+                            //loop to find if the first order is the greatest
+                            if(!skip && currentOrderQueue.size() > 1){
+                                for(int r = 0; r < times.size() - currentOrder; r++){
+                                    if(currentOrder + r < times.size()){
+                                        if(times.get(currentOrder + r) <= currentTime &&  currentOrderQueue.get(max).getMeal().getTotalWeight() < currentOrderQueue.get(r).getMeal().getTotalWeight()){
+                                            max = r;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if(max == 0 && currentOrderQueue.size() > 1){
+                                skip = true;
+                                skippedList.add(currentOrderQueue.get(0));
+                                currentOrderQueue.remove(0);
+
+                                /*int a = 1;
+                                while(times.get(currentOrder) - (60 * a) > 0){
+                                    a++;
+                                }
+                                if(a != prevResult){
+                                    drone.addKnapsackDeliveryTime(-1);
+                                    prevResult = a;
+                                }
+                                System.out.println("\n" + a + "\n");*/
+                                currentOrder++;
+                                if(currentOrder >= times.size() - 1){
+                                    canLoad = false;
+                                    break;
+                                }
+                            }
+                            if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
+                                System.out.print("Added order to drone that was available at time " + times.get(currentOrder) + " at time " + currentTime + "\t");
+                                /*int a = 1;
+                                while(times.get(currentOrder) - (60 * a) > 0){
+                                    a++;
+                                }
+                                if(a != prevResult){
+                                    drone.addKnapsackDeliveryTime(-1);
+                                    prevResult = a;
+                                }
+                                System.out.println("\n" + a + "\n");*/
+                                loadOrderKnapsack(currentOrder);
+                                currentOrder++;
+                                if(currentOrder >= times.size() - 1){
+                                    canLoad = false;
+                                    break;
+                                }
+                            } else {
+                                canLoad = false;
+                            }
+                        }
+
+                        //the drone will launch if it has anything on it
+                        if(drone.getCurrentWeight() > 0){
+                            canLoad = false;
+                        } else if(times.get(currentOrder) > currentTime && canLoad){ //the drone will wait for more orders
+                            System.out.println("The drone waited a minute for more orders to appear.");
+                            currentTime++;
+                        }
+                    }
+
+
+                    drone.setOrdersList(sortOrders(drone.getOrdersList()));
+                    System.out.print("Began launch sequence. TSP has been called.");
+                    calcTime = calculateTime(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination());
+                    System.out.print(" The calculated time is " + calcTime + " while old current time is " + currentTime);
+                    currentTime += calcTime;
+                    tripTime += calcTime;
+                    System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
+                    deliverOrderKnapsack(currentTime);
+                }
+            } else {
+                //the drone is not home and is empty
+                if(drone.getNumOrders() == 0){
+                    //add a time tracker for the current trip to make sure it won't surpass 20 min. Should check next route time and time to get home
+
+                    calcTime = calculateTime(drone.getCurrentPosition(), simMap.getStartingPoint());
+                    System.out.print("The drone has run out of orders and has returned home. The calc time was " + calcTime + " the old current time is " + currentTime);
+                    currentTime += calcTime;
+                    System.out.print(" And the new current time is " + currentTime);
+                    tripTime += calcTime;
+                    drone.setCurrentPosition(simMap.getStartingPoint());
+                } else { //the drone is not home and has orders
+                    //the drone figures out if it can make it to its next destination and home if it needs to charge
+                    calcTime = calculateTime(drone.getCurrentPosition(), drone.getOrderOnDrone(0).getDestination());
+                    homeTime = calculateTime(drone.getOrderOnDrone(0).getDestination(), simMap.getStartingPoint());
+
+                    //the drone returns home
+                    if(tripTime + calcTime + homeTime > drone.getMaxFlightTime() - 0.5){
+                        System.out.print("After " + tripTime + " min of trip time, the drone has decided to return home.");
+                        calcTime = calculateTime(drone.getCurrentPosition(), simMap.getStartingPoint());
+                        System.out.print("The calc time was" + calcTime + " the old current time is " + currentTime + "\n");
+                        currentTime += calcTime;
+                        System.out.print(" And the new current time is " + currentTime);
+                        drone.setCurrentPosition(simMap.getStartingPoint());
+                        tripTime = 0;
+                    } else { //the drone continues its current delivery path
+                        currentTime += calcTime;
+                        tripTime += calcTime;
+                        System.out.print(" The new time is " + currentTime + " while current trip time is " + tripTime + "\n");
+                        deliverOrderKnapsack(currentTime);
+                    }
+                }
+            }
         }
     }
 
     //||-----------Shared Utility Methods Between FIFO and Knapsack-----------||
-    private void loadOrder(int currentOrder){
+    private void loadOrderFIFO(int currentOrder){
+        currentOrderQueue.get(0).setPickUpTime(times.get(currentOrder));
+        System.out.print("Set Pickup time for order " + currentOrderQueue.get(0).getMeal().getName() + " as " + currentOrderQueue.get(0).getPickUpTime() + "\n");
+        drone.addOrderToDrone(currentOrderQueue.get(0));
+        currentOrderQueue.remove(0);
+    }
+
+    private void loadOrderKnapsack(int currentOrder){
         currentOrderQueue.get(0).setPickUpTime(times.get(currentOrder));
         System.out.print("Set Pickup time for order " + currentOrderQueue.get(0).getMeal().getName() + " as " + currentOrderQueue.get(0).getPickUpTime() + "\n");
         drone.addOrderToDrone(currentOrderQueue.get(0));
@@ -342,14 +549,23 @@ public class Simulation {
 
     private double calculateTime(Waypoint a, Waypoint b){
         System.out.println("The Calculated distance it " + distance(a, b));
-        return ((distance(a, b) * 1) / (drone.getSpeed() * 1609.34)) / 60 + .5;
+        return Math.round((((distance(a, b) * 1) / (drone.getSpeed() * 1609.34)) / 60 + .5) * 100.00) / 100.00;
     }
 
-    private void deliverOrder(double currentTime){
+    private void deliverOrderFIFO(double currentTime){
         drone.addFIFODeliveryTime(currentTime - drone.getOrderOnDrone(0).getPickUpTime());
         drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
         System.out.println("The drone delivered an order of " + drone.getOrderOnDrone(0).getMeal().getName() + " that was picked up at "
          + drone.getOrderOnDrone(0).getPickUpTime() + " and had a delivery time of " + drone.getFIFODeliveryTime(drone.getNumFIFODeliveryTimes() - 1) + " and has been removed " +
+                "from the drone.");
+        drone.removeOrderFromDrone(0);
+    }
+
+    private void deliverOrderKnapsack(double currentTime){
+        drone.addKnapsackDeliveryTime(currentTime - drone.getOrderOnDrone(0).getPickUpTime());
+        drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
+        System.out.println("The drone delivered an order of " + drone.getOrderOnDrone(0).getMeal().getName() + " that was picked up at "
+                + drone.getOrderOnDrone(0).getPickUpTime() + " and had a delivery time of " + drone.getKnapsackDeliveryTime(drone.getNumKnapsackDeliveryTimes() - 1) + " and has been removed " +
                 "from the drone.");
         drone.removeOrderFromDrone(0);
     }
