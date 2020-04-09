@@ -1,6 +1,5 @@
 package sample;
 
-import Mapping.Waypoint;
 import Simulation.DataTransfer;
 import Simulation.Simulation;
 import javafx.application.Platform;
@@ -9,21 +8,19 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SideMenu extends ToolBar {
@@ -209,6 +206,7 @@ public class SideMenu extends ToolBar {
     private String getResultsStr() {
         String ret = "Your Results:\n";
         // Need to actually get the simulation data
+
         ret += "FIFO Avg Time: " + Values.simulation.FIFOaverageTime + "\n";
         ret += "FIFO Worst Time: " + Values.simulation.FIFOworstTime + "\n\n";
         ret += "KS Avg Time:" + Values.simulation.KSaverageTime + "\n";
@@ -216,6 +214,11 @@ public class SideMenu extends ToolBar {
 
         // Need some way to get shift information
         //DataTransfer.getNumShifts()  DataTransfer.getShifts()
+
+        //ret += "";
+
+        //DataTransfer.getNumShifts();  DataTransfer.getShifts();
+
 
         return ret;
     }
