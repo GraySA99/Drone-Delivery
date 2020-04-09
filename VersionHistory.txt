@@ -11,13 +11,17 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
-Version 1.19.0 4/8/20
+Version 1.19.0 The Knapsack Update 4/8/20-4/9/20
 -Added the map and number of shifts stored in the DataTransfer class to be used in the simulation (Patrick)
 -Added a new constructor to the Map class that takes an array of Waypoints instead of an arrayList (Patrick)
 -Added the removeWaypoint method to the Map class (Patrick)
 -Added the loadOrderKnapsack and deliverOrderKnapsack methods to the simulation class (Patrick)
 -Added the methods getKnapsackDeliveryTime and getNumKnapsackDeliveryTimes to the Drone class (Patrick)
 -Added setDestination and setMeal methods to the order class (Patrick)
+-Added the skipping system to the knapsack method. If the max weight order is ever first out of the available ones, it is sent to a queue
+with the skipped orders and prioritized by position and how many times it was skipped. The lightest there are added first but the ones
+that remain increase in priority. There check happens twice as when there are two orders left, the last could be stuck there when it
+does not need to be (Patrick)
 -Implemented the runKnapsack method starting as another FIFO simulation (Patrick)
 -Changed the simulation to do turn around every time the drone returns to the start point and if it's going to hit its flight limit (Patrick)
 -Changed simulation times to round to 2 decimal places (Patrick)
