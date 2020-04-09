@@ -16,7 +16,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class ResultsPage extends VBox {
@@ -49,6 +53,30 @@ public class ResultsPage extends VBox {
             }
         }
         return worst;
+    }
+
+    //Methods for saving to a file
+    private String getResultsStr() {
+        String ret = "Your Results:\n";
+        ret += "FIFO Avg Time: " + Values.simulation.FIFOaverageTime.toString() + "\n";
+        ret += "FIFO Worst Time: " + Values.simulation.FIFOworstTime.toString() + "\n\n";
+        ret += "KS Avg Time:" + Values.simulation.KSaverageTime.toString() + "\n";
+        ret += "KS Worst Time: " + Values.simulation.KSworstTime.toString() + "\n\n";
+
+        // Need some way to get shift information
+        //DataTransfer.getNumShifts()  DataTransfer.getShifts()
+
+        return ret;
+    }
+    private void writeTextToFile(String str, File file)
+    {
+        try {
+            PrintWriter writer = new PrintWriter(file);
+            writer.println(str);
+            writer.close();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     public ResultsPage() {
@@ -167,6 +195,25 @@ public class ResultsPage extends VBox {
                 public void handle(ActionEvent e) {
 
                     Values.primaryStage.getScene().setRoot(Values.rootPage);
+                }
+            });
+
+            // Added by Josh - Save Button Functionality
+            saveResultsBtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    FileChooser fileChooser = new FileChooser();
+
+                    //If we want we can set extension filters for text files
+                    FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+                    fileChooser.getExtensionFilters().add(filter);
+
+                    //Show save file dialogue
+                    File file = fileChooser.showSaveDialog(Values.primaryStage);
+
+                    if(file != null) {
+                        writeTextToFile(getResultsStr(), file);
+                    }
                 }
             });
 
