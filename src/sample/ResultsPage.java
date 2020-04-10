@@ -303,6 +303,7 @@ public class ResultsPage extends VBox {
              */
             HBox resultsContainer = new HBox();
 
+            // Left
             VBox resultsBarChartFrame = new VBox();
             CategoryAxis resultsXAxis = new CategoryAxis();
             resultsXAxis.setLabel("Hours");
@@ -313,6 +314,7 @@ public class ResultsPage extends VBox {
             XYChart.Series<String, Number> FIFOSeries = new XYChart.Series<>();
             FIFOSeries.setName("FIFO");
 
+            //Initialize blank variables
             int[] hourCounter = new int[4];
             for (int i = 0; i < hourCounter.length; i++) {
                 hourCounter[i] = 0;
@@ -325,10 +327,12 @@ public class ResultsPage extends VBox {
             XYChart.Series<String, Number> KSSeries = new XYChart.Series<>();
             KSSeries.setName("Knapsack");
 
+            //Reset Variables
             for (int i = 0; i < hourCounter.length; i++) {
                 hourCounter[i] = 0;
             }
 
+            //For loop adding the hour counter to the graph
             for (int i = 0; i < hourCounter.length; i++) {
                 KSSeries.getData().add(new XYChart.Data<String, Number>(Integer.toString(i + 1), hourCounter[i]));
             }
@@ -336,6 +340,7 @@ public class ResultsPage extends VBox {
             resultsBarChart.getData().addAll(FIFOSeries, KSSeries);
             resultsBarChartFrame.getChildren().add(resultsBarChart);
 
+            // Right
             VBox resultsDataFrame = new VBox();
             VBox FIFODataFrame = new VBox();
             Text FIFOLabel = new Text("FIFO: ");
@@ -354,6 +359,7 @@ public class ResultsPage extends VBox {
             );
             resultsDataFrame.getChildren().addAll(FIFODataFrame, new Separator(Orientation.HORIZONTAL), KSDataFrame);
 
+            // Bottom
             HBox resultsButtonFrame = new HBox();
             Button restartBtn = new Button("Restart");
             Button saveResultsBtn = new Button("Save Results");
@@ -365,14 +371,15 @@ public class ResultsPage extends VBox {
             finishBtn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-
                     Values.primaryStage.getScene().setRoot(Values.rootPage);
                 }
             });
 
+            // Root Assembly
             resultsContainer.getChildren().addAll(resultsBarChartFrame, resultsDataFrame);
             this.getChildren().setAll(resultsContainer, resultsButtonFrame);
 
+            // Styles
             FIFODataFrame.setStyle(Styles.FIFODataFrame);
             FIFOLabel.setStyle(Styles.resultsDeliveryTypeLabel);
             FIFOAverageTime.setStyle(Styles.resultsDeliveryTime);
@@ -383,14 +390,17 @@ public class ResultsPage extends VBox {
             resultsButtonFrame.setStyle(Styles.resultsButtonFrame);
             resultsDataFrame.setStyle(Styles.resultsDataFrame);
 
+            // Growth
             VBox.setVgrow(resultsContainer, Priority.ALWAYS);
             VBox.setVgrow(resultsButtonFrame, Priority.ALWAYS);
             VBox.setVgrow(resultsBarChart, Priority.ALWAYS);
             VBox.setVgrow(resultsDataFrame, Priority.ALWAYS);
 
+            // Dimensions
             resultsBarChart.setPrefWidth(1200);
             resultsButtonFrame.setMaxHeight(150);
-            
+
+            // Alignment
             resultsDataFrame.setAlignment(Pos.CENTER_LEFT);
             restartBtn.setAlignment(Pos.CENTER);
             saveResultsBtn.setAlignment(Pos.CENTER);
