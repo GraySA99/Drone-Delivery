@@ -106,6 +106,7 @@ public class ResultsPage extends VBox {
 
             //Hour Counter for For Loops
             int[] hourCounter = new int[dataTransfer.getNumShifts()];
+            //int[] hourCounter = new int[recentSimulation.getNumShifts()];
             //dataTransfer.getNumShifts * dataTransfer.getNumSimulations?
             for (int i = 0; i < hourCounter.length; i++) {
                 hourCounter[i] = 0;
