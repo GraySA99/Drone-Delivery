@@ -24,7 +24,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         // Setup
-        Parent root1 = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        //Parent root1 = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Team Azure Drones");
         BorderPane root = new BorderPane();
         MapPage mapPage = new MapPage();
