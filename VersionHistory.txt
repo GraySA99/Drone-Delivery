@@ -14,6 +14,7 @@ Version Version# Month/Day/Year
 Version 1.20.1 4/10/20
 -Added lots of documentation to the Simulation class, Map class, Order class, Drone class, Food class, Meal class, and Waypoint class (Patrick)
 -Added the hasSkipped variable to the Knapsack method as using just skip at some points may have been causing errors (Patrick)
+-Refactored showing results by hour counter so errors didn't happen (Paul)
 -Removed the orderGenerator, Hamburger, Fries, and Drink class (Patrick)
 
 Version 1.20.0 4/9/20
