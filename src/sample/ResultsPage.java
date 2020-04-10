@@ -27,17 +27,18 @@ import java.util.ArrayList;
 public class ResultsPage extends VBox {
 
 
-    double tempTime;
-    DataTransfer dataTransfer = new DataTransfer();
+    double tempTime; //Holding variable for showing average and worst times
+    DataTransfer dataTransfer = new DataTransfer(); //For bringing over data shared between classes
 
 
     //Average and worst delivery time variable, found by getting the average and worst from deliveryTimes
-    //public Double average = getAverage(drone.deliveryTimes);
-    //public Double worst = getWorst(drone.deliveryTimes);
 
+    //For calculating the average delivery time of a group of times
     public static Double getAverage(ArrayList<ArrayList<Double>> times){
-        double sum = 0;
-        int numberOfTimes = 0;
+        double sum = 0; //sum of all the times
+        int numberOfTimes = 0; //number of times in the list of times
+
+        //
         for(int i = 0; i<times.size(); i++){
             numberOfTimes+=times.get(i).size();
             for(int j = 0; j<times.get(i).size(); j++){
