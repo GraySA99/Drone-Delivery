@@ -38,24 +38,29 @@ public class ResultsPage extends VBox {
         double sum = 0; //sum of all the times
         int numberOfTimes = 0; //number of times in the list of times
 
-        //
+        //for every list of times inside of the list of times, add each element to the sum
         for(int i = 0; i<times.size(); i++){
+            //Build up the number of delivery times at every iteration
             numberOfTimes+=times.get(i).size();
             for(int j = 0; j<times.get(i).size(); j++){
                 sum += times.get(i).get(j);
             }
         }
+        //Return average
         return sum/numberOfTimes;
     }
     public static Double getWorst(ArrayList<ArrayList<Double>> times){
-        double worst = 0;
+        double worst = 0; //Stores biggest time in times
+
         for(int i = 0; i<times.size(); i++){
             for(int j = 0; j<times.get(i).size(); j++){
+                //If the time found is greater than the worst time, make it the worst time
                 if(times.get(i).get(j) > worst){
                     worst = times.get(i).get(j);
                 }
             }
         }
+        //Return that worst time
         return worst;
     }
 
@@ -87,10 +92,15 @@ public class ResultsPage extends VBox {
 
         super();
 
-        //Figure out how to get the most recent of each drone and bring them into this page
+        //If there is a recent simulation show the results for that simulation
+        //If no recent simulation, show a blank results page
         if (Values.simulation != null) {
+
+            //Get Simulation and Drone for results
             Simulation recentSimulation = Values.simulation;
             Drone droneforresults = recentSimulation.drone;
+
+            //Start creating graphs
 
             HBox resultsContainer = new HBox();
 
@@ -109,18 +119,21 @@ public class ResultsPage extends VBox {
             int[] hourCounter = new int[dataTransfer.getNumShifts()];
             //int[] hourCounter = new int[recentSimulation.getNumShifts()];
             //dataTransfer.getNumShifts * dataTransfer.getNumSimulations?
+
+            //Initalize hourCounter
             for (int i = 0; i < hourCounter.length; i++) {
                 hourCounter[i] = 0;
             }
 
-            //For loop iterating over the FIFO delivery times and adding each of them to the hour counter
+            //For loop iterating over the FIFO delivery times
             for (int FIFOIndex = 0; FIFOIndex < hourCounter.length; FIFOIndex++) {
+                //Increment hour counter based on what part of the FIFO list the times are in
                 for(int i = 0; i<droneforresults.FIFODeliveryTimes.get(FIFOIndex).size(); i++){
                     hourCounter[FIFOIndex]++;
                 }
             }
 
-            //For loop adding the hour counter to the graph
+            //For loop adding the hour counter times to the bar graph
             for (int i = 0; i < hourCounter.length; i++) {
                 FIFOSeries.getData().add(new XYChart.Data<String, Number>(Integer.toString(i + 1), hourCounter[i]));
             }
@@ -128,28 +141,33 @@ public class ResultsPage extends VBox {
             XYChart.Series<String, Number> KSSeries = new XYChart.Series<>();
             KSSeries.setName("Knapsack");
 
-            //Reset Variables
+            //Reset hour counter
             for (int i = 0; i < hourCounter.length; i++) {
                 hourCounter[i] = 0;
             }
 
-            //For loop iterating over the Knapsack delivery times and adding each of them to the hour counter
+            //For loop iterating over the Knapsack delivery times
             for (int KSIndex = 0; KSIndex < hourCounter.length; KSIndex++) {
+                //Increment hour counter based on what part of the knapsack list the times are in
                 for(int i = 0; i<droneforresults.KnapsackDeliveryTimes.get(KSIndex).size(); i++){
                     hourCounter[KSIndex]++;
                 }
             }
 
-            //For loop adding the hour counter to the graph
+            //For loop adding the hour counter times to the bar graph
             for (int i = 0; i < hourCounter.length; i++) {
                 KSSeries.getData().add(new XYChart.Data<String, Number>(Integer.toString(i + 1), hourCounter[i]));
             }
 
+            //Add the series of data to the bar graph
             resultsBarChart.getData().addAll(FIFOSeries, KSSeries);
+            //Show graph
             resultsBarChartFrame.getChildren().add(resultsBarChart);
 
             // Right
             VBox resultsDataFrame = new VBox();
+
+            //Create FIFO display
             VBox FIFODataFrame = new VBox();
             Text FIFOLabel = new Text("FIFO: ");
 
@@ -159,50 +177,69 @@ public class ResultsPage extends VBox {
             recentSimulation.KSaverageTime = getAverage(droneforresults.KnapsackDeliveryTimes);
             recentSimulation.KSworstTime = getWorst(droneforresults.KnapsackDeliveryTimes);
 
-            //Put FIFODeliveryTimes.getAverage in Double.toString
+            //Calculate FIFO average time and display it
             tempTime = Math.round(recentSimulation.FIFOaverageTime*100)/100.0;
             Text FIFOAverageTime = new Text("Average Time: " + tempTime + " minutes");
-            //Put FIFODeliveryTimes.getWorst in Double.toString
+
+            //Calculate worst FIFO time and display it
             tempTime = Math.round(recentSimulation.FIFOworstTime*100)/100.0;
             Text FIFOWorstTime = new Text("Worst Time: " + tempTime + " minutes");
+
+            //Add to display
             FIFODataFrame.getChildren().addAll(
                     FIFOLabel, FIFOAverageTime, FIFOWorstTime
             );
+
+            //Create knapsack display
             VBox KSDataFrame = new VBox();
             Text KSLabel = new Text("Knapsack: ");
-            //Put KnapsackDeliveryTimes.getAverage in Double.toString
+
+            //Calculate knapsack average time and display it
             tempTime = Math.round(recentSimulation.KSaverageTime * 100)/100.0;
             Text KSAverageTime = new Text("Average Time: " + tempTime +" minutes");
-            //Put KnapsackDeliveryTimes.getAverage in Double.toString
+            //Calculate knapsack worst time and display it
             tempTime = Math.round(recentSimulation.KSworstTime * 100)/100.0;
             Text KSWorstTime = new Text("Worst Time: " + tempTime +" minutes");
+
+            //Add times to display
             KSDataFrame.getChildren().addAll(
                     KSLabel, KSAverageTime, KSWorstTime
             );
+
+            //Show display on page
             resultsDataFrame.getChildren().addAll(FIFODataFrame, new Separator(Orientation.HORIZONTAL), KSDataFrame);
 
             // Bottom
             HBox resultsButtonFrame = new HBox();
+
+            //Create buttons on results page
             Button restartBtn = new Button("Restart");
             Button saveResultsBtn = new Button("Save Results");
             Button finishBtn = new Button("Finish");
+
+            //Show buttons on page
             resultsButtonFrame.getChildren().addAll(
                     new ESHBox(), restartBtn, new ESHBox(), saveResultsBtn, new ESHBox(), finishBtn, new ESHBox()
             );
 
+            //Create functionality for clicking restart button
             restartBtn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
+                    //Run new simulation
                     Values.simulation = new Simulation();
                     Values.simulation.runSimulation();
+
+                    //Go to main menu
                     Values.primaryStage.getScene().setRoot(Values.rootPage);
                 }
             });
 
+            //Create functionality for finish button
             finishBtn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-
+                    //Go to main menu
                     Values.primaryStage.getScene().setRoot(Values.rootPage);
                 }
             });
@@ -226,7 +263,7 @@ public class ResultsPage extends VBox {
                 }
             });
 
-            // Root Assembly
+            // Root Assembly (Show everything on the page)
             resultsContainer.getChildren().addAll(resultsBarChartFrame, resultsDataFrame);
             this.getChildren().setAll(resultsContainer, resultsButtonFrame);
 
@@ -257,9 +294,15 @@ public class ResultsPage extends VBox {
             saveResultsBtn.setAlignment(Pos.CENTER);
             finishBtn.setAlignment(Pos.CENTER);
         } else {
+            /*
+            Blank results page throughout this else statement
+            No separate formatting for it from the actual results page
+
+            Added default blank values instead of calling actual values
+            (Will have null pointer exception if I call actual values)
+             */
             HBox resultsContainer = new HBox();
 
-            // Left
             VBox resultsBarChartFrame = new VBox();
             CategoryAxis resultsXAxis = new CategoryAxis();
             resultsXAxis.setLabel("Hours");
@@ -270,13 +313,11 @@ public class ResultsPage extends VBox {
             XYChart.Series<String, Number> FIFOSeries = new XYChart.Series<>();
             FIFOSeries.setName("FIFO");
 
-            //Hour Counter for For Loops
             int[] hourCounter = new int[4];
             for (int i = 0; i < hourCounter.length; i++) {
                 hourCounter[i] = 0;
             }
 
-            //For loop adding the hour counter to the graph
             for (int i = 0; i < hourCounter.length; i++) {
                 FIFOSeries.getData().add(new XYChart.Data<String, Number>(Integer.toString(i + 1), hourCounter[i]));
             }
@@ -284,12 +325,10 @@ public class ResultsPage extends VBox {
             XYChart.Series<String, Number> KSSeries = new XYChart.Series<>();
             KSSeries.setName("Knapsack");
 
-            //Reset Variables
             for (int i = 0; i < hourCounter.length; i++) {
                 hourCounter[i] = 0;
             }
 
-            //For loop adding the hour counter to the graph
             for (int i = 0; i < hourCounter.length; i++) {
                 KSSeries.getData().add(new XYChart.Data<String, Number>(Integer.toString(i + 1), hourCounter[i]));
             }
@@ -297,30 +336,24 @@ public class ResultsPage extends VBox {
             resultsBarChart.getData().addAll(FIFOSeries, KSSeries);
             resultsBarChartFrame.getChildren().add(resultsBarChart);
 
-            // Right
             VBox resultsDataFrame = new VBox();
             VBox FIFODataFrame = new VBox();
             Text FIFOLabel = new Text("FIFO: ");
 
-            //Put FIFODeliveryTimes.getAverage in Double.toString
             Text FIFOAverageTime = new Text("Average Time: " + Double.toString(0));
-            //Put FIFODeliveryTimes.getWorst in Double.toString
             Text FIFOWorstTime = new Text("Worst Time: " + Double.toString(0));
             FIFODataFrame.getChildren().addAll(
                     FIFOLabel, FIFOAverageTime, FIFOWorstTime
             );
             VBox KSDataFrame = new VBox();
             Text KSLabel = new Text("Knapsack: ");
-            //Put KnapsackDeliveryTimes.getAverage in Double.toString
             Text KSAverageTime = new Text("Average Time: " + Double.toString(0));
-            //Put KnapsackDeliveryTimes.getAverage in Double.toString
             Text KSWorstTime = new Text("Worst Time: " + Double.toString(0));
             KSDataFrame.getChildren().addAll(
                     KSLabel, KSAverageTime, KSWorstTime
             );
             resultsDataFrame.getChildren().addAll(FIFODataFrame, new Separator(Orientation.HORIZONTAL), KSDataFrame);
 
-            // Bottom
             HBox resultsButtonFrame = new HBox();
             Button restartBtn = new Button("Restart");
             Button saveResultsBtn = new Button("Save Results");
@@ -337,11 +370,9 @@ public class ResultsPage extends VBox {
                 }
             });
 
-            // Root Assembly
             resultsContainer.getChildren().addAll(resultsBarChartFrame, resultsDataFrame);
             this.getChildren().setAll(resultsContainer, resultsButtonFrame);
 
-            // Styles
             FIFODataFrame.setStyle(Styles.FIFODataFrame);
             FIFOLabel.setStyle(Styles.resultsDeliveryTypeLabel);
             FIFOAverageTime.setStyle(Styles.resultsDeliveryTime);
@@ -352,17 +383,14 @@ public class ResultsPage extends VBox {
             resultsButtonFrame.setStyle(Styles.resultsButtonFrame);
             resultsDataFrame.setStyle(Styles.resultsDataFrame);
 
-            // Growth
             VBox.setVgrow(resultsContainer, Priority.ALWAYS);
             VBox.setVgrow(resultsButtonFrame, Priority.ALWAYS);
             VBox.setVgrow(resultsBarChart, Priority.ALWAYS);
             VBox.setVgrow(resultsDataFrame, Priority.ALWAYS);
 
-            // Dimensions
             resultsBarChart.setPrefWidth(1200);
             resultsButtonFrame.setMaxHeight(150);
-
-            // Alignment
+            
             resultsDataFrame.setAlignment(Pos.CENTER_LEFT);
             restartBtn.setAlignment(Pos.CENTER);
             saveResultsBtn.setAlignment(Pos.CENTER);
