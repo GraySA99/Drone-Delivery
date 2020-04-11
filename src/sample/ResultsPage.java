@@ -27,6 +27,7 @@ import java.util.ArrayList;
 public class ResultsPage extends VBox {
 
 
+
     double tempTime; //Holding variable for showing average and worst times
     DataTransfer dataTransfer = new DataTransfer(); //For bringing over data shared between classes
 
@@ -77,6 +78,7 @@ public class ResultsPage extends VBox {
 
         return ret;
     }
+    // writes string str to file file
     private void writeTextToFile(String str, File file)
     {
         try {
@@ -180,8 +182,8 @@ public class ResultsPage extends VBox {
             //Calculate FIFO average time and display it
             tempTime = Math.round(recentSimulation.FIFOaverageTime*100)/100.0;
             Text FIFOAverageTime = new Text("Average Time: " + tempTime + " minutes");
-
             //Calculate worst FIFO time and display it
+          
             tempTime = Math.round(recentSimulation.FIFOworstTime*100)/100.0;
             Text FIFOWorstTime = new Text("Worst Time: " + tempTime + " minutes");
 
@@ -198,6 +200,7 @@ public class ResultsPage extends VBox {
             tempTime = Math.round(recentSimulation.KSaverageTime * 100)/100.0;
             Text KSAverageTime = new Text("Average Time: " + tempTime +" minutes");
             //Calculate knapsack worst time and display it
+
             tempTime = Math.round(recentSimulation.KSworstTime * 100)/100.0;
             Text KSWorstTime = new Text("Worst Time: " + tempTime +" minutes");
 
@@ -244,7 +247,7 @@ public class ResultsPage extends VBox {
                 }
             });
 
-            // Added by Josh - Save Button Functionality
+            // Added by Josh - Save Button Functionality in results page
             saveResultsBtn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
