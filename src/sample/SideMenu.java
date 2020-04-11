@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
@@ -16,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -134,17 +136,25 @@ public class SideMenu extends ToolBar {
             start.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
 
-//                    final Stage dialog = new Stage();
-//                    dialog.initModality(Modality.APPLICATION_MODAL);
-//                    //dialog.initOwner(rootMenu);
-//
-//                    BorderPane subRoot = new BorderPane();
-//                    Text dialogText = new Text("Simulation is Running Please Wait");
-//                    subRoot.setCenter(dialogText);
-//                    Scene dialogScene = new Scene(subRoot, 300, 200);
-//                    dialog.setScene(dialogScene);
-//                    dialog.show();
-//                    //dialog.close();
+                    final Stage dialog = new Stage();
+                    dialog.initModality(Modality.APPLICATION_MODAL);
+
+                    BorderPane subRoot = new BorderPane();
+                    Text dialogText = new Text("Simulation is Finished");
+                    Button okBtn = new Button("Ok");
+                    okBtn.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override public void handle(ActionEvent e) {
+
+                            dialog.close();
+                        }
+                    });
+                    subRoot.setCenter(dialogText);
+                    HBox okBtnFrame = new HBox();
+                    okBtnFrame.getChildren().addAll(new ESHBox(), okBtn, new ESHBox());
+                    subRoot.setBottom(okBtnFrame);
+                    Scene dialogScene = new Scene(subRoot, 300, 200);
+                    dialog.setScene(dialogScene);
+                    dialog.showAndWait();
 
                     Values.simulation = new Simulation();
                     Values.simulation.runSimulation();
