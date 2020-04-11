@@ -11,11 +11,36 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
-Version 1.19.0 4/8/20
--Added the map stores in the DataTransfer class to be used in the simulation (Patrick)
+Version 1.20.1 4/10/20
+-Added lots of documentation to the Simulation class, Map class, Order class, Drone class, Food class, Meal class, and Waypoint class (Patrick)
+-Added the hasSkipped variable to the Knapsack method as using just skip at some points may have been causing errors (Patrick)
+-Refactored showing results by hour counter so errors didn't happen (Paul)
+-Removed the orderGenerator, Hamburger, Fries, and Drink class (Patrick)
+
+Version 1.20.0 4/9/20
+-Added new variations of getNumFIFODeliveryTimes and getNumKnapsackDeliveryTimes that give the size for a specific hour (Patrick))
+-Added restart button functionality (Paul)
+-Changed the delivery times lists to be a list of lists where each list in the main list is a particular hour (Patrick)
+-Changed back to one load order method in the simulation class (Patrick)
+-Fixed incorrect Knapsack delivery times (Patrick)
+-Cleaning up of unused variables, useless comments, changes from public to private, and duplicate methods in the simulation class (Patrick)
+-Removed the getNumShifts method from the simulation class (Patrick)
+
+Version 1.19.0 The Knapsack Update 4/8/20-4/9/20
+-Added the map and number of shifts stored in the DataTransfer class to be used in the simulation (Patrick)
 -Added a new constructor to the Map class that takes an array of Waypoints instead of an arrayList (Patrick)
 -Added the removeWaypoint method to the Map class (Patrick)
+-Added the loadOrderKnapsack and deliverOrderKnapsack methods to the simulation class (Patrick)
+-Added the methods getKnapsackDeliveryTime and getNumKnapsackDeliveryTimes to the Drone class (Patrick)
+-Added setDestination and setMeal methods to the order class (Patrick)
+-Added the skipping system to the knapsack method. If the max weight order is ever first out of the available ones, it is sent to a queue
+with the skipped orders and prioritized by position and how many times it was skipped. The lightest there are added first but the ones
+that remain increase in priority. There check happens twice as when there are two orders left, the last could be stuck there when it
+does not need to be (Patrick)
+-Implemented the runKnapsack method starting as another FIFO simulation (Patrick)
 -Changed the simulation to do turn around every time the drone returns to the start point and if it's going to hit its flight limit (Patrick)
+-Changed simulation times to round to 2 decimal places (Patrick)
+-Change the loadOrder and deliverOrder methods to loadOrderFIFO and deliverOrderFIFO in the simulation class (Patrick)
 -Results Page now accesses actual simulation (Paul)
 -Refactored Results Page to not include test simulation (Paul)
 -Refactored allowing for a blank results page if no simulation has been run (Paul)
