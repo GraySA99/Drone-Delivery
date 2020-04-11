@@ -152,6 +152,7 @@ public class SideMenu extends ToolBar {
                 }
             });
 
+            // Code to handle save action for save button in sidemenu
             save.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
                     FileChooser fileChooser = new FileChooser();
@@ -203,6 +204,7 @@ public class SideMenu extends ToolBar {
         }
     }
 
+    // Pulls the simulation times from Values and returns their string representation
     private String getResultsStr() {
         String ret = "Your Results:\n";
         ret += "FIFO Avg Time: " + Values.simulation.FIFOaverageTime.toString() + "\n";
@@ -216,6 +218,7 @@ public class SideMenu extends ToolBar {
         return ret;
     }
 
+    //Writes str to file file
     private void writeTextToFile(String str, File file)
     {
         try {

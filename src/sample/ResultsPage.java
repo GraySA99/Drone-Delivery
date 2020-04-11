@@ -68,6 +68,7 @@ public class ResultsPage extends VBox {
 
         return ret;
     }
+    // writes string str to file file
     private void writeTextToFile(String str, File file)
     {
         try {
@@ -198,7 +199,7 @@ public class ResultsPage extends VBox {
                 }
             });
 
-            // Added by Josh - Save Button Functionality
+            // Added by Josh - Save Button Functionality in results page
             saveResultsBtn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
