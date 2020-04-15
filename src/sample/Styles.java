@@ -2,192 +2,198 @@ package sample;
 
 public class Styles {
 
-    public static final String resultsDataFrame = ""
-            + "-fx-padding: 0px 0px 0px 150px;\n";
+    public static String resultsDataFrame = "";
 
-    public static final String resultsDeliveryTime = ""
-            + "-fx-font-size: 25px;\n"
-            + "-fx-font-weight: normal;\n";
+    public static String resultsDeliveryTime = "";
 
-    public static final String resultsDeliveryTypeLabel = ""
-            + "-fx-font-size: 45px;\n"
-            + "-fx-font-weight: bolder";
+    public static String resultsDeliveryTypeLabel = "";
 
-    public static final String FIFODataFrame = ""
-            + "-fx-border-style: hidden hidden solid hidden;\n"
-            + "-fx-padding: 0px 0px 75px 0px;\n";
+    public static String FIFODataFrame = "";
 
-    public static final String resultsButtonFrame = ""
-            + "-fx-border-style: solid hidden hidden hidden;\n";
+    public static String resultsButtonFrame = "";
 
-    public static final String currentPointLabel = ""
-            + "-fx-font-size: 55px;\n";
+    // Map Page
+    public static String currentPointLabel = "";
 
-    public static final String DPListContainer = ""
-            + "-fx-padding: 50 0 50 30;\n";
+    public static String DPListContainer = "";
 
-    public static final String DPList = ""
-            + "-fx-border-style: solid;\n"
-            + "-fx-background-color: #51dacf;\n";
+    public static String DPList = ""
+            + "-fx-background-color: " + Colors.secondaryColor + ";\n";
 
-    public static final String mapWebView = ""
-            + "-fx-border-style: solid;\n";
+    public static String mapWebView = "";
 
-    public static final String mapWebContainer = ""
-            + "-fx-padding: 25 50 25 50;\n";
+    public static String mapWebContainer = "";
 
-    public static final String mapPage = ""
-            + "-fx-background-color: #51dacf;\n"
-            + "-fx-border-style: hidden hidden hidden solid;\n";
+    public static String mapPage = ""
+            + "-fx-background-color: " + Colors.secondaryColor + ";\n";
 
-    public static final String shiftsListContainer = ""
-            + "-fx-padding: 50 0 50 30;\n";
+    // Shifts Page
+    public static String shiftsListContainer = "";
 
-    public static final String shiftsList = ""
-            + "-fx-border-style: solid;\n"
-            + "-fx-background-color: #51dacf;\n";
+    public static String shiftsList = ""
+            + "-fx-background-color: " + Colors.secondaryColor + ";\n";
 
-    public static final String shiftsPage = ""
-            + "-fx-background-color: #51dacf;\n"
-            + "-fx-border-style: hidden hidden hidden solid;\n";
+    public static String shiftsPage = ""
+            + "-fx-background-color: " + Colors.secondaryColor + ";\n";
 
-    public static final String mealEntry = ""
-            + "-fx-background-color: #51dacf;\n"
-            + "-fx-padding: 100 550 100 0";
+    // Meals Page
+    public static String mealEntry = ""
+            + "-fx-background-color: " + Colors.secondaryColor + ";\n";
 
-    public static final String foodScrollFrame = ""
-            + "-fx-background-color: #51dacf;\n"
-            + "-fx-border-style: solid;\n";
+    public static String foodScrollFrame = ""
+            + "-fx-background-color: " + Colors.secondaryColor + ";\n";
 
-    public static final String foodFrame = ""
-            + "-fx-background-color: #51dacf;\n";
+    public static String foodFrame = ""
+            + "-fx-background-color: " + Colors.secondaryColor + ";\n";
 
-    public static final String foodFrameRow = ""
-            + "-fx-background-color: #51dacf;\n"
+    public static String foodFrameRow = ""
+            + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+
+    public static String mealsPage = ""
+            + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+
+    public static String mealsListContainer = "";
+
+    public static String mealsList = ""
+            + "-fx-background-color: " + Colors.primaryColor + ";\n";
+
+    // Food Page
+    public static String foodEntries = "";
+
+    public static String foodLabels = "";
+
+    public static String foodItemEntry = "";
+
+    public static String foodListContainer = "";
+
+    public static String foodList = ""
+            + "-fx-background-color: " + Colors.primaryColor + ";\n";
+
+    public static String foodPage = ""
+            + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+
+    // Menu
+    public static String secondaryMenuBtn = ""
+            + "-fx-background-color: " + Colors.primaryColor + ";\n";
+
+    public static String secondaryMenuBtnHover = ""
+            + "-fx-background-color: " + Colors.quaternaryColor + ";\n";
+
+    public static String secondaryMenu = ""
+            + "-fx-background-color: " + Colors.primaryColor + ";\n";
+
+    public static String sideMenuTitleBtn = ""
+            + "-fx-background-color: " + Colors.primaryColor + ";\n";
+
+    public static String sideMenuTitleBtnHover = ""
+            + "-fx-text-fill: " + Colors.quaternaryColor + ";\n"
+            + "-fx-background-color: " + Colors.primaryColor + ";\n";
+
+    public static String sideMenuTitle = ""
+            + "-fx-background-color: " + Colors.primaryColor + ";\n"
             + "-fx-border-style: hidden hidden solid hidden;\n";
 
-    public static final String mealsPage = ""
-            + "-fx-background-color: #51dacf;\n"
-            + "-fx-border-style: hidden hidden hidden solid;\n";
+    public static String sideMenuTitleText = ""
+            + "-fx-backgrond-color: " + Colors.primaryColor + ";\n"
+            + "-fx-color: " + Colors.complimentaryFontColor + ";\n"
+            + "-fx-font-size: " + Values.sideMenuTitleFontSize + ";\n";
 
-    public static final String mealsListContainer = ""
-            + "-fx-padding: 50 0 50 30;\n";
+    public static String sideMenu = ""
+            + "-fx-background-color: " + Colors.primaryColor + ";\n";
 
-    public static final String mealsList = ""
-            + "-fx-border-style: solid;\n"
-            + "-fx-background-color: #51dacf;\n";
+    public static String sideMenuBtn = ""
+            + "-fx-background-color: " + Colors.primaryColor + ";\n"
+            + "-fx-color: " + Colors.complimentaryFontColor + ";\n"
+            + "-fx-font-size: " + Values.sideMenuFontSize + "px;\n";
 
-    public static final String foodEntries = ""
-            + "-fx-padding: 0 0 50 0;\n";
+    public static String sideMenuBtnActive = ""
+            + "-fx-background-color: " + Colors.tertiaryColor + ";\n"
+            + "-fx-color: " + Colors.contrastFontColor + ";\n"
+            + "-fx-font-size: " + Values.sideMenuFontSize + "px;\n";
 
-    public static final String foodLabels = ""
-            + "-fx-font-size: 50px;\n";
+    public static String sideMenuBtnHover = ""
+            + "-fx-background-color: " + Colors.quaternaryColor + ";\n"
+            + "-fx-color: " + Colors.complimentaryFontColor + ";\n"
+            + "-fx-font-size: " + Values.sideMenuFontSize + "px;\n";
 
-    public static final String foodItemEntry = ""
-            + "-fx-padding: 100 550 100 0;\n";
+    // Page Title
+    public static String pageTitleLabelContainer = "";
 
-    public static final String foodListContainer = ""
-            + "-fx-padding: 50 0 50 30;\n";
+    public static String pageTitleLabel = "";
 
-    public static final String foodList = ""
-            + "-fx-border-style: solid;\n"
-            + "-fx-background-color: #51dacf;\n";
+    public static String pageTitle = "";
 
-    public static final String foodPage = ""
-            + "-fx-background-color: #51dacf;\n"
-            + "-fx-border-style: hidden hidden hidden solid;\n";
+    public static void reset() {
 
-    public static final String secondaryMenuBtn = ""
-            + "-fx-background-color: #d2fafb;\n"
-            + "-fx-outline: none;\n"
-            + "-fx-text-fill: black;\n"
-            + "-fx-font-size: 35px;\n";
-
-    public static final String secondaryMenuBtnHover = ""
-            + "-fx-background-color: #51dacf;\n"
-            + "-fx-outline: none;\n"
-            + "-fx-text-fill: black;\n"
-            + "-fx-font-size: 35px;\n";
-
-    public static final String secondaryMenu = ""
-            + "-fx-background-color: #d2fafb;\n";
-
-    public static final String sideMenuTitleBtn = ""
-            + "-fx-text-fill: black;\n"
-            + "-fx-background-color: #d2fafb;\n"
-            + "-fx-outline: none;\n";
-
-    public static final String sideMenuTitleBtnHover = ""
-            + "-fx-text-fill: #41aaa8;\n"
-            + "-fx-background-color: #d2fafb;\n"
-            + "-fx-outline: none;\n";
-
-    public static final String sideMenuTitle = ""
-            + "-fx-background-color: #d2fafb;\n"
-            + "-fx-padding: 10px;\n"
-            + "-fx-border-style: hidden hidden solid hidden;\n";
-
-    public static final String sideMenuTitleText = ""
-            + "-fx-text-fill: black;\n"
-            + "-fx-font-size: 25px;\n";
-
-    public static final String sideMenu = ""
-            + "-fx-background-color: #d2fafb;\n";
-
-    public static final String sideMenuBtn = ""
-            + "-fx-background-color: #d2fafb;\n"
-            + "-fx-outline: none;\n"
-            + "-fx-text-fill: black;\n"
-            + "-fx-font-size: 55px;\n";
-
-    public static final String sideMenuBtnActive = ""
-            + "-fx-background-color: #2c003e;\n"
-            + "-fx-outline: none;\n"
-            + "-fx-text-fill: white;\n"
-            + "-fx-font-size: 55px;\n";
-
-    public static final String sideMenuBtnHover = ""
-            + "-fx-background-color: #51dacf;\n"
-            + "-fx-outline: none;\n"
-            + "-fx-text-fill: black;\n"
-            + "-fx-font-size: 55px;\n";
-
-    public static final String pageTitleLabelContainer = ""
-            + "-fx-border-style: hidden hidden solid hidden;\n";
-
-    public static final String pageTitleLabel = ""
-            + "-fx-font-size: 80px;\n"
-            + "-fx-border-style: hidden hidden solid hidden;\n";
-
-    public static final String pageTitle = ""
-            + "-fx-padding: 25 0 0 0;\n";
-
-    public static final String TopBar = ""
-            + "-fx-background-color: #0db0c3;\n"
-            + "-fx-outline: none;\n";
-
-    public static final String CloseWindowBtn = ""
-            + "-fx-background-color: #0db0c3;\n"
-            + "-fx-outline: none;\n"
-            + "-fx-color: white;\n"
-            + "-fx-font-size: 14px;\n";
-
-    public static final String CloseWindowBtnHover = ""
-            + "-fx-background-color: #096c78;\n"
-            + "-fx-outline: none;\n"
-            + "-fx-color: white;\n"
-            + "-fx-font-size: 14px;\n";
-
-    public static final String MiniWindowBtn = ""
-            + "-fx-background-color: #0db0c3;\n"
-            + "-fx-outline: none;\n"
-            + "-fx-color: white;\n"
-            + "-fx-font-size: 14px;\n";
-
-    public static final String MiniWindowBtnHover = ""
-            + "-fx-background-color: #096c78;\n"
-            + "-fx-outline: none;\n"
-            + "-fx-color: white;\n"
-            + "-fx-font-size: 14px;\n";
-
+        resultsDataFrame = "";
+        resultsDeliveryTime = "";
+        resultsDeliveryTypeLabel = "";
+        FIFODataFrame = "";
+        resultsButtonFrame = "";
+        currentPointLabel = "";
+        DPListContainer = "";
+        DPList = ""
+                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+        mapWebView = "";
+        mapWebContainer = "";
+        mapPage = ""
+                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+        shiftsListContainer = "";
+        shiftsList = ""
+                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+        shiftsPage = ""
+                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+        mealEntry = ""
+                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+        foodScrollFrame = ""
+                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+        foodFrame = ""
+                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+        foodFrameRow = ""
+                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+        mealsPage = ""
+                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+        mealsListContainer = "";
+        mealsList = ""
+                + "-fx-background-color: " + Colors.primaryColor + ";\n";
+        foodEntries = "";
+        foodLabels = "";
+        foodItemEntry = "";
+        foodListContainer = "";
+        foodList = ""
+                + "-fx-background-color: " + Colors.primaryColor + ";\n";
+        foodPage = ""
+                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+        secondaryMenuBtn = ""
+                + "-fx-background-color: " + Colors.primaryColor + ";\n";
+        secondaryMenuBtnHover = ""
+                + "-fx-background-color: " + Colors.quaternaryColor + ";\n";
+        secondaryMenu = ""
+                + "-fx-background-color: " + Colors.primaryColor + ";\n";
+        sideMenuTitleBtn = ""
+                + "-fx-background-color: " + Colors.primaryColor + ";\n";
+        sideMenuTitleBtnHover = ""
+                + "-fx-text-fill: " + Colors.quaternaryColor + ";\n"
+                + "-fx-background-color: " + Colors.primaryColor + ";\n";
+        sideMenuTitle = ""
+                + "-fx-background-color: " + Colors.primaryColor + ";\n";
+        sideMenuTitleText = "";
+        sideMenu = ""
+                + "-fx-background-color: " + Colors.primaryColor + ";\n";
+        sideMenuBtn = ""
+                + "-fx-background-color: " + Colors.primaryColor + ";\n"
+                + "-fx-color: " + Colors.complimentaryFontColor + ";\n"
+                + "-fx-font-size: " + Values.sideMenuFontSize + "px;\n";
+        sideMenuBtnActive = ""
+                + "-fx-background-color: " + Colors.tertiaryColor + ";\n"
+                + "-fx-color: " + Colors.contrastFontColor + ";\n"
+                + "-fx-font-size: " + Values.sideMenuFontSize + "px;\n";
+        sideMenuBtnHover = ""
+                + "-fx-background-color: " + Colors.quaternaryColor + ";\n"
+                + "-fx-color: " + Colors.complimentaryFontColor + ";\n"
+                + "-fx-font-size: " + Values.sideMenuFontSize + "px;\n";
+        pageTitleLabelContainer = "";
+        pageTitleLabel = "";
+        pageTitle = "";
+    }
 }

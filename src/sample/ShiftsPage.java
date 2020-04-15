@@ -25,7 +25,7 @@ public class ShiftsPage extends BorderPane {
 
         PageTitle pageTitle = new PageTitle("Shifts");
 
-        // Left Side
+        // Right Side
         StackPane hoursListContainer = new StackPane();
         hoursList = new ListView<>();
         hoursList.setPrefWidth(550);
@@ -33,7 +33,7 @@ public class ShiftsPage extends BorderPane {
         hoursList.setStyle(Styles.shiftsList);
         hoursListContainer.getChildren().add(hoursList);
 
-        // Right Side
+        // Left Side
         VBox entryContainer = new VBox();
         Text shiftHoursLabel = new Text("Shift Hours");
         shiftHoursEnt = new TextField();
@@ -60,8 +60,8 @@ public class ShiftsPage extends BorderPane {
                 numSimsLabel,
                 numSimsEnt);
 
-        this.setLeft(hoursListContainer);
-        this.setRight(entryContainer);
+        this.setRight(hoursListContainer);
+        this.setLeft(entryContainer);
         this.setTop(pageTitle);
         this.setStyle(Styles.shiftsPage);
 
@@ -204,5 +204,10 @@ public class ShiftsPage extends BorderPane {
             System.out.println("Problem With File");
             e.printStackTrace();
         }
+    }
+
+    public void resizeWindow() {
+
+        this.setMinWidth(Values.windowWidth * Values.mainPageWidthPercent);
     }
 }

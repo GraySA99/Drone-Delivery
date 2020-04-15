@@ -32,16 +32,15 @@ public class FoodPage extends BorderPane {
 
         PageTitle pageTitle = new PageTitle("Food Items");
 
-        // Left Side - The List of Entered Food
+        // Right Side - The List of Entered Food
         StackPane foodListContainer = new StackPane();
         foodListContainer.setStyle(Styles.foodListContainer);
         foodList = new ListView<HBox>();
-        foodList.setPrefWidth(Values.foodListWidth);
         foodList.setStyle(Styles.foodList);
         foodList.getItems().add(new HBox());
         foodListContainer.getChildren().add(foodList);
 
-        // Right Side - How the user enters the food
+        // Left Side - How the user enters the food
         GridPane foodItemEntry = new GridPane(); // Container for right side
         Text foodNameLabel = new Text("Name");
         Text foodWeightLabel = new Text("Weight");
@@ -128,8 +127,8 @@ public class FoodPage extends BorderPane {
         foodWeightEnt.setStyle(Styles.foodEntries);
 
         // Add Frames to this
-        this.setRight(foodItemEntry);
-        this.setLeft(foodListContainer);
+        this.setLeft(foodItemEntry);
+        this.setRight(foodListContainer);
         this.setTop(pageTitle);
 
         initFromFile();
@@ -198,5 +197,10 @@ public class FoodPage extends BorderPane {
             System.out.println("Problem With File");
             e.printStackTrace();
         }
+    }
+
+    public void resizeWindow() {
+
+        this.setMinWidth(Values.windowWidth * Values.mainPageWidthPercent);
     }
 }

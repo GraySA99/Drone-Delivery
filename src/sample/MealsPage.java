@@ -31,7 +31,7 @@ public class MealsPage extends BorderPane {
 
         foodItems = new HashMap<>();
 
-        // Left Side
+        // Right Side
         StackPane mealsListContainer = new StackPane();
         mealsListContainer.setStyle(Styles.foodListContainer);
         mealsList = new ListView<>();
@@ -39,7 +39,7 @@ public class MealsPage extends BorderPane {
         mealsList.setStyle(Styles.mealsList);
         mealsList.getItems().add(new HBox());
 
-        // Right Side
+        // Left Side
         GridPane mealEntry = new GridPane();
         mealEntry.setStyle(Styles.mealEntry);
 
@@ -49,7 +49,6 @@ public class MealsPage extends BorderPane {
         foodScrollFrame.setContent(foodFrame);
         foodScrollFrame.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         foodScrollFrame.setStyle(Styles.foodScrollFrame);
-        foodScrollFrame.setPrefSize(250, Values.foodScrollFrameHeight);
         Text mealsNameLabel = new Text("Name");
         Text mealsProbLabel = new Text("Probability");
         TextField mealsNameEnt = new TextField();
@@ -153,8 +152,8 @@ public class MealsPage extends BorderPane {
             }
         });
 
-        this.setRight(mealEntry);
-        this.setLeft(mealsList);
+        this.setLeft(mealEntry);
+        this.setRight(mealsList);
         this.setTop(pageTitle);
 
         initFromFile();
@@ -273,5 +272,10 @@ public class MealsPage extends BorderPane {
             System.out.println("Problem With File");
             e.printStackTrace();
         }
+    }
+
+    public void resizeWindow() {
+
+        this.setMinWidth(Values.windowWidth * Values.mainPageWidthPercent);
     }
 }
