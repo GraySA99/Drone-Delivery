@@ -11,6 +11,6 @@ For installation in IntelliJ:
 
 4. Below that, make sure the language level is "SDK Default".
 
-5. While remanining in "Project Structure", navigate to the "Libraries" tab which is also under "Project Settings". From there, hit the + button and select Java. Then, you will need to navigate to your installation of the JavaFX JDK for Java 14. Once you find where it is installed, you will need to select the "lib" folder within it. Once selected, hit the "OK" button. Apply the new settings.
+5. While remaining in "Project Structure", navigate to the "Libraries" tab which is also under "Project Settings". From there, hit the + button and select Java. Then, you will need to navigate to your installation of the JavaFX JDK for Java 14. Once you find where it is installed, you will need to select the "lib" folder within it. Once selected, hit the "OK" button. Apply the new settings.
 
 6. Navigate to the VCS tab. Select "Checkout From Version Control" -> "GIT". Paste the Project URL into the URL box and select your desired directory for your local version of the project on your machine. Once you do this, hit the "Clone" button. You may be prompted to log in to your Github account. Once this is done, the project should be cloned onto your device.
