@@ -1,4 +1,4 @@
-package sample;
+package GUI;
 
 import Simulation.Simulation;
 import javafx.scene.layout.BorderPane;

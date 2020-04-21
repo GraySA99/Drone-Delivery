@@ -14,6 +14,8 @@ import java.util.ArrayList;
  */
 
 public class Simulation {
+    private static final int MINUTES_TO_WAIT_AT_START = 5, MINUTES_PER_SHIFT = 60;
+    private static final double PERCENTAGE_OF_FLIGHT_TIME_NOT_TO_EXCEED = 0.95;
     private ArrayList<Order> orderQueue; //stores the order queue for a pair of simulations
     private ArrayList<Meal> mealList; //stores all different possible meals. Passed through DataTransfer
     private ArrayList<Order> currentOrderQueue; //a deep copy of the order queue manipulated in a simulation
@@ -35,7 +37,6 @@ public class Simulation {
      * still hardcoded, but some are now pulled from DataTransfer.
      */
     public Simulation(){
-        //creation of the simMap
         Waypoint starting = DataTransfer.getWaypoint(0);
         assert DataTransfer.getWaypoints() != null;
         simMap = new Map(starting, DataTransfer.getWaypoints());
@@ -49,15 +50,15 @@ public class Simulation {
 
         numShifts = DataTransfer.getNumShifts();
         ordersPerHour = new int[numShifts];
-        timesToBeRan = 1;
-        ordersPerHour[0] = 38;
-        ordersPerHour[1] = 45;
-        ordersPerHour[2] = 60;
-        ordersPerHour[3] = 30;
+        timesToBeRan = DataTransfer.getNumSimulations();
+
+        for(int ordersPerHourIndex = 0; ordersPerHourIndex < numShifts; ordersPerHourIndex++){
+            ordersPerHour[ordersPerHourIndex] = DataTransfer.getShift(ordersPerHourIndex + 1);
+        }
 
         times = new ArrayList<Integer>();
 
-        //creation of the default meals hardcoded for this sprint
+        //creation of the default meals temporary
         ArrayList<Food> temp = new ArrayList<Food>();
         temp.add(new Food("Hamburger", 0.375));
         temp.add(new Food("Drink", 0.875));
@@ -88,23 +89,23 @@ public class Simulation {
      * copying the order queue and other things that need to be reset between simulations
      */
     public void runSimulation(){
-        for(int i = 0; i < timesToBeRan; i++){
+        for(int currentIteration = 0; currentIteration < timesToBeRan; currentIteration++){
             generateOrderQueue();
             copyOrderQueue();
 
             //initializes the number of needed lists for this simulation iteration
-            for(int j = 0; j < numShifts; j++){
+            for(int addedLists = 0; addedLists < numShifts; addedLists++){
                 drone.getFIFODeliveryTimesList().add(new ArrayList<Double>());
                 drone.getKnapsackDeliveryTimesList().add(new ArrayList<Double>());
             }
 
             drone.setCurrentPosition(simMap.getStartingPoint());
-            runFIFO(i);
+            runFIFO(currentIteration);
 
             copyOrderQueue();
 
             drone.setCurrentPosition(simMap.getStartingPoint());
-            runKnapsack(i);
+            runKnapsack(currentIteration);
         }
 
         //used for debugging to view delivery times
@@ -134,18 +135,22 @@ public class Simulation {
         double prob, curProb;
         boolean found;
 
-        //clears out the previous order queue
-        for(int r = orderQueue.size(); r > 0; r--){
-            orderQueue.remove(r - 1);
+        /*for(int numRemaining = currentOrderQueue.size(); numRemaining > 0; numRemaining--){
+            currentOrderQueue.remove(numRemaining - 1);
+        }*/
+
+        //clears out the previous order queue to ensure it is reset from previous simulation
+        for(int numRemaining = orderQueue.size(); numRemaining > 0; numRemaining--){
+            orderQueue.remove(numRemaining - 1);
         }
 
-        //clear out times list
-        for(int r = times.size(); r > 0; r--){
-            times.remove(r - 1);
+        //clear out times list to ensure it is reset from previous simulation
+        for(int numRemaining = times.size(); numRemaining > 0; numRemaining--){
+            times.remove(numRemaining - 1);
         }
 
-        for(int i = 0; i < numShifts; i++){
-            for(int j = 0; j < ordersPerHour[i]; j++){
+        for(int shiftIndex = 0; shiftIndex < numShifts; shiftIndex++){
+            for(int currentOrderIndex = 0; currentOrderIndex < ordersPerHour[shiftIndex]; currentOrderIndex++){
                 curProb = 0;
                 curPos = 0;
                 found = false;
@@ -164,7 +169,7 @@ public class Simulation {
                 mapPos = ((int) (Math.random()*(simMap.getSize())));
                 orderQueue.add(new Order(mealList.get(curPos), simMap.getMapPoint(mapPos)));
                 //adds a new time for each order, however for the moment, this isn't the time that corresponds with this order
-                times.add((i * 60) + (int) (1 + Math.random() * ((60 - 1) + 1)));
+                times.add((shiftIndex * MINUTES_PER_SHIFT) + (int) (1 + Math.random() * ((MINUTES_PER_SHIFT - 1) + 1)));
             }
         }
 
@@ -199,7 +204,7 @@ public class Simulation {
         int currentOrder = 0; //tracks the current order in currentOrderQueue
         boolean launched, canLoad; //both are used when the drone is loading to stop it from loading when needed
 
-        while ((currentOrderQueue.size() > 0 || drone.getNumOrders() > 0)){
+        while (ordersInQueueOrDrone()){
             //when the drone is at the starting point
             if(drone.getCurrentPosition().isStarting()){
                 launched = false;
@@ -210,13 +215,13 @@ public class Simulation {
                     tripTime = 0;
                 }
 
-                //when the drone is at the starting point and it's within the first five minutes of the simulation
-                if(currentTime <= 5){
+                //when the drone is at the starting point and it's within the waiting time at the beginning of the simulation
+                if(isDuringWaitTime(currentTime)){
                     //the drone will add any available orders if it can. If the drone is full then it will launch
-                    while(!launched && currentTime <= 5){
+                    while(!launched && isDuringWaitTime(currentTime)){
                         //this loop goes through all the available order, starting with the first, and tries to add them if possible
-                        while(times.get(currentOrder) <= currentTime && !launched && currentTime <= 5){
-                            if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
+                        while(ordersAreAvailable(currentOrder, currentTime) && !launched && isDuringWaitTime(currentTime)){
+                            if(orderDoesNotExceedWeightCapacity()){
                                 loadOrder(currentOrder);
                                 currentOrder++;
                             } else { //launch
@@ -228,7 +233,7 @@ public class Simulation {
                                 deliverOrderFIFO(currentTime, iteration);
                                 launched = true;
                             }
-                            if(currentTime == 5){
+                            if(currentTime == MINUTES_TO_WAIT_AT_START){
                                 launched = true;
                             }
                         }
@@ -242,7 +247,7 @@ public class Simulation {
                 } else {
                     //resets the pickup times for the orders that were loaded before the five minute mark
                     //this launches the drone at minute 6 if there is anything on it so that it doesn't try and wait around any more
-                    if(currentTime < 7){
+                    if(currentTime >= MINUTES_TO_WAIT_AT_START + 1){
                         if(drone.getCurrentWeight() > 0){
                             canLoad = false;
                         }
@@ -250,8 +255,8 @@ public class Simulation {
                     //loading phase
                     while(canLoad && currentOrder <= times.size() - 1){
                         //this loop goes through all the available orders, starting with the first, and tries to add them if possible
-                        while(times.get(currentOrder) <= currentTime && canLoad){//loads available orders until weight capacity is hit
-                            if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
+                        while(ordersAreAvailable(currentOrder, currentTime) && canLoad){//loads available orders until weight capacity is hit
+                            if(orderDoesNotExceedWeightCapacity()){
                                 loadOrder(currentOrder);
                                 currentOrder++;
                                 if(currentOrder >= times.size() - 1){
@@ -291,7 +296,7 @@ public class Simulation {
                     homeTime = calculateTime(drone.getOrderOnDrone(0).getDestination(), simMap.getStartingPoint());
 
                     //the drone returns home if it cannot make it to the next stop and home
-                    if(tripTime + calcTime + homeTime > drone.getMaxFlightTime() * 0.95){
+                    if(tripTime + calcTime + homeTime >= drone.getMaxFlightTime() * PERCENTAGE_OF_FLIGHT_TIME_NOT_TO_EXCEED){
                         calcTime = calculateTime(drone.getCurrentPosition(), simMap.getStartingPoint());
                         currentTime += calcTime;
                         drone.setCurrentPosition(simMap.getStartingPoint());
@@ -320,7 +325,7 @@ public class Simulation {
         ArrayList<Order> skippedList = new ArrayList<Order>(); //keeps a list of skipped orders
         ArrayList<Integer> skipped = new ArrayList<Integer>(); //stores the number of times skipped orders have been skipped in knapsack
 
-        while ((currentOrderQueue.size() > 0 || drone.getNumOrders() > 0 || skippedList.size() > 0)){
+        while ((ordersInQueueOrDrone() || skippedList.size() > 0)){
             //when the drone is at the starting point
             if(drone.getCurrentPosition().isStarting()){
                 launched = false;
@@ -331,13 +336,13 @@ public class Simulation {
                     tripTime = 0;
                 }
 
-                //when the drone is at the starting point and it's within the first five minutes of the simulation
-                if(currentTime <= 5){
+                //when the drone is at the starting point and it's within the waiting time at the beginning of the simulation
+                if(isDuringWaitTime(currentTime)){
                     //the drone will add any available orders if it can. If the drone is full then it will launch
-                    while(!launched && currentTime <= 5){
+                    while(!launched && isDuringWaitTime(currentTime)){
                         //this loop goes through all the available order, starting with the first, and tries to add them if possible
-                        while(times.get(currentOrder) <= currentTime && !launched && currentTime <= 5){
-                            if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
+                        while(ordersAreAvailable(currentOrder, currentTime) && !launched && isDuringWaitTime(currentTime)){
+                            if(orderDoesNotExceedWeightCapacity()){
                                 //System.out.print("Added order to drone that was available at time " + times.get(currentOrder) + " at time " + currentTime + "\t");
                                 loadOrder(currentOrder);
                                 currentOrder++;
@@ -350,7 +355,7 @@ public class Simulation {
                                 deliverOrderKnapsack(currentTime, iteration);
                                 launched = true;
                             }
-                            if(currentTime == 5){
+                            if(currentTime == MINUTES_TO_WAIT_AT_START){
                                 launched = true;
                             }
                         }
@@ -364,7 +369,7 @@ public class Simulation {
                 } else {
                     //resets the pickup times for the orders that were loaded before the five minute mark
                     //this launches the drone at minute 6 if there is anything on it so that it doesn't try and wait around any more
-                    if(currentTime < 7){
+                    if(currentTime >= MINUTES_TO_WAIT_AT_START + 1){
                         if(drone.getCurrentWeight() > 0){
                             canLoad = false;
                         }
@@ -408,11 +413,20 @@ public class Simulation {
                         }
 
                         //loading phase
-                        while(times.get(currentOrder) <= currentTime && canLoad){//loads available orders until weight capacity is hit
+                        while(ordersAreAvailable(currentOrder, currentTime) && canLoad){//loads available orders until weight capacity is hit
+                            //fixes an error where orders were getting stuck at the end if there was only one left
+                            int weight = 0;
+                            for(int i = 0; i < currentOrderQueue.size(); i++){
+                                weight += currentOrderQueue.get(i).getMeal().getTotalWeight();
+                            }
+                            if(weight < drone.getWeightCapacity()){
+                                hasSkipped = true;
+                            }
+
                             //loop to find if the first order is the greatest
                             if(!hasSkipped && currentOrderQueue.size() > 1){
                                 for(int r = 0; r < times.size() - currentOrder; r++){
-                                    if(times.get(currentOrder + r) <= currentTime &&  currentOrderQueue.get(max).getMeal().getTotalWeight() < currentOrderQueue.get(r).getMeal().getTotalWeight()){
+                                    if(times.get(currentOrder + r) <= currentTime &&  currentOrderQueue.get(max).getMeal().getTotalWeight() < currentOrderQueue.get(r).getMeal().getTotalWeight()){ //index out of bounds 2
                                         max = r;
                                     }
 
@@ -420,7 +434,7 @@ public class Simulation {
                             }
 
                             //adds the largest order to the skipped queue
-                            if(currentOrderQueue.size() > 1){
+                            if(currentOrderQueue.size() > 1 && !hasSkipped){
                                 if(times.get(currentOrder + 1) <= currentTime && drone.getCurrentWeight() + currentOrderQueue.get(1).getMeal().getTotalWeight() < drone.getWeightCapacity()){
                                     if(max == 0){
                                         skip = true;
@@ -434,20 +448,25 @@ public class Simulation {
                             }
 
                             //adds the next first in the queue if it is available as we know it's not the largest
-                            if(times.get(currentOrder) <= currentTime && drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
+                            if(times.get(currentOrder) <= currentTime && currentOrderQueue.size() > 0 && orderDoesNotExceedWeightCapacity()){ //check weight
                                 loadOrder(currentOrder);
                                 currentOrder++;
                                 if(currentOrder >= times.size() - 1){
                                     canLoad = false;
                                     break;
                                 }
+                            } else {
+                                canLoad = false;
                             }
                         }
 
                         //adds any orders that were skipped that may fit into the drone before going to the next minute
+
+                        start = 0;
                         while(skip && skippedList.size() > 0 && start < skippedList.size()){
                             //adds the minimum weight orders to the drone starting at the most skipped ones, and working its way down
                             min = start;
+
                             for(int r = start; r < skippedList.size(); r++){
                                 if(skippedList.get(min).getMeal().getTotalWeight() > skippedList.get(r).getMeal().getTotalWeight() && skipped.get(r).equals(skipped.get(start))){
                                     min = r;
@@ -481,7 +500,7 @@ public class Simulation {
                     }
 
                     drone.setOrdersList(sortOrders(drone.getOrdersList()));
-                    calcTime = calculateTime(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination());
+                    calcTime = calculateTime(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination()); //index out of bounds 0
                     currentTime += calcTime;
                     tripTime += calcTime;
                     deliverOrderKnapsack(currentTime, iteration);
@@ -499,7 +518,7 @@ public class Simulation {
                     homeTime = calculateTime(drone.getOrderOnDrone(0).getDestination(), simMap.getStartingPoint());
 
                     //the drone returns home if it cannot make it to the next stop and home
-                    if(tripTime + calcTime + homeTime > drone.getMaxFlightTime()  * 0.95){
+                    if(tripTime + calcTime + homeTime >= drone.getMaxFlightTime() * PERCENTAGE_OF_FLIGHT_TIME_NOT_TO_EXCEED){
                         calcTime = calculateTime(drone.getCurrentPosition(), simMap.getStartingPoint());
                         currentTime += calcTime;
                         drone.setCurrentPosition(simMap.getStartingPoint());
@@ -515,6 +534,22 @@ public class Simulation {
     }
 
     //||-----------Utility Methods Between FIFO and Knapsack-----------||
+
+    private boolean ordersInQueueOrDrone(){
+        return (currentOrderQueue.size() > 0 || drone.getNumOrders() > 0);
+    }
+
+    private boolean isDuringWaitTime(double currentTime){
+        return (currentTime <= MINUTES_TO_WAIT_AT_START);
+    }
+
+    private boolean ordersAreAvailable(int currentOrder, double currentTime){
+        return (times.get(currentOrder) <= currentTime);
+    }
+
+    private boolean orderDoesNotExceedWeightCapacity(){
+        return (drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity());
+    }
 
     /**
      * Author: Patrick Reagan
@@ -547,7 +582,7 @@ public class Simulation {
     private void deliverOrderFIFO(double currentTime, int iteration){
         //finds what hour the orders pickup time is from
         int a = 1;
-        while(drone.getOrderOnDrone(0).getPickUpTime() - (60 * a) > 0){
+        while(drone.getOrderOnDrone(0).getPickUpTime() - (MINUTES_PER_SHIFT * a) > 0){
             a++;
         }
         drone.addFIFODeliveryTime((a - 1) + (numShifts * iteration),currentTime - drone.getOrderOnDrone(0).getPickUpTime());
@@ -564,7 +599,7 @@ public class Simulation {
     private void deliverOrderKnapsack(double currentTime, int iteration){
         //finds what hour the orders pickup time is from
         int a = 1;
-        while(drone.getOrderOnDrone(0).getPickUpTime() - (60 * a) > 0){
+        while(drone.getOrderOnDrone(0).getPickUpTime() - (MINUTES_PER_SHIFT * a) > 0){
             a++;
         }
         drone.addKnapsackDeliveryTime((a - 1) + (numShifts * iteration), currentTime - drone.getOrderOnDrone(0).getPickUpTime());

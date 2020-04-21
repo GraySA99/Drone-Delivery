@@ -12,7 +12,13 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 Version Version# Month/Day/Year
 
 Version 2.0.1 4/21/20
+-Added the pulling number of orders per a given shift and number of simulations to be run from Data transfer to the simulation class (Patrick)
+-Updated the default number of orders in each shift (Patrick)
 -Changed all hardcoded values in the simulation class to meet the new requirements (Patrick)
+-Renamed the sample package to the GUI package (Patrick)
+-Began cleaning simulation class code, starting with magic numbers and predicate methods (Patrick)
+-Fixed several issues when running more then one instance of Knapsack including an infinite loop when there were only skipped orders, and
+an issue where it would get stuck at times
 
 Version 2.0.0 4/15/20
 -Started restyling pages (Not Finished) (Spencer)
@@ -222,4 +228,4 @@ Version 1.0.1 3/12/20
 
 Version 1.0.0 3/12/20
 -Added main and controller classes made by default for JavaFX project's (Patrick)
--Added the sample package (Patrick)
+-Added the GUI package (Patrick)
