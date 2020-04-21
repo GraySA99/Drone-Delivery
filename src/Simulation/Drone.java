@@ -12,9 +12,9 @@ import java.util.ArrayList;
 
 public class Drone {
     private ArrayList<Order> loadedOrdersList; //the list of orders currently on the Drone
-    private double weightCapacity, currentWeight; //stores the Drones weight capacity and current stored weight
+    private double weightCapacity, currentWeight, turnAroundTime; //stores the Drones weight capacity, current stored weight, and turn around time
     private Waypoint currentPosition; //stores the Drone's current position
-    private int turnAroundTime, speed, maxFlightTime; //stores the drones turn around time, speed, and max flight time
+    private int speed, maxFlightTime; //stores the drones speed and max flight time
     //these crazy lists will probably be their own class in Sprint 2
     public ArrayList<ArrayList<Double>> FIFODeliveryTimes, KnapsackDeliveryTimes; //stores the lists of lists of delivery times for each
     // hour of each simulation ran
@@ -28,10 +28,10 @@ public class Drone {
         weightCapacity = 12;
         currentWeight = 0;
         currentPosition = null;
-        turnAroundTime = 3;
+        turnAroundTime = 2.5;
         FIFODeliveryTimes = new ArrayList<ArrayList<Double>>();
         KnapsackDeliveryTimes = new ArrayList<ArrayList<Double>>();
-        speed = 20;
+        speed = 25;
         maxFlightTime = 20;
     }
 
@@ -44,11 +44,11 @@ public class Drone {
         weightCapacity = 12;
         currentWeight = 0;
         currentPosition = s;
-        turnAroundTime = 3;
+        turnAroundTime = 2.5;
         FIFODeliveryTimes = new ArrayList<ArrayList<Double>>();
         KnapsackDeliveryTimes = new ArrayList<ArrayList<Double>>();
         speed = 20;
-        maxFlightTime = 20;
+        maxFlightTime = 25;
     }
 
     /**
@@ -137,7 +137,7 @@ public class Drone {
      * Returns the Drone's turn around time.
      * @return the Drone's  turn around time.
      */
-    public int getTurnAroundTime(){
+    public double getTurnAroundTime(){
         return turnAroundTime;
     }
 

@@ -50,10 +50,10 @@ public class Simulation {
         numShifts = DataTransfer.getNumShifts();
         ordersPerHour = new int[numShifts];
         timesToBeRan = 1;
-        ordersPerHour[0] = 15;
-        ordersPerHour[1] = 17;
-        ordersPerHour[2] = 22;
-        ordersPerHour[3] = 15;
+        ordersPerHour[0] = 38;
+        ordersPerHour[1] = 45;
+        ordersPerHour[2] = 60;
+        ordersPerHour[3] = 30;
 
         times = new ArrayList<Integer>();
 
@@ -63,17 +63,23 @@ public class Simulation {
         temp.add(new Food("Drink", 0.875));
         temp.add(new Food("Fries", 0.25));
 
-        mealList.add(new Meal("One of Each", temp, 0.55));
+        mealList.add(new Meal("One of Each", temp, 0.5));
 
         temp.add(new Food("Hamburger", 0.375));
-        mealList.add(new Meal("Two burgers, one drink, one fry", temp, 0.1));
 
-        temp.remove(2);
-        temp.remove(2);
-        mealList.add(new Meal("Burger and Drink", temp, 0.2));
+        mealList.add(new Meal("Two burgers, one drink, one fry", temp, 0.2));
 
-        temp.add(new Food("Hamburger", 0.375));
-        mealList.add(new Meal("Two Burgers and a Drink", temp, 0.15));
+        temp.remove(1);
+
+        mealList.add(new Meal("Two burgers and one fry", temp, 0.1));
+
+        temp.remove(0);
+
+        mealList.add(new Meal("Burger and a fry", temp, 0.15));
+
+        temp.remove(1);
+
+        mealList.add(new Meal("One Fry", temp, 0.05));
     }
 
     /**
@@ -243,7 +249,7 @@ public class Simulation {
                     }
                     //loading phase
                     while(canLoad && currentOrder <= times.size() - 1){
-                        //this loop goes through all the available order, starting with the first, and tries to add them if possible
+                        //this loop goes through all the available orders, starting with the first, and tries to add them if possible
                         while(times.get(currentOrder) <= currentTime && canLoad){//loads available orders until weight capacity is hit
                             if(drone.getCurrentWeight() + currentOrderQueue.get(0).getMeal().getTotalWeight() < drone.getWeightCapacity()){ //check weight
                                 loadOrder(currentOrder);
@@ -285,7 +291,7 @@ public class Simulation {
                     homeTime = calculateTime(drone.getOrderOnDrone(0).getDestination(), simMap.getStartingPoint());
 
                     //the drone returns home if it cannot make it to the next stop and home
-                    if(tripTime + calcTime + homeTime > drone.getMaxFlightTime() - 0.5){
+                    if(tripTime + calcTime + homeTime > drone.getMaxFlightTime() * 0.95){
                         calcTime = calculateTime(drone.getCurrentPosition(), simMap.getStartingPoint());
                         currentTime += calcTime;
                         drone.setCurrentPosition(simMap.getStartingPoint());
@@ -493,7 +499,7 @@ public class Simulation {
                     homeTime = calculateTime(drone.getOrderOnDrone(0).getDestination(), simMap.getStartingPoint());
 
                     //the drone returns home if it cannot make it to the next stop and home
-                    if(tripTime + calcTime + homeTime > drone.getMaxFlightTime() - 0.5){
+                    if(tripTime + calcTime + homeTime > drone.getMaxFlightTime()  * 0.95){
                         calcTime = calculateTime(drone.getCurrentPosition(), simMap.getStartingPoint());
                         currentTime += calcTime;
                         drone.setCurrentPosition(simMap.getStartingPoint());
