@@ -11,8 +11,11 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
-Version 2.0.0 4/21/20
+Version 2.0.1 4/21/20
 -Changed all hardcoded values in the simulation class to meet the new requirements (Patrick)
+
+Version 2.0.0 4/15/20
+-Started restyling pages (Not Finished) (Spencer)
 
 Version 1.20.2 4/11/20
 -Added a "Simulation is Finished" dialog window after the start button is pressed (Spencer)
