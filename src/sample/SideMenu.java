@@ -31,6 +31,11 @@ public class SideMenu extends ToolBar {
     private Pane[] pages;
     private Integer activeScene;
     private ToolBar secondaryMenu;
+    private Button sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn;
+    private Button start, save, results, quit;
+    private HBox title;
+    private Text titleLabel;
+    private Button titleBtn;
 
     public SideMenu(Pane[] panes, BorderPane rM, Stage pM) {
 
@@ -38,48 +43,142 @@ public class SideMenu extends ToolBar {
         super();
         menues = new HashMap<Button, Integer>();
         activeScene = 1;
-        Button sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn;
         pages = panes.clone();
-        this.setOrientation(Orientation.VERTICAL);
-        this.setMaxWidth(Values.sideMenuWidth);
-        this.setPrefWidth(Values.sideMenuWidth);
-        this.setMinWidth(Values.sideMenuWidth);
-        this.setMaxHeight(Values.sideMenuHeight);
-        this.setStyle(Styles.sideMenu);
-        setUpSecondaryMenu();
+        //setUpSecondaryMenu();
 
-        HBox title = new HBox();
+        title = new HBox();
         HBox.setHgrow(title, Priority.ALWAYS);
-        title.setMaxSize(Values.sideMenuBtnWidth, Values.sideMenuBtnHeight);
-        Text titleLabel = new Text("AzureSim");
-        Button titleBtn = new Button("|||");
+        titleLabel = new Text("AzureSim");
+        titleBtn = new Button("|||");
         title.getChildren().addAll(new ESHBox(), titleLabel, new ESHBox(), titleBtn);
-        title.setStyle(Styles.sideMenuTitle);
-        titleLabel.setStyle(Styles.sideMenuTitleText);
         HamburgerButtonSetup(titleBtn);
 
         sideMenuMapBtn = new Button("Map");
-        sideMenuMapBtn.setMaxSize(Values.sideMenuBtnWidth, Values.sideMenuBtnHeight);
-        sideMenuMapBtn.setStyle(Styles.sideMenuBtnActive);
         sideMenuFoodBtn = new Button("Food");
-        sideMenuFoodBtn.setMaxSize(Values.sideMenuBtnWidth, Values.sideMenuBtnHeight);
-        sideMenuFoodBtn.setStyle(Styles.sideMenuBtn);
         sideMenuMealsBtn = new Button("Meals");
-        sideMenuMealsBtn.setMaxSize(Values.sideMenuBtnWidth, Values.sideMenuBtnHeight);
-        sideMenuMealsBtn.setStyle(Styles.sideMenuBtn);
         sideMenuShiftsBtn = new Button("Shifts");
-        sideMenuShiftsBtn.setMaxSize(Values.sideMenuBtnWidth, Values.sideMenuBtnHeight);
-        sideMenuShiftsBtn.setStyle(Styles.sideMenuBtn);
 
         menues.put(sideMenuMapBtn, Values.mapMenuID);
         menues.put(sideMenuFoodBtn, Values.foodMenuID);
         menues.put(sideMenuMealsBtn, Values.mealsMenuID);
         menues.put(sideMenuShiftsBtn, Values.shiftsMenuID);
 
-        SideMenuOnHover(new Button[]{sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn});
+        SetupActionButtons();
+        SideMenuOnHover(new Button[] {sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn,
+                start, results, save, quit});
         SideMenuOnClick(new Button[]{sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn});
 
-        this.getItems().addAll(title, sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn);
+        this.getItems().addAll(title, sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn,
+                                new ESVBox(), start, results, save, quit);
+
+        resizeWindow();
+    }
+
+    private void SetupActionButtons() {
+
+        start = new Button("Start");
+        save = new Button("Save");
+        results = new Button("Results");
+        quit = new Button("Quit");
+
+        start.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+
+                final Stage dialog = new Stage();
+                dialog.initModality(Modality.APPLICATION_MODAL);
+
+                BorderPane subRoot = new BorderPane();
+                Text dialogText = new Text("Simulation is Finished");
+                Button okBtn = new Button("Ok");
+                okBtn.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override public void handle(ActionEvent e) {
+
+                        dialog.close();
+                    }
+                });
+                subRoot.setCenter(dialogText);
+                HBox okBtnFrame = new HBox();
+                okBtnFrame.getChildren().addAll(new ESHBox(), okBtn, new ESHBox());
+                subRoot.setBottom(okBtnFrame);
+                Scene dialogScene = new Scene(subRoot, 300, 200);
+                dialog.setScene(dialogScene);
+                dialog.showAndWait();
+
+                Values.simulation = new Simulation();
+                Values.simulation.runSimulation();
+
+            }
+        });
+
+        // Code to handle save action for save button in sidemenu
+        save.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                FileChooser fileChooser = new FileChooser();
+
+                //If we want we can set extension filters for text files
+                FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+                fileChooser.getExtensionFilters().add(filter);
+
+                //Show save file dialogue
+                File file = fileChooser.showSaveDialog(Values.primaryStage);
+
+                if(file != null) {
+                    writeTextToFile(getResultsStr(), file);
+                }
+            }
+        });
+
+        results.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+
+                Values.primaryStage.getScene().setRoot(new ResultsPage());
+            }
+        });
+
+        quit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+
+                Platform.exit();
+                System.exit(0);
+            }
+        });
+    }
+
+    public void resizeWindow() {
+
+        // Styles
+        this.setStyle(Styles.sideMenu);
+        title.setStyle(Styles.sideMenuTitle);
+        titleLabel.setStyle(Styles.sideMenuTitleText);
+
+        // Dimensions
+        double menuWidth = Values.windowWidth * Values.sideMenuWidthPercent;
+        double menuHeight = this.getHeight();
+
+        this.setOrientation(Orientation.VERTICAL);
+        this.setMinWidth(menuWidth);
+
+        sideMenuMapBtn.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
+        sideMenuMapBtn.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
+        sideMenuFoodBtn.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
+        sideMenuFoodBtn.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
+        sideMenuMealsBtn.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
+        sideMenuMealsBtn.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
+        sideMenuShiftsBtn.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
+        sideMenuShiftsBtn.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
+        start.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
+        start.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
+        results.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
+        results.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
+        save.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
+        save.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
+        quit.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
+        quit.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
+
+        // Buttons
+        SideMenuOnHover(new Button[] {sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn,
+                                        start, results, save, quit});
+        SideMenuOnClick(new Button[] {sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn});
     }
 
     public int getActiveScene() {
@@ -105,13 +204,8 @@ public class SideMenu extends ToolBar {
 
         secondaryMenu = new ToolBar();
         secondaryMenu.setOrientation(Orientation.VERTICAL);
-        secondaryMenu.setMaxWidth(Values.sideMenuWidth);
-        secondaryMenu.setPrefWidth(Values.sideMenuWidth);
-        secondaryMenu.setMinWidth(Values.sideMenuWidth);
-        secondaryMenu.setMaxHeight(Values.sideMenuHeight);
         secondaryMenu.setStyle(Styles.secondaryMenu);
 
-        Button start, save, results, quit;
         start = new Button("Start");
         save = new Button("Save");
         results = new Button("Results");
@@ -120,7 +214,6 @@ public class SideMenu extends ToolBar {
 
         for (Button b : buttons) {
 
-            b.setMaxSize(Values.sideMenuBtnWidth, Values.sideMenuBtnHeight);
             b.setStyle(Styles.sideMenuBtnActive);
 
             b.styleProperty().bind(
@@ -132,74 +225,7 @@ public class SideMenu extends ToolBar {
                                     new SimpleStringProperty(Styles.secondaryMenuBtn)
                             )
             );
-
-            start.setOnAction(new EventHandler<ActionEvent>() {
-                @Override public void handle(ActionEvent e) {
-
-                    final Stage dialog = new Stage();
-                    dialog.initModality(Modality.APPLICATION_MODAL);
-
-                    BorderPane subRoot = new BorderPane();
-                    Text dialogText = new Text("Simulation is Finished");
-                    Button okBtn = new Button("Ok");
-                    okBtn.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override public void handle(ActionEvent e) {
-
-                            dialog.close();
-                        }
-                    });
-                    subRoot.setCenter(dialogText);
-                    HBox okBtnFrame = new HBox();
-                    okBtnFrame.getChildren().addAll(new ESHBox(), okBtn, new ESHBox());
-                    subRoot.setBottom(okBtnFrame);
-                    Scene dialogScene = new Scene(subRoot, 300, 200);
-                    dialog.setScene(dialogScene);
-                    dialog.showAndWait();
-
-                    Values.simulation = new Simulation();
-                    Values.simulation.runSimulation();
-
-                }
-            });
-
-            // Code to handle save action for save button in sidemenu
-            save.setOnAction(new EventHandler<ActionEvent>() {
-                @Override public void handle(ActionEvent e) {
-                    FileChooser fileChooser = new FileChooser();
-
-                    //If we want we can set extension filters for text files
-                    FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-                    fileChooser.getExtensionFilters().add(filter);
-
-                    //Show save file dialogue
-                    File file = fileChooser.showSaveDialog(Values.primaryStage);
-
-                    if(file != null) {
-                        writeTextToFile(getResultsStr(), file);
-                    }
-                }
-            });
-
-            results.setOnAction(new EventHandler<ActionEvent>() {
-                @Override public void handle(ActionEvent e) {
-
-                    Values.primaryStage.getScene().setRoot(new ResultsPage());
-                    swapMenues();
-                }
-            });
-
-            if (b.equals(quit)) {
-
-                b.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override public void handle(ActionEvent e) {
-
-                        Platform.exit();
-                        System.exit(0);
-                    }
-                });
-            }
         }
-
         secondaryMenu.getItems().addAll(start, save, results, new ESHBox(), quit);
 
         for (Pane p : pages) {

@@ -50,6 +50,29 @@ public class Main extends Application {
         primaryStage.setScene(scene);
       
         primaryStage.show();
+        Values.resizeWindow();
+        Styles.reset();
+        sideMenu.resizeWindow();
+
+        primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
+            Values.resizeWindow();
+            Styles.reset();
+            sideMenu.resizeWindow();
+            mapPage.resizeWindow();
+            foodPage.resizeWindow();
+            mealsPage.resizeWindow();
+            shiftsPage.resizeWindow();
+        });
+
+        primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
+            Values.resizeWindow();
+            Styles.reset();
+            sideMenu.resizeWindow();
+            mapPage.resizeWindow();
+            foodPage.resizeWindow();
+            mealsPage.resizeWindow();
+            shiftsPage.resizeWindow();
+        });
     }
 
     static { // use system proxy settings when standalone application

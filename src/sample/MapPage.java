@@ -32,7 +32,7 @@ public class MapPage extends BorderPane {
         this.setStyle(Styles.mapPage);
         PageTitle pageTitle = new PageTitle("Map");
 
-        // Left Side - Point List
+        // Right Side - Point List
         StackPane DPListContainer = new StackPane();
         DPListContainer.setStyle(Styles.DPListContainer);
         DPList = new ListView<>();
@@ -41,7 +41,7 @@ public class MapPage extends BorderPane {
         DPList.getItems().add(new HBox());
         DPListContainer.getChildren().add(DPList);
 
-        // Right Side - Map
+        // Left Side - Map
         VBox pointEntryContainer = new VBox();
 
         HBox nameContainer = new HBox();
@@ -158,8 +158,8 @@ public class MapPage extends BorderPane {
         webContainer.setStyle(Styles.mapWebView);
 
         this.setTop(pageTitle);
-        this.setRight(pointEntryContainer);
-        this.setLeft(DPListContainer);
+        this.setLeft(pointEntryContainer);
+        this.setRight(DPListContainer);
 
         webEngine.loadContent(Values.googleMapsJavaScript);
         initFromFile();
@@ -221,6 +221,11 @@ public class MapPage extends BorderPane {
             System.out.println("Problem With File");
             e.printStackTrace();
         }
+    }
+
+    public void resizeWindow() {
+
+        this.setMinWidth(Values.windowWidth * Values.mainPageWidthPercent);
     }
 }
 

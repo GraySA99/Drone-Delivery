@@ -16,20 +16,29 @@ public class Values {
     public static Stage primaryStage;
     public static BorderPane rootPage;
 
-    public static final double foodScrollFrameHeight = Double.MAX_VALUE * .70;
+    public static double windowHeight = 0;
+    public static double windowWidth = 0;
+    public static int sideMenuFontSize = 0;
+    public static void resizeWindow() {
 
-    public static final double foodListWidth = 550;
-
-    public static final double sideMenuWidth = 250;
-    public static final double sideMenuHeight = Double.MAX_VALUE;
-    public static final double sideMenuBtnHeight = 100;
-    public static final double sideMenuBtnWidth = Double.MAX_VALUE;
+        windowHeight = primaryStage.getHeight();
+        windowWidth = primaryStage.getWidth();
+        sideMenuFontSize = (int)(windowHeight * 0.03);
+    }
 
     public static final int numberOfMenues = 4;
     public static final Integer mapMenuID = 1;
     public static final Integer foodMenuID = 2;
     public static final Integer mealsMenuID = 3;
     public static final Integer shiftsMenuID = 4;
+
+    // Side Menu
+    public static final double sideMenuWidthPercent = 0.10;
+    public static final double mainPageWidthPercent = 0.85;
+    public static final double sideMenuBtnWidthPercent = 1.0;
+    public static final double sideMenuBtnHeightPercent = 0.11;
+    public static final int sideMenuTitleFontSize = 55;
+    public static final double sideMenuTitleFrameHeightPercent = 0.10;
 
     public static final String googleMapsAPIKey = "AIzaSyCC1c7VEIHPU08i-fNQEkfps0S4i-TsU9I";
     public static final String googleMapsJavaScript = "<!DOCTYPE html>\n" +
