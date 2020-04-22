@@ -131,13 +131,13 @@ public class ResultsPage extends VBox {
             for (int FIFOIndex = 0; FIFOIndex < hourCounter.length; FIFOIndex++) {
                 //Increment hour counter based on what part of the FIFO list the times are in
                 for(int i = 0; i<droneforresults.FIFODeliveryTimes.get(FIFOIndex).size(); i++){
-                    hourCounter[FIFOIndex]++;
+                    hourCounter[FIFOIndex%dataTransfer.getNumShifts()]++;
                 }
             }
 
             //For loop adding the hour counter times to the bar graph
-            for (int i = 0; i < hourCounter.length; i++) {
-                FIFOSeries.getData().add(new XYChart.Data<String, Number>(Integer.toString(i + 1), hourCounter[i]));
+            for (int i = 0; i < dataTransfer.getNumShifts(); i++) {
+                FIFOSeries.getData().add(new XYChart.Data<String, Number>(Integer.toString(i + 1), hourCounter[i]/dataTransfer.getNumSimulations()));
             }
 
             XYChart.Series<String, Number> KSSeries = new XYChart.Series<>();
@@ -152,13 +152,13 @@ public class ResultsPage extends VBox {
             for (int KSIndex = 0; KSIndex < hourCounter.length; KSIndex++) {
                 //Increment hour counter based on what part of the knapsack list the times are in
                 for(int i = 0; i<droneforresults.KnapsackDeliveryTimes.get(KSIndex).size(); i++){
-                    hourCounter[KSIndex]++;
+                    hourCounter[KSIndex%dataTransfer.getNumShifts()]++;
                 }
             }
 
             //For loop adding the hour counter times to the bar graph
-            for (int i = 0; i < hourCounter.length; i++) {
-                KSSeries.getData().add(new XYChart.Data<String, Number>(Integer.toString(i + 1), hourCounter[i]));
+            for (int i = 0; i < dataTransfer.getNumShifts(); i++) {
+                KSSeries.getData().add(new XYChart.Data<String, Number>(Integer.toString(i + 1), hourCounter[i]/dataTransfer.getNumSimulations()));
             }
 
             //Add the series of data to the bar graph
