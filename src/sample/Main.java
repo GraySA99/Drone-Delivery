@@ -1,6 +1,8 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
@@ -50,15 +52,17 @@ public class Main extends Application {
         primaryStage.setScene(scene);
       
         primaryStage.show();
+        System.out.println("Sleep Done");
         Values.resizeWindow();
         Styles.reset();
         sideMenu.resizeWindow();
+        mapPage.refresh();
 
         primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
             Values.resizeWindow();
             Styles.reset();
             sideMenu.resizeWindow();
-            mapPage.resizeWindow();
+            mapPage.refresh();
             foodPage.resizeWindow();
             mealsPage.resizeWindow();
             shiftsPage.resizeWindow();
@@ -68,7 +72,7 @@ public class Main extends Application {
             Values.resizeWindow();
             Styles.reset();
             sideMenu.resizeWindow();
-            mapPage.resizeWindow();
+            mapPage.refresh();
             foodPage.resizeWindow();
             mealsPage.resizeWindow();
             shiftsPage.resizeWindow();

@@ -13,19 +13,24 @@ public class Styles {
     public static String resultsButtonFrame = "";
 
     // Map Page
-    public static String currentPointLabel = "";
+    public static String mapPageCurrentPointLabel = "";
 
-    public static String DPListContainer = "";
+    public static String mapPageNameLabel = "";
 
-    public static String DPList = ""
-            + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+    public static String mapPageMapView = ""
+            + "-fx-padding: 0px 0px 50px 50px;\n";
 
-    public static String mapWebView = "";
+    public static String mapPageMapInfoContainer = "";
 
-    public static String mapWebContainer = "";
+    public static String mapPageDPListContainer = ""
+            + "-fx-padding: 0px 50px 0px 0px;\n";
+
+    public static String mapPageMapContainer = ""
+            + "-fx-padding: 50px 0px 50px 50px;\n";
 
     public static String mapPage = ""
             + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+
 
     // Shifts Page
     public static String shiftsListContainer = "";
@@ -83,19 +88,19 @@ public class Styles {
             + "-fx-background-color: " + Colors.primaryColor + ";\n";
 
     public static String sideMenuTitleBtn = ""
-            + "-fx-background-color: " + Colors.primaryColor + ";\n";
+            + "-fx-background-color: " + Colors.primaryColor + ";\n"
+            + "-fx-text-fill: " + Colors.contrastFontColor + ";\n";
 
     public static String sideMenuTitleBtnHover = ""
             + "-fx-text-fill: " + Colors.quaternaryColor + ";\n"
             + "-fx-background-color: " + Colors.primaryColor + ";\n";
 
     public static String sideMenuTitle = ""
-            + "-fx-background-color: " + Colors.primaryColor + ";\n"
-            + "-fx-border-style: hidden hidden solid hidden;\n";
+            + "-fx-background-color: " + Colors.primaryColor + ";\n";
 
     public static String sideMenuTitleText = ""
-            + "-fx-backgrond-color: " + Colors.primaryColor + ";\n"
-            + "-fx-color: " + Colors.complimentaryFontColor + ";\n"
+            + "-fx-background-color: " + Colors.primaryColor + ";\n"
+            + "-fx-fill: " + Colors.contrastFontColor + ";\n"
             + "-fx-font-size: " + Values.sideMenuTitleFontSize + ";\n";
 
     public static String sideMenu = ""
@@ -130,14 +135,20 @@ public class Styles {
         resultsDeliveryTypeLabel = "";
         FIFODataFrame = "";
         resultsButtonFrame = "";
-        currentPointLabel = "";
-        DPListContainer = "";
-        DPList = ""
-                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
-        mapWebView = "";
-        mapWebContainer = "";
+
+        // Map Page
+        mapPageCurrentPointLabel = "";
+        mapPageNameLabel = "";
+        mapPageMapView = ""
+                + "-fx-padding: 0px 0px 50px 50px;\n";
+        mapPageMapInfoContainer = "";
+        mapPageDPListContainer = ""
+                + "-fx-padding: 0px 50px 0px 0px;\n";
+        mapPageMapContainer = ""
+                + "-fx-padding: 50px 0px 50px 50px;\n";
         mapPage = ""
                 + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+
         shiftsListContainer = "";
         shiftsList = ""
                 + "-fx-background-color: " + Colors.secondaryColor + ";\n";
@@ -171,15 +182,21 @@ public class Styles {
         secondaryMenu = ""
                 + "-fx-background-color: " + Colors.primaryColor + ";\n";
         sideMenuTitleBtn = ""
-                + "-fx-background-color: " + Colors.primaryColor + ";\n";
+                + "-fx-background-color: " + Colors.primaryColor + ";\n"
+                + "-fx-text-fill: " + Colors.contrastFontColor + ";\n";
         sideMenuTitleBtnHover = ""
                 + "-fx-text-fill: " + Colors.quaternaryColor + ";\n"
                 + "-fx-background-color: " + Colors.primaryColor + ";\n";
         sideMenuTitle = ""
                 + "-fx-background-color: " + Colors.primaryColor + ";\n";
-        sideMenuTitleText = "";
+        sideMenuTitleText = ""
+                + "-fx-background-color: " + Colors.primaryColor + ";\n"
+                + "-fx-fill: " + Colors.contrastFontColor + ";\n"
+                + "-fx-font-size: " + Values.sideMenuTitleFontSize + ";\n"
+                + "-fx-font-weight: bold;\n";
         sideMenu = ""
-                + "-fx-background-color: " + Colors.primaryColor + ";\n";
+                + "-fx-background-color: " + Colors.primaryColor + ";\n"
+                + "-fx-border-style: hidden solid hidden hidden;\n";
         sideMenuBtn = ""
                 + "-fx-background-color: " + Colors.primaryColor + ";\n"
                 + "-fx-color: " + Colors.complimentaryFontColor + ";\n"

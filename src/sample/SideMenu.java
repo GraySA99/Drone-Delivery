@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -68,8 +69,9 @@ public class SideMenu extends ToolBar {
                 start, results, save, quit});
         SideMenuOnClick(new Button[]{sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn});
 
-        this.getItems().addAll(title, sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn,
-                                new ESVBox(), start, results, save, quit);
+        this.getItems().addAll(title, new Separator(),
+                sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn,
+                new ESVBox(), new Separator(), new ESVBox(), start, results, save, quit);
 
         resizeWindow();
     }
@@ -158,6 +160,9 @@ public class SideMenu extends ToolBar {
         this.setOrientation(Orientation.VERTICAL);
         this.setMinWidth(menuWidth);
 
+        title.setPrefWidth(menuWidth);
+        title.setPrefHeight(menuHeight * Values.sideMenuTitleFrameHeightPercent);
+
         sideMenuMapBtn.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
         sideMenuMapBtn.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
         sideMenuFoodBtn.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
@@ -179,6 +184,7 @@ public class SideMenu extends ToolBar {
         SideMenuOnHover(new Button[] {sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn,
                                         start, results, save, quit});
         SideMenuOnClick(new Button[] {sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn});
+        HamburgerButtonSetup(titleBtn);
     }
 
     public int getActiveScene() {
@@ -281,7 +287,15 @@ public class SideMenu extends ToolBar {
         b.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
-                swapMenues();
+                //swapMenues();
+                Colors.swapToDarkTheme();
+                Values.resizeWindow();
+                Styles.reset();
+                resizeWindow();
+                ((MapPage)pages[Values.mapMenuID-1]).refresh();
+                ((FoodPage)pages[Values.foodMenuID-1]).resizeWindow();
+                ((MealsPage)pages[Values.mealsMenuID-1]).resizeWindow();
+                ((ShiftsPage)pages[Values.shiftsMenuID-1]).resizeWindow();
             }
         });
     }
