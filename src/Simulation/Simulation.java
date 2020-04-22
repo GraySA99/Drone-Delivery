@@ -74,8 +74,8 @@ public class Simulation {
 
             //initializes the number of needed lists for this simulation iteration
             for(int addedLists = 0; addedLists < numShifts; addedLists++){
-                drone.getFIFODeliveryTimesList().add(new ArrayList<Double>());
-                drone.getKnapsackDeliveryTimesList().add(new ArrayList<Double>());
+                drone.getFIFODeliveryTimesList().getDeliveryTimesList().add(new ArrayList<Double>());
+                drone.getKnapsackDeliveryTimesList().getDeliveryTimesList().add(new ArrayList<Double>());
             }
 
             drone.setCurrentPosition(simMap.getStartingPoint());
@@ -562,9 +562,9 @@ public class Simulation {
             hourFrom++;
         }
         if(simID == FIFO_SIM_ID){
-            drone.addFIFODeliveryTime((hourFrom - 1) + (numShifts * iteration),currentTime - drone.getOrderOnDrone(0).getPickUpTime());
+            drone.getFIFODeliveryTimesList().addDeliveryTime((hourFrom - 1) + (numShifts * iteration),currentTime - drone.getOrderOnDrone(0).getPickUpTime());
         } else if (simID == KNAPSACK_SIM_ID){
-            drone.addKnapsackDeliveryTime((hourFrom - 1) + (numShifts * iteration), currentTime - drone.getOrderOnDrone(0).getPickUpTime());
+            drone.getKnapsackDeliveryTimesList().addDeliveryTime((hourFrom - 1) + (numShifts * iteration), currentTime - drone.getOrderOnDrone(0).getPickUpTime());
         }
         drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
         drone.removeOrderFromDrone(0);

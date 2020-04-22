@@ -11,6 +11,10 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
+Version 2.1.0 4/22/20
+-Added the DeliveryTimeList class to store all of the methods needed for a delivery time list and get them out of the drone class (Patrick)
+-Removed all delivery time related methods from the Drone class except to get its two new lists (Patrick)
+
 Version 2.0.2 4/22/20
 -Added a getNumMeals method to the DataTransfer class (Patrick)
 -Added pulling from the meals list in Simulation. There are no longer any hardcoded values in the Simulation class (Patrick)
