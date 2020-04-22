@@ -118,7 +118,7 @@ public class ResultsPage extends VBox {
             FIFOSeries.setName("FIFO");
 
             //Hour Counter for For Loops
-            int[] hourCounter = new int[dataTransfer.getNumShifts()];
+            int[] hourCounter = new int[dataTransfer.getNumShifts()*dataTransfer.getNumSimulations()];
             //int[] hourCounter = new int[recentSimulation.getNumShifts()];
             //dataTransfer.getNumShifts * dataTransfer.getNumSimulations?
 
