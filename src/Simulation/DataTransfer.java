@@ -146,6 +146,10 @@ public class DataTransfer {
         return null;
     }
 
+    public static int getNumMeals(){
+        return meals.size();
+    }
+
     public static boolean addWaypoint(Waypoint wp) {
 
         if (deliveryPoints == null)

@@ -1,6 +1,5 @@
 package Simulation;
 
-import Food.Food;
 import Food.Meal;
 import Food.Order;
 import Mapping.Map;
@@ -33,8 +32,7 @@ public class Simulation {
 
     /**
      * Author: Patrick Reagan
-     * Initializes many values used by the simulation. Creates a map from what is available in data transfer. Other default settings are
-     * still hardcoded, but some are now pulled from DataTransfer.
+     * Initializes many values used by the simulation. All settings are pulled from DataTransfer.
      */
     public Simulation(){
         Waypoint starting = DataTransfer.getWaypoint(0);
@@ -58,29 +56,9 @@ public class Simulation {
 
         times = new ArrayList<Integer>();
 
-        //creation of the default meals temporary
-        ArrayList<Food> temp = new ArrayList<Food>();
-        temp.add(new Food("Hamburger", 0.375));
-        temp.add(new Food("Drink", 0.875));
-        temp.add(new Food("Fries", 0.25));
-
-        mealList.add(new Meal("One of Each", temp, 0.5));
-
-        temp.add(new Food("Hamburger", 0.375));
-
-        mealList.add(new Meal("Two burgers, one drink, one fry", temp, 0.2));
-
-        temp.remove(1);
-
-        mealList.add(new Meal("Two burgers and one fry", temp, 0.1));
-
-        temp.remove(0);
-
-        mealList.add(new Meal("Burger and a fry", temp, 0.15));
-
-        temp.remove(1);
-
-        mealList.add(new Meal("One Fry", temp, 0.05));
+        for(int mealIndex = 0; mealIndex < DataTransfer.getNumMeals(); mealIndex++){
+            mealList.add(DataTransfer.getMeal(mealIndex));
+        }
     }
 
     /**
