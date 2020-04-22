@@ -1,4 +1,4 @@
-package sample;
+package GUI;
 
 import Simulation.Drone;
 import Simulation.Simulation;

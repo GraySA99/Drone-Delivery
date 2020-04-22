@@ -1,18 +1,16 @@
-package sample;
+package GUI;
 
 import Food.Food;
 import Food.Meal;
 import Simulation.DataTransfer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 

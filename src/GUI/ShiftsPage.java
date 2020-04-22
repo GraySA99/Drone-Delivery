@@ -1,10 +1,8 @@
-package sample;
+package GUI;
 
-import Mapping.Waypoint;
 import Simulation.DataTransfer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;

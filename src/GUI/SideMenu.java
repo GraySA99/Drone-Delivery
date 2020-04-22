@@ -1,6 +1,5 @@
-package sample;
+package GUI;
 
-import Simulation.DataTransfer;
 import Simulation.Simulation;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;

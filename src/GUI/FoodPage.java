@@ -1,13 +1,11 @@
-package sample;
+package GUI;
 
 import Food.Food;
 
-import Mapping.Waypoint;
 import Simulation.DataTransfer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
@@ -15,9 +13,7 @@ import javafx.scene.text.Text;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Set;
 
 public class FoodPage extends BorderPane {
 
