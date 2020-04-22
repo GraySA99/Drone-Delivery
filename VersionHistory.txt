@@ -24,6 +24,7 @@ Version 2.0.1 4/21/20
 -Began cleaning simulation class code, starting with magic numbers and predicate methods (Patrick)
 -Fixed several issues when running more then one instance of Knapsack including an infinite loop when there were only skipped orders, and
 an issue where it would get stuck at times
+-Lengthened hour counter to receive results from number of simulations as well (Paul)
 
 Version 2.0.0 4/15/20
 -Started restyling pages (Not Finished) (Spencer)
