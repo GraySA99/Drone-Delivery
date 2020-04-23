@@ -6,11 +6,7 @@ import javafx.stage.Stage;
 
 public class Values {
 
-    public static final String defaultShiftsFileName = "DefaultShifts.txt";
-    public static final String defaultMealsFileName = "DefaultMeals.txt";
-    public static final String defaultFoodFileName = "DefaultFoodItems.txt";
-    public static final String defaultWaypointFileName = "DefaultWaypoints.txt";
-    //Filename for file with universal defaults inside
+    //Filename for text file with universal defaults
     public static final String defaultFileName = "defaults_universal.dd";
 
     public static Simulation simulation;
