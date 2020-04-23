@@ -612,7 +612,7 @@ public class Simulation {
     //and uses backtracking to efficiently find best route
     private int[] tspRoute(double[][] graph, int[] solution, int[] bestSolution, boolean[] visited,
                           int currentNode, int level, int numNodes) {
-        boolean debug = false;
+        boolean debug = false; // hey!!! :)
 
         if(debug)
             System.out.println("I'm at Node: " + currentNode);
