@@ -1,6 +1,5 @@
 package Simulation;
 
-import Food.Food;
 import Food.Meal;
 import Food.Order;
 import Mapping.Map;
@@ -14,7 +13,8 @@ import java.util.ArrayList;
  */
 
 public class Simulation {
-    private static final int MINUTES_TO_WAIT_AT_START = 5, MINUTES_PER_SHIFT = 60;
+    private static final int MINUTES_TO_WAIT_AT_START = 5, MINUTES_PER_SHIFT = 60,
+            FIFO_SIM_ID = 1, KNAPSACK_SIM_ID = 2;
     private static final double PERCENTAGE_OF_FLIGHT_TIME_NOT_TO_EXCEED = 0.95;
     private ArrayList<Order> orderQueue; //stores the order queue for a pair of simulations
     private ArrayList<Meal> mealList; //stores all different possible meals. Passed through DataTransfer
@@ -33,8 +33,7 @@ public class Simulation {
 
     /**
      * Author: Patrick Reagan
-     * Initializes many values used by the simulation. Creates a map from what is available in data transfer. Other default settings are
-     * still hardcoded, but some are now pulled from DataTransfer.
+     * Initializes many values used by the simulation. All settings are pulled from DataTransfer.
      */
     public Simulation(){
         Waypoint starting = DataTransfer.getWaypoint(0);
@@ -58,29 +57,9 @@ public class Simulation {
 
         times = new ArrayList<Integer>();
 
-        //creation of the default meals temporary
-        ArrayList<Food> temp = new ArrayList<Food>();
-        temp.add(new Food("Hamburger", 0.375));
-        temp.add(new Food("Drink", 0.875));
-        temp.add(new Food("Fries", 0.25));
-
-        mealList.add(new Meal("One of Each", temp, 0.5));
-
-        temp.add(new Food("Hamburger", 0.375));
-
-        mealList.add(new Meal("Two burgers, one drink, one fry", temp, 0.2));
-
-        temp.remove(1);
-
-        mealList.add(new Meal("Two burgers and one fry", temp, 0.1));
-
-        temp.remove(0);
-
-        mealList.add(new Meal("Burger and a fry", temp, 0.15));
-
-        temp.remove(1);
-
-        mealList.add(new Meal("One Fry", temp, 0.05));
+        for(int mealIndex = 0; mealIndex < DataTransfer.getNumMeals(); mealIndex++){
+            mealList.add(DataTransfer.getMeal(mealIndex));
+        }
     }
 
     /**
@@ -95,8 +74,8 @@ public class Simulation {
 
             //initializes the number of needed lists for this simulation iteration
             for(int addedLists = 0; addedLists < numShifts; addedLists++){
-                drone.getFIFODeliveryTimesList().add(new ArrayList<Double>());
-                drone.getKnapsackDeliveryTimesList().add(new ArrayList<Double>());
+                drone.getFIFODeliveryTimesList().getDeliveryTimesList().add(new ArrayList<Double>());
+                drone.getKnapsackDeliveryTimesList().getDeliveryTimesList().add(new ArrayList<Double>());
             }
 
             drone.setCurrentPosition(simMap.getStartingPoint());
@@ -134,10 +113,6 @@ public class Simulation {
         int curPos, mapPos;
         double prob, curProb;
         boolean found;
-
-        /*for(int numRemaining = currentOrderQueue.size(); numRemaining > 0; numRemaining--){
-            currentOrderQueue.remove(numRemaining - 1);
-        }*/
 
         //clears out the previous order queue to ensure it is reset from previous simulation
         for(int numRemaining = orderQueue.size(); numRemaining > 0; numRemaining--){
@@ -230,7 +205,7 @@ public class Simulation {
                                 calcTime = calculateTime(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination());
                                 currentTime += calcTime;
                                 tripTime += calcTime;
-                                deliverOrderFIFO(currentTime, iteration);
+                                deliverOrder(currentTime, iteration, FIFO_SIM_ID);
                                 launched = true;
                             }
                             if(currentTime == MINUTES_TO_WAIT_AT_START){
@@ -281,7 +256,7 @@ public class Simulation {
                     calcTime = calculateTime(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination());
                     currentTime += calcTime;
                     tripTime += calcTime;
-                    deliverOrderFIFO(currentTime, iteration);
+                    deliverOrder(currentTime, iteration, FIFO_SIM_ID);
                 }
             } else { //the drone is not at the starting point
                 //the drone is not at the starting point and is empty
@@ -304,7 +279,7 @@ public class Simulation {
                     } else { //the drone continues its current delivery path
                         currentTime += calcTime;
                         tripTime += calcTime;
-                        deliverOrderFIFO(currentTime, iteration);
+                        deliverOrder(currentTime, iteration, FIFO_SIM_ID);
                     }
                 }
             }
@@ -352,7 +327,7 @@ public class Simulation {
                                 calcTime = calculateTime(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination());
                                 currentTime += calcTime;
                                 tripTime += calcTime;
-                                deliverOrderKnapsack(currentTime, iteration);
+                                deliverOrder(currentTime, iteration, KNAPSACK_SIM_ID);
                                 launched = true;
                             }
                             if(currentTime == MINUTES_TO_WAIT_AT_START){
@@ -503,7 +478,7 @@ public class Simulation {
                     calcTime = calculateTime(simMap.getStartingPoint(), drone.getOrderOnDrone(0).getDestination()); //index out of bounds 0
                     currentTime += calcTime;
                     tripTime += calcTime;
-                    deliverOrderKnapsack(currentTime, iteration);
+                    deliverOrder(currentTime, iteration, KNAPSACK_SIM_ID);
                 }
             } else { //the drone is not at the starting point
                 //the drone is not home and is empty, so it goes back to the start point
@@ -526,7 +501,7 @@ public class Simulation {
                     } else { //the drone continues its current delivery path
                         currentTime += calcTime;
                         tripTime += calcTime;
-                        deliverOrderKnapsack(currentTime, iteration);
+                        deliverOrder(currentTime, iteration, KNAPSACK_SIM_ID);
                     }
                 }
             }
@@ -575,34 +550,22 @@ public class Simulation {
 
     /**
      * Author: Patrick Reagan
-     * Delivers an order in the FIFO simulation
+     * Delivers an order in either simulation. Taking in a simType eliminated the need of having two separate methods
      * @param currentTime is the time of delivery and is used to find the delivery time for the order
      * @param iteration is used for finding which hour the order was available in
+     * @param simID is used to identify whether it is a FIFO or Knapsack delivery time
      */
-    private void deliverOrderFIFO(double currentTime, int iteration){
-        //finds what hour the orders pickup time is from
-        int a = 1;
-        while(drone.getOrderOnDrone(0).getPickUpTime() - (MINUTES_PER_SHIFT * a) > 0){
-            a++;
+    private void deliverOrder(double currentTime, int iteration, int simID){
+        //finds what hour the orders pickup time is from to ensure it is added to the correct list
+        int hourFrom = 1;
+        while(drone.getOrderOnDrone(0).getPickUpTime() - (MINUTES_PER_SHIFT * hourFrom) > 0){
+            hourFrom++;
         }
-        drone.addFIFODeliveryTime((a - 1) + (numShifts * iteration),currentTime - drone.getOrderOnDrone(0).getPickUpTime());
-        drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
-        drone.removeOrderFromDrone(0);
-    }
-
-    /**
-     * Author: Patrick Reagan
-     * Delivers an order in the Knapsack simulation
-     * @param currentTime is the time of delivery and is used to find the delivery time for the order
-     * @param iteration is used for finding which hour the order was available in
-     */
-    private void deliverOrderKnapsack(double currentTime, int iteration){
-        //finds what hour the orders pickup time is from
-        int a = 1;
-        while(drone.getOrderOnDrone(0).getPickUpTime() - (MINUTES_PER_SHIFT * a) > 0){
-            a++;
+        if(simID == FIFO_SIM_ID){
+            drone.getFIFODeliveryTimesList().addDeliveryTime((hourFrom - 1) + (numShifts * iteration),currentTime - drone.getOrderOnDrone(0).getPickUpTime());
+        } else if (simID == KNAPSACK_SIM_ID){
+            drone.getKnapsackDeliveryTimesList().addDeliveryTime((hourFrom - 1) + (numShifts * iteration), currentTime - drone.getOrderOnDrone(0).getPickUpTime());
         }
-        drone.addKnapsackDeliveryTime((a - 1) + (numShifts * iteration), currentTime - drone.getOrderOnDrone(0).getPickUpTime());
         drone.setCurrentPosition(drone.getOrderOnDrone(0).getDestination());
         drone.removeOrderFromDrone(0);
     }
@@ -759,7 +722,7 @@ public class Simulation {
     }
 
     // returns the distance in meters between wp1 and wp2
-    public double distance(Waypoint wp1, Waypoint wp2) {
+    private double distance(Waypoint wp1, Waypoint wp2) {
         int earthRadius = 6371000; // distance in meters
         double lat1 = Math.toRadians(wp1.getLatitude());
         double lat2 = Math.toRadians(wp2.getLatitude());
@@ -778,7 +741,7 @@ public class Simulation {
      * Conducts a heapSort for a given ArrayList.
      * @param a is the ArrayList to be sorted.
      */
-    public void heapSort(ArrayList<Integer> a)
+    private void heapSort(ArrayList<Integer> a)
     {
         int size = a.size();
 
@@ -803,7 +766,7 @@ public class Simulation {
      * @param root is the current starting root
      * @param size is the size of the list.
      */
-    void createHeap(ArrayList<Integer> a, int root, int size)
+    private void createHeap(ArrayList<Integer> a, int root, int size)
     {
         int largest = root, left = 2 * root + 1, right = 2 * root + 2;
 

@@ -1,8 +1,9 @@
 package GUI;
 
+import Simulation.DataTransfer;
 import Simulation.Drone;
 import Simulation.Simulation;
-import Simulation.DataTransfer;
+import Simulation.DeliveryTimeList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
@@ -101,6 +102,8 @@ public class ResultsPage extends VBox {
             //Get Simulation and Drone for results
             Simulation recentSimulation = Values.simulation;
             Drone droneforresults = recentSimulation.drone;
+            DeliveryTimeList FIFODTL = droneforresults.getFIFODeliveryTimesList();
+            DeliveryTimeList KSDTL = droneforresults.getKnapsackDeliveryTimesList();
 
             //Start creating graphs
 
@@ -118,7 +121,7 @@ public class ResultsPage extends VBox {
             FIFOSeries.setName("FIFO");
 
             //Hour Counter for For Loops
-            int[] hourCounter = new int[dataTransfer.getNumShifts()];
+            int[] hourCounter = new int[dataTransfer.getNumShifts()*dataTransfer.getNumSimulations()];
             //int[] hourCounter = new int[recentSimulation.getNumShifts()];
             //dataTransfer.getNumShifts * dataTransfer.getNumSimulations?
 
@@ -128,16 +131,16 @@ public class ResultsPage extends VBox {
             }
 
             //For loop iterating over the FIFO delivery times
-            for (int FIFOIndex = 0; FIFOIndex < hourCounter.length; FIFOIndex++) {
+            for (int FIFOIndex = 0; FIFOIndex < FIFODTL.getDeliveryTimesList().size(); FIFOIndex++) {
                 //Increment hour counter based on what part of the FIFO list the times are in
-                for(int i = 0; i<droneforresults.FIFODeliveryTimes.get(FIFOIndex).size(); i++){
-                    hourCounter[FIFOIndex]++;
+                for(int i = 0; i<FIFODTL.getDeliveryTimesList().get(FIFOIndex).size(); i++){
+                    hourCounter[FIFOIndex%dataTransfer.getNumShifts()]++;
                 }
             }
 
             //For loop adding the hour counter times to the bar graph
-            for (int i = 0; i < hourCounter.length; i++) {
-                FIFOSeries.getData().add(new XYChart.Data<String, Number>(Integer.toString(i + 1), hourCounter[i]));
+            for (int i = 0; i < dataTransfer.getNumShifts(); i++) {
+                FIFOSeries.getData().add(new XYChart.Data<String, Number>(Integer.toString(i + 1), hourCounter[i]/dataTransfer.getNumSimulations()));
             }
 
             XYChart.Series<String, Number> KSSeries = new XYChart.Series<>();
@@ -149,16 +152,16 @@ public class ResultsPage extends VBox {
             }
 
             //For loop iterating over the Knapsack delivery times
-            for (int KSIndex = 0; KSIndex < hourCounter.length; KSIndex++) {
+            for (int KSIndex = 0; KSIndex < KSDTL.getDeliveryTimesList().size(); KSIndex++) {
                 //Increment hour counter based on what part of the knapsack list the times are in
-                for(int i = 0; i<droneforresults.KnapsackDeliveryTimes.get(KSIndex).size(); i++){
-                    hourCounter[KSIndex]++;
+                for(int i = 0; i<KSDTL.getDeliveryTimesList().get(KSIndex).size(); i++){
+                    hourCounter[KSIndex%dataTransfer.getNumShifts()]++;
                 }
             }
 
             //For loop adding the hour counter times to the bar graph
-            for (int i = 0; i < hourCounter.length; i++) {
-                KSSeries.getData().add(new XYChart.Data<String, Number>(Integer.toString(i + 1), hourCounter[i]));
+            for (int i = 0; i < dataTransfer.getNumShifts(); i++) {
+                KSSeries.getData().add(new XYChart.Data<String, Number>(Integer.toString(i + 1), hourCounter[i]/dataTransfer.getNumSimulations()));
             }
 
             //Add the series of data to the bar graph
@@ -174,10 +177,10 @@ public class ResultsPage extends VBox {
             Text FIFOLabel = new Text("FIFO: ");
 
             //Calculate results times and put in simulation
-            recentSimulation.FIFOaverageTime = getAverage(droneforresults.FIFODeliveryTimes);
-            recentSimulation.FIFOworstTime = getWorst(droneforresults.FIFODeliveryTimes);
-            recentSimulation.KSaverageTime = getAverage(droneforresults.KnapsackDeliveryTimes);
-            recentSimulation.KSworstTime = getWorst(droneforresults.KnapsackDeliveryTimes);
+            recentSimulation.FIFOaverageTime = getAverage(FIFODTL.getDeliveryTimesList());
+            recentSimulation.FIFOworstTime = getWorst(FIFODTL.getDeliveryTimesList());
+            recentSimulation.KSaverageTime = getAverage(KSDTL.getDeliveryTimesList());
+            recentSimulation.KSworstTime = getWorst(KSDTL.getDeliveryTimesList());
 
             //Calculate FIFO average time and display it
             tempTime = Math.round(recentSimulation.FIFOaverageTime*100)/100.0;
