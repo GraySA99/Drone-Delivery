@@ -151,7 +151,7 @@ public class FoodPage extends BorderPane {
 
         try {
 
-            FileInputStream fis = new FileInputStream(Values.defaultFoodFileName);
+            FileInputStream fis = new FileInputStream(Values.defaultFileName);
             Scanner fileIn = new Scanner(fis);
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();

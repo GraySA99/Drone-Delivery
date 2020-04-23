@@ -10,6 +10,8 @@ public class Values {
     public static final String defaultMealsFileName = "DefaultMeals.txt";
     public static final String defaultFoodFileName = "DefaultFoodItems.txt";
     public static final String defaultWaypointFileName = "DefaultWaypoints.txt";
+    //Filename for file with universal defaults inside
+    public static final String defaultFileName = "defaults_universal.dd";
 
     public static Simulation simulation;
 
