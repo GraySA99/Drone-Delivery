@@ -70,7 +70,7 @@ public class ResultsPage extends VBox {
         String ret = "Your Results:\n";
         ret += "FIFO Avg Time: " + Values.simulation.FIFOaverageTime.toString() + "\n";
         ret += "FIFO Worst Time: " + Values.simulation.FIFOworstTime.toString() + "\n\n";
-        ret += "KS Avg Time:" + Values.simulation.KSaverageTime.toString() + "\n";
+        ret += "KS Avg Time: " + Values.simulation.KSaverageTime.toString() + "\n";
         ret += "KS Worst Time: " + Values.simulation.KSworstTime.toString() + "\n\n";
 
         // Need some way to get shift information
