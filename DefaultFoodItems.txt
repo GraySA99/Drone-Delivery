@@ -1,8 +1,0 @@
-Format:
-Name&Weight
-
-@Food
-Burger&0.375
-Fries&0.25
-Drink&0.875
-@/Food

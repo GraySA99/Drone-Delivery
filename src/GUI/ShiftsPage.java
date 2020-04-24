@@ -133,7 +133,7 @@ public class ShiftsPage extends BorderPane {
 
         try {
 
-            FileInputStream fis = new FileInputStream(Values.defaultShiftsFileName);
+            FileInputStream fis = new FileInputStream(Values.defaultFileName);
             Scanner fileIn = new Scanner(fis);
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();
