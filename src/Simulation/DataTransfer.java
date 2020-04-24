@@ -183,6 +183,16 @@ public class DataTransfer {
         return null;
     }
 
+    public static Waypoint getWaypoint(String name) {
+
+        for (Waypoint wp : deliveryPoints) {
+
+            if (wp.getName().equals(name)) { return wp; }
+        }
+
+        return null;
+    }
+
     public static Waypoint getWaypoint() {
 
         return deliveryPoints.get(0);

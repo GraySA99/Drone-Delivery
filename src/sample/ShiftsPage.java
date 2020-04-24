@@ -29,8 +29,6 @@ public class ShiftsPage extends BorderPane {
         StackPane hoursListContainer = new StackPane();
         hoursList = new ListView<>();
         hoursList.setPrefWidth(550);
-        hoursListContainer.setStyle(Styles.shiftsListContainer);
-        hoursList.setStyle(Styles.shiftsList);
         hoursListContainer.getChildren().add(hoursList);
 
         // Left Side
@@ -63,7 +61,6 @@ public class ShiftsPage extends BorderPane {
         this.setRight(hoursListContainer);
         this.setLeft(entryContainer);
         this.setTop(pageTitle);
-        this.setStyle(Styles.shiftsPage);
 
         initFromFile();
     }

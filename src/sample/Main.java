@@ -36,6 +36,11 @@ public class Main extends Application {
         sideMenu = new SideMenu(new Pane[]{mapPage, foodPage, mealsPage, shiftsPage}, root, primaryStage);
         Values.primaryStage = primaryStage;
         Values.rootPage = root;
+        Values.mapPage = mapPage;
+        Values.foodPage = foodPage;
+        Values.mealsPage = mealsPage;
+        Values.shiftsPage = shiftsPage;
+        Values.main = this;
 
         // Root Setup
         root.setLeft(sideMenu);
@@ -50,34 +55,33 @@ public class Main extends Application {
         primaryStage.setWidth(bounds.getWidth());
         primaryStage.setHeight(bounds.getHeight());
         primaryStage.setScene(scene);
-      
+
         primaryStage.show();
-        System.out.println("Sleep Done");
-        Values.resizeWindow();
-        Styles.reset();
-        sideMenu.resizeWindow();
-        mapPage.refresh();
+        refresh();
+        MultiThreadRefresh obj = new MultiThreadRefresh();
+        obj.start();
 
         primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
-            Values.resizeWindow();
-            Styles.reset();
-            sideMenu.resizeWindow();
-            mapPage.refresh();
-            foodPage.resizeWindow();
-            mealsPage.resizeWindow();
-            shiftsPage.resizeWindow();
+            refresh();
         });
 
         primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
-            Values.resizeWindow();
-            Styles.reset();
-            sideMenu.resizeWindow();
-            mapPage.refresh();
-            foodPage.resizeWindow();
-            mealsPage.resizeWindow();
-            shiftsPage.resizeWindow();
+            refresh();
         });
     }
+
+    public void refresh() {
+
+        Values.resizeWindow();
+        Styles.reset();
+        sideMenu.resizeWindow();
+        Values.mapPage.refresh();
+        Values.foodPage.refresh();
+        Values.mealsPage.refresh();
+        Values.shiftsPage.resizeWindow();
+    }
+
+    public void putCenter(BorderPane bp) { Values.rootPage.setCenter(bp); }
 
     static { // use system proxy settings when standalone application
         System.setProperty("java.net.useSystemProxies", "true");
@@ -86,4 +90,5 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }

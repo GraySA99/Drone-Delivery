@@ -293,8 +293,8 @@ public class SideMenu extends ToolBar {
                 Styles.reset();
                 resizeWindow();
                 ((MapPage)pages[Values.mapMenuID-1]).refresh();
-                ((FoodPage)pages[Values.foodMenuID-1]).resizeWindow();
-                ((MealsPage)pages[Values.mealsMenuID-1]).resizeWindow();
+                ((FoodPage)pages[Values.foodMenuID-1]).refresh();
+                ((MealsPage)pages[Values.mealsMenuID-1]).refresh();
                 ((ShiftsPage)pages[Values.shiftsMenuID-1]).resizeWindow();
             }
         });
@@ -331,6 +331,9 @@ public class SideMenu extends ToolBar {
                     }
 
                     Values.rootPage.setCenter(pages[activeScene-1]);
+                    MultiThreadRefresh thread = new MultiThreadRefresh();
+                    thread.start();
+
                     for (Button btn : menues.keySet()) {
 
                         btn.styleProperty().unbind();

@@ -5,6 +5,7 @@ import Food.Meal;
 import Simulation.DataTransfer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -21,49 +22,47 @@ public class MealsPage extends BorderPane {
     private VBox foodFrame;
     private HashMap<Food, HBox> foodItems;
     private ListView<HBox> mealsList;
+    private StackPane mealsListContainer;
+    private VBox mealEntry;
+    private Text mealsNameLabel, mealsProbLabel;
+    private TextField mealsNameEnt, mealsProbEnt;
+    private Button mealsAddItem, mealsRemoveItem;
+    private ScrollPane foodScrollFrame;
+    private HBox mealsNameFrame, mealsProbFrame, mealsBtnFrame;
 
     public MealsPage() {
 
         super(); // Super Constructor
-        this.setStyle(Styles.mealsPage);
-
-        PageTitle pageTitle = new PageTitle("Meals");
 
         foodItems = new HashMap<>();
 
         // Right Side
-        StackPane mealsListContainer = new StackPane();
-        mealsListContainer.setStyle(Styles.foodListContainer);
+        mealsListContainer = new StackPane();
         mealsList = new ListView<>();
-        mealsList.setPrefWidth(550);
-        mealsList.setStyle(Styles.mealsList);
         mealsList.getItems().add(new HBox());
+        mealsListContainer.getChildren().add(mealsList);
 
         // Left Side
-        GridPane mealEntry = new GridPane();
-        mealEntry.setStyle(Styles.mealEntry);
-
+        mealEntry = new VBox();
         foodFrame = new VBox();
-        foodFrame.setStyle(Styles.foodFrame);
-        ScrollPane foodScrollFrame = new ScrollPane();
+        foodScrollFrame = new ScrollPane();
         foodScrollFrame.setContent(foodFrame);
         foodScrollFrame.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        foodScrollFrame.setStyle(Styles.foodScrollFrame);
-        Text mealsNameLabel = new Text("Name");
-        Text mealsProbLabel = new Text("Probability");
-        TextField mealsNameEnt = new TextField();
-        TextField mealsProbEnt = new TextField();
-        Button mealsAddItem = new Button("Add");
-        Button mealsRemoveItem = new Button("Remove");
 
-        mealEntry.add(mealsNameLabel, 0, 0, 1, 1);
-        mealEntry.add(mealsNameEnt, 0, 1, 1, 1);
-        mealEntry.add(mealsProbLabel, 1, 0, 1, 1);
-        mealEntry.add(mealsProbEnt, 1, 1, 1, 1);
-        mealEntry.add(foodScrollFrame, 0, 2, 2, 2);
-        mealEntry.add(mealsAddItem, 0, 4, 1, 1);
-        mealEntry.add(mealsRemoveItem, 1, 4, 1, 1);
+        mealsNameFrame = new HBox();
+        mealsNameLabel = new Text("Name: ");
+        mealsNameEnt = new TextField();
+        mealsNameFrame.getChildren().addAll(new ESHBox(), mealsNameLabel, new ESHBox(), mealsNameEnt, new ESHBox());
 
+        mealsProbFrame = new HBox();
+        mealsProbLabel = new Text("Probability: ");
+        mealsProbEnt = new TextField();
+        mealsProbFrame.getChildren().addAll(new ESHBox(), mealsProbLabel, new ESHBox(), mealsProbEnt, new ESHBox());
+
+        mealsBtnFrame = new HBox();
+        mealsAddItem = new Button("Add");
+        mealsRemoveItem = new Button("Remove");
+        mealsBtnFrame.getChildren().addAll(new ESHBox(), mealsAddItem, new ESHBox(), mealsRemoveItem, new ESHBox());
         mealsAddItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
@@ -78,7 +77,7 @@ public class MealsPage extends BorderPane {
 
                         if (((CheckBox)hb.getChildren().get(0)).isSelected()) {
 
-                            String qty = ((TextField)hb.getChildren().get(4)).getText();
+                            String qty = ((TextField)hb.getChildren().get(5)).getText();
                             if (!isNumeric(qty))
                                 return;
                         }
@@ -91,7 +90,7 @@ public class MealsPage extends BorderPane {
                         if (((CheckBox)foodItems.get(food).getChildren().get(0)).isSelected()) {
 
                             int qty = Integer.parseInt(
-                                    ((TextField)foodItems.get(food).getChildren().get(4)).getText()
+                                    ((TextField)foodItems.get(food).getChildren().get(5)).getText()
                             );
 
                             tempFoodList.put(new Food(food.getName(), food.getWeight()), qty);
@@ -116,7 +115,7 @@ public class MealsPage extends BorderPane {
                     for (HBox hb : foodItems.values()) {
 
                         CheckBox tempCB = ((CheckBox)hb.getChildren().get(0));
-                        TextField tempTF = ((TextField)hb.getChildren().get(4));
+                        TextField tempTF = ((TextField)hb.getChildren().get(5));
                         tempCB.setSelected(false);
                         tempTF.clear();
                         tempTF.setDisable(!tempCB.isSelected());
@@ -124,7 +123,6 @@ public class MealsPage extends BorderPane {
                 }
             }
         });
-
         mealsRemoveItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
@@ -152,11 +150,70 @@ public class MealsPage extends BorderPane {
             }
         });
 
+        mealEntry.getChildren().addAll(mealsNameFrame, mealsProbFrame, foodScrollFrame, mealsBtnFrame);
+
         this.setLeft(mealEntry);
-        this.setRight(mealsList);
-        this.setTop(pageTitle);
+        this.setRight(mealsListContainer);
 
         initFromFile();
+        refresh();
+    }
+
+    public void refresh() {
+
+        double pageWidth = Values.windowWidth * (1 - Values.sideMenuWidthPercent);
+        double pageHeight = Values.windowHeight;
+        this.setMaxWidth(pageWidth);
+        this.setPrefWidth(pageWidth);
+        this.setPrefHeight(pageHeight);
+
+        mealsListContainer.setMaxWidth(pageWidth * Values.mealsPageListWidthPercent);
+        mealsListContainer.setMaxHeight(pageHeight * Values.mealsPageListHeightPercent);
+        mealsList.setPrefWidth(pageWidth * Values.mealsPageListWidthPercent);
+        mealsList.setPrefHeight(pageHeight * Values.mealsPageListHeightPercent);
+        BorderPane.setAlignment(mealsListContainer, Pos.CENTER_LEFT);
+
+        mealEntry.setPrefWidth(pageWidth * Values.mealsPageMealEntryWidthPercent);
+        mealEntry.setPrefHeight(pageHeight * Values.mealsPageMealEntryHeightPercent);
+        BorderPane.setAlignment(mealEntry, Pos.CENTER);
+
+        // Meal Entry Stuff
+        double mealEntryWidth = pageWidth * Values.mealsPageMealEntryWidthPercent;
+        double mealEntryHeight = pageHeight * Values.mealsPageMealEntryHeightPercent;
+
+        mealsNameFrame.setPrefWidth(mealEntryWidth * Values.mealsPageNameFrameWidthPercent);
+        mealsNameFrame.setPrefHeight(mealEntryHeight * Values.mealsPageNameFrameHeightPercent);
+
+        mealsProbFrame.setPrefWidth(mealEntryWidth * Values.mealsPageProbFrameWidthPercent);
+        mealsProbFrame.setPrefHeight(mealEntryHeight * Values.mealsPageProbFrameHeightPercent);
+
+        foodScrollFrame.setPrefWidth(mealEntryWidth * Values.mealsPageFoodScrollFrameWidthPercent);
+        foodScrollFrame.setPrefHeight(mealEntryHeight * Values.mealsPageFoodScrollFrameHeightPercent);
+
+        mealsBtnFrame.setPrefWidth(mealEntryWidth * Values.mealsPageBtnFrameWidthPercent);
+        mealsBtnFrame.setPrefHeight(mealEntryHeight * Values.mealsPageBtnFrameHeightPercent);
+
+        // Food Frame
+        VBox.setVgrow(foodFrame, Priority.ALWAYS);
+        foodFrame.setPrefWidth(foodScrollFrame.getWidth() * Values.mealsPageFoodFrameWidthPercent);
+        foodFrame.setPrefHeight(foodScrollFrame.getHeight() * Values.mealsPageFoodFrameHeightPercent);
+        for (Node n : foodFrame.getChildren()) {
+
+            HBox item = ((HBox)n);
+            item.setStyle(Styles.mealsPageFoodItem);
+            item.setPrefWidth(foodFrame.getWidth() * Values.mealsPageFoodItemWidthPercent);
+            item.setPrefHeight(foodFrame.getHeight() * Values.mealsPageFoodItemHeightPercent);
+        }
+
+        // Styles
+        this.setStyle(Styles.mealsPage);
+        mealsListContainer.setStyle(Styles.mealsPageMealsListContainer);
+        mealsNameLabel.setStyle(Styles.mealsPageMealsNameLabel + "-fx-font-size: "
+                + (mealEntryHeight * Values.mealsPageMealsLabelFontPercent));
+        mealsProbLabel.setStyle(Styles.mealsPageMealsProbLabel + "-fx-font-size: "
+                + (mealEntryHeight * Values.mealsPageMealsLabelFontPercent));
+        mealEntry.setStyle(Styles.mealsPageMealEntry);
+
     }
 
     public void setFoodFrame() {
@@ -169,15 +226,14 @@ public class MealsPage extends BorderPane {
 
                 HBox foodFrameRow = new HBox();
                 HBox.setHgrow(foodFrameRow, Priority.ALWAYS);
-                foodFrameRow.setStyle(Styles.foodFrameRow);
                 CheckBox isItemIn = new CheckBox();
                 Text foodName = new Text(food.getName().substring(0,1).toUpperCase()
                         .concat(food.getName().substring(1,food.getName().length())));
-                Text qtyLabel = new Text("Qty");
+                Text qtyLabel = new Text("Qty: ");
                 TextField qtyEnt = new TextField();
                 qtyEnt.setPromptText("0");
-                qtyEnt.setPrefSize(35, 20);
-                foodFrameRow.getChildren().addAll(isItemIn, foodName, new ESHBox(), qtyLabel, qtyEnt);
+                foodFrameRow.getChildren().addAll(isItemIn, new ESHBox(), foodName, new ESHBox(),
+                        qtyLabel, qtyEnt);
                 foodItems.put(food, foodFrameRow);
 
                 qtyEnt.clear();
@@ -272,10 +328,5 @@ public class MealsPage extends BorderPane {
             System.out.println("Problem With File");
             e.printStackTrace();
         }
-    }
-
-    public void resizeWindow() {
-
-        this.setMinWidth(Values.windowWidth * Values.mainPageWidthPercent);
     }
 }

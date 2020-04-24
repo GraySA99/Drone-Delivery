@@ -34,6 +34,7 @@ public class MapPage extends BorderPane {
     private TextField nameEnt;
     private ListView<HBox> DPList;
     private StackPane DPListContainer;
+    private StackPane mapViewContainer;
     private WebView mapView;
     private VBox mapContainer;
     private VBox mapInfoContainer;
@@ -146,6 +147,8 @@ public class MapPage extends BorderPane {
         );
 
         mapView = new WebView();
+        mapViewContainer = new StackPane();
+        mapViewContainer.getChildren().add(mapView);
         final WebEngine webEngine = mapView.getEngine();
         webEngine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
            if (Worker.State.SUCCEEDED == newValue) {
@@ -158,7 +161,7 @@ public class MapPage extends BorderPane {
 
         });
 
-        mapContainer.getChildren().addAll(mapInfoContainer, mapView);
+        mapContainer.getChildren().addAll(mapInfoContainer, mapViewContainer);
 
         this.setLeft(mapContainer);
         this.setRight(DPListContainer);
@@ -175,15 +178,13 @@ public class MapPage extends BorderPane {
     public void refresh() {
 
         double pageWidth = Values.windowWidth * (1 - Values.sideMenuWidthPercent);
-        double pageHeight = this.getHeight();
+        double pageHeight = Values.windowHeight;
         this.setMaxWidth(pageWidth);
         this.setPrefWidth(pageWidth);
+        this.setPrefHeight(pageHeight);
 
-        DPList.setPrefWidth(pageWidth * Values.mapPageListWidthPercent);
-        DPList.setPrefHeight(pageHeight * Values.mapPageListHeightPercent);
-
-        mapView.setPrefWidth(pageWidth * Values.mapPageMapWidthPercent);
-        mapView.setPrefHeight(pageHeight * Values.mapPageMapHeightPercent);
+        mapViewContainer.setPrefWidth(pageWidth * Values.mapPageMapWidthPercent);
+        mapViewContainer.setPrefHeight(pageHeight * Values.mapPageMapHeightPercent);
 
         mapInfoContainer.setPrefWidth(pageWidth * Values.mapPageMapInfoWidthPercent);
         mapInfoContainer.setPrefHeight(pageHeight * Values.mapPageMapInfoHeightPercent);
@@ -212,7 +213,7 @@ public class MapPage extends BorderPane {
                 + (mapInfoHeight * Values.mapPageNameFontPercent) + ";\n");
         currentPointLabel.setStyle(Styles.mapPageCurrentPointLabel + "-fx-font-size: "
                 + (mapInfoHeight * Values.mapPageLatLngFontPercent) + ";\n");
-        mapView.setStyle(Styles.mapPageMapView);
+        mapViewContainer.setStyle(Styles.mapPageMapView);
         mapInfoContainer.setStyle(Styles.mapPageMapInfoContainer);
         DPListContainer.setStyle(Styles.mapPageDPListContainer);
         mapContainer.setStyle(Styles.mapPageMapContainer);
@@ -243,14 +244,13 @@ public class MapPage extends BorderPane {
             }
         }
 
-        public void exit() {
+        public void highlight(String name) {
 
-            System.exit(0);
-        }
-
-        public void debug(String message, String name, String lat, String lng) {
-
-            System.out.println(message + " " + name + " " + lat + " " + lng);
+            Waypoint target = DataTransfer.getWaypoint(name);
+            nameEnt.setText(target.getName());
+            currentPointLabel.setText(String.format("(%.5f, %.5f)",
+                    target.getLatitude(),
+                    target.getLongitude()));
         }
     }
 

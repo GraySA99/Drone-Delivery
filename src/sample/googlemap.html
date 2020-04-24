@@ -115,8 +115,10 @@
                 tempMarker.addListener('mouseout', function() {
                     infoWindow.close();
                 });
+                tempMarker.addListener('click', function() {
+                    javaConnector.highlight(name);
+                });
                 droneMarkers.push(tempMarker);
-                javaConnector.debug("Marker Added", name, la, ln);
             },
             removeMarker: function (name) {
                 droneMarkers.forEach(function(droneMarkers) {
