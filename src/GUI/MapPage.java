@@ -162,7 +162,8 @@ public class MapPage extends BorderPane {
         this.setRight(DPListContainer);
 
         webEngine.loadContent(Values.googleMapsJavaScript);
-        initFromFile();
+        //will load defaults
+        initFromFile("");
     }
 
     public class JavaConnector {
@@ -178,11 +179,14 @@ public class MapPage extends BorderPane {
         }
     }
 
-    private void initFromFile() {
+    private void initFromFile(String filename) {
 
         try {
 
             FileInputStream fis = new FileInputStream(Values.defaultFileName);
+            if(!filename.equals(""))
+                fis = new FileInputStream(filename);
+
             Scanner fileIn = new Scanner(fis);
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();

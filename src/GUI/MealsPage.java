@@ -153,8 +153,8 @@ public class MealsPage extends BorderPane {
         this.setLeft(mealEntry);
         this.setRight(mealsList);
         this.setTop(pageTitle);
-
-        initFromFile();
+        // this change lets this method init from default file
+        initFromFile("");
     }
 
     public void setFoodFrame() {
@@ -209,11 +209,14 @@ public class MealsPage extends BorderPane {
         }
     }
 
-    private void initFromFile() {
+    private void initFromFile(String filename) {
 
         try {
 
             FileInputStream fis = new FileInputStream(Values.defaultFileName);
+            if(!filename.equals(""))
+                fis = new FileInputStream(filename);
+
             Scanner fileIn = new Scanner(fis);
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();
