@@ -275,6 +275,10 @@ public class MealsPage extends BorderPane {
         }
     }
 
+    public void loadMealsFrom(String filename) {
+
+    }
+
     public void resizeWindow() {
 
         this.setMinWidth(Values.windowWidth * Values.mainPageWidthPercent);

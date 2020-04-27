@@ -207,6 +207,10 @@ public class ShiftsPage extends BorderPane {
         }
     }
 
+    public void loadShiftsFrom(String filename) {
+        
+    }
+
     public void resizeWindow() {
 
         this.setMinWidth(Values.windowWidth * Values.mainPageWidthPercent);

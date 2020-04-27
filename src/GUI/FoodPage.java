@@ -148,7 +148,7 @@ public class FoodPage extends BorderPane {
         }
     }
 
-    private void initFromFile(String filename) {
+    public void initFromFile(String filename) {
 
         try {
             FileInputStream fis = new FileInputStream(Values.defaultFileName);
@@ -196,6 +196,10 @@ public class FoodPage extends BorderPane {
             System.out.println("Problem With File");
             e.printStackTrace();
         }
+    }
+
+    public void loadFoodsFrom(String filename) {
+
     }
 
     public void resizeWindow() {

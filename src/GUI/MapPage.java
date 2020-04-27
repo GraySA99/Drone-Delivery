@@ -227,6 +227,10 @@ public class MapPage extends BorderPane {
         }
     }
 
+    public void loadMapsFrom(String filename) {
+
+    }
+
     public void resizeWindow() {
 
         this.setMinWidth(Values.windowWidth * Values.mainPageWidthPercent);
