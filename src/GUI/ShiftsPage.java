@@ -62,8 +62,8 @@ public class ShiftsPage extends BorderPane {
         this.setLeft(entryContainer);
         this.setTop(pageTitle);
         this.setStyle(Styles.shiftsPage);
-
-        initFromFile();
+        //this change lets initFromFile init from defaults
+        initFromFile("");
     }
 
     public void reload(int newNumHours, int oldNumHours) {
@@ -129,11 +129,14 @@ public class ShiftsPage extends BorderPane {
         }
     }
 
-    private void initFromFile() {
+    private void initFromFile(String filename) {
 
         try {
 
             FileInputStream fis = new FileInputStream(Values.defaultFileName);
+            if(!filename.equals(""))
+                fis = new FileInputStream(filename);
+
             Scanner fileIn = new Scanner(fis);
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();
@@ -202,6 +205,10 @@ public class ShiftsPage extends BorderPane {
             System.out.println("Problem With File");
             e.printStackTrace();
         }
+    }
+
+    public void loadShiftsFrom(String filename) {
+        
     }
 
     public void resizeWindow() {

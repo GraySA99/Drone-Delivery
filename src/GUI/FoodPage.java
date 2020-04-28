@@ -127,7 +127,8 @@ public class FoodPage extends BorderPane {
         this.setRight(foodListContainer);
         this.setTop(pageTitle);
 
-        initFromFile();
+        // initFromFile will load defaults now
+        initFromFile("");
     }
 
     // Function: isNumeric
@@ -147,11 +148,13 @@ public class FoodPage extends BorderPane {
         }
     }
 
-    private void initFromFile() {
+    public void initFromFile(String filename) {
 
         try {
-
             FileInputStream fis = new FileInputStream(Values.defaultFileName);
+            if(!filename.equals(""))
+                fis = new FileInputStream(filename);
+
             Scanner fileIn = new Scanner(fis);
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();
@@ -193,6 +196,10 @@ public class FoodPage extends BorderPane {
             System.out.println("Problem With File");
             e.printStackTrace();
         }
+    }
+
+    public void loadFoodsFrom(String filename) {
+
     }
 
     public void resizeWindow() {
