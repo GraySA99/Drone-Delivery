@@ -131,9 +131,9 @@ public class ResultsPage extends VBox {
             }
 
             //For loop iterating over the FIFO delivery times
-            for (int FIFOIndex = 0; FIFOIndex < FIFODTL.getDeliveryTimesList().size(); FIFOIndex++) {
+            for (int FIFOIndex = 0; FIFOIndex < FIFODTL.getNumDeliveryTimes(); FIFOIndex++) {
                 //Increment hour counter based on what part of the FIFO list the times are in
-                for(int i = 0; i<FIFODTL.getDeliveryTimesList().get(FIFOIndex).size(); i++){
+                for(int i = 0; i<FIFODTL.getNumDeliveryTimes(FIFOIndex); i++){
                     hourCounter[FIFOIndex%dataTransfer.getNumShifts()]++;
                 }
             }
@@ -152,9 +152,9 @@ public class ResultsPage extends VBox {
             }
 
             //For loop iterating over the Knapsack delivery times
-            for (int KSIndex = 0; KSIndex < KSDTL.getDeliveryTimesList().size(); KSIndex++) {
+            for (int KSIndex = 0; KSIndex < KSDTL.getNumDeliveryTimes(); KSIndex++) {
                 //Increment hour counter based on what part of the knapsack list the times are in
-                for(int i = 0; i<KSDTL.getDeliveryTimesList().get(KSIndex).size(); i++){
+                for(int i = 0; i<KSDTL.getNumDeliveryTimes(KSIndex); i++){
                     hourCounter[KSIndex%dataTransfer.getNumShifts()]++;
                 }
             }
