@@ -19,10 +19,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class SideMenu extends ToolBar {
 
@@ -31,7 +30,7 @@ public class SideMenu extends ToolBar {
     private Integer activeScene;
     private ToolBar secondaryMenu;
     private Button sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn;
-    private Button start, save, results, quit;
+    private Button start, save, results, load;
     private HBox title;
     private Text titleLabel;
     private Button titleBtn;
@@ -64,11 +63,11 @@ public class SideMenu extends ToolBar {
 
         SetupActionButtons();
         SideMenuOnHover(new Button[] {sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn,
-                start, results, save, quit});
+                start, results, save, load});
         SideMenuOnClick(new Button[]{sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn});
 
         this.getItems().addAll(title, sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn,
-                                new ESVBox(), start, results, save, quit);
+                                new ESVBox(), start, results, save, load);
 
         resizeWindow();
     }
@@ -78,7 +77,7 @@ public class SideMenu extends ToolBar {
         start = new Button("Start");
         save = new Button("Save");
         results = new Button("Results");
-        quit = new Button("Quit");
+        load = new Button("Load");
 
         start.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
@@ -109,7 +108,7 @@ public class SideMenu extends ToolBar {
             }
         });
 
-        // Code to handle save action for save button in sidemenu
+        // TODO: This save button is supposed to save the results of a simulation in a .dd file
         save.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 FileChooser fileChooser = new FileChooser();
@@ -134,11 +133,24 @@ public class SideMenu extends ToolBar {
             }
         });
 
-        quit.setOnAction(new EventHandler<ActionEvent>() {
+        // is supposed to put the rules in the specified .dd file into the simulation
+        load.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
+                //Platform.exit(); //System.exit(0);
+                FileChooser fileChooser = new FileChooser();
 
-                Platform.exit();
-                System.exit(0);
+                //Set extension filter for our .dd files
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(".DD files (*.dd)", "*.dd");
+                fileChooser.getExtensionFilters().add(extFilter);
+
+                // Show open dialog
+                File openFile = fileChooser.showOpenDialog(Values.primaryStage);
+
+                if(openFile != null) {
+                    String path = openFile.getAbsolutePath();
+                    //System.out.println("PATH: " + path);
+                    setSimSettings(path);
+                }
             }
         });
     }
@@ -171,12 +183,12 @@ public class SideMenu extends ToolBar {
         results.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
         save.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
         save.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
-        quit.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
-        quit.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
+        load.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
+        load.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
 
         // Buttons
         SideMenuOnHover(new Button[] {sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn,
-                                        start, results, save, quit});
+                                        start, results, save, load});
         SideMenuOnClick(new Button[] {sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn});
     }
 
@@ -208,8 +220,8 @@ public class SideMenu extends ToolBar {
         start = new Button("Start");
         save = new Button("Save");
         results = new Button("Results");
-        quit = new Button("Quit");
-        Button[] buttons = {start, save, results, quit};
+        load = new Button("Load");
+        Button[] buttons = {start, save, results, load};
 
         for (Button b : buttons) {
 
@@ -225,7 +237,7 @@ public class SideMenu extends ToolBar {
                             )
             );
         }
-        secondaryMenu.getItems().addAll(start, save, results, new ESHBox(), quit);
+        secondaryMenu.getItems().addAll(start, save, results, new ESHBox(), load);
 
         for (Pane p : pages) {
 
@@ -239,18 +251,26 @@ public class SideMenu extends ToolBar {
         }
     }
 
-    // Pulls the simulation times from Values and returns their string representation
+    //Todo - This is supposed to save the rules for the simulation in a .dd file
     private String getResultsStr() {
-        String ret = "Your Results:\n";
+        /*String ret = "Your Results:\n";
         ret += "FIFO Avg Time: " + Values.simulation.FIFOaverageTime.toString() + "\n";
         ret += "FIFO Worst Time: " + Values.simulation.FIFOworstTime.toString() + "\n\n";
         ret += "KS Avg Time:" + Values.simulation.KSaverageTime.toString() + "\n";
-        ret += "KS Worst Time: " + Values.simulation.KSworstTime.toString() + "\n\n";
+        ret += "KS Worst Time: " + Values.simulation.KSworstTime.toString() + "\n\n";*/
 
         // Need some way to get shift information
         //DataTransfer.getNumShifts()  DataTransfer.getShifts()
 
-        return ret;
+        //return ret;
+        return "YOU STILL NEED TO DEAL WITH ME";
+    }
+
+    private void setSimSettings(String filepath) {
+        Values.foodPage.initFromFile(filepath);
+        Values.mapPage.initFromFile(filepath);
+        Values.mealsPage.initFromFile(filepath);
+        Values.shiftsPage.initFromFile(filepath);
     }
 
     //Writes str to file file
