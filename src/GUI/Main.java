@@ -33,6 +33,11 @@ public class Main extends Application {
         Values.primaryStage = primaryStage;
         Values.rootPage = root;
 
+        Values.foodPage = foodPage;
+        Values.mapPage = mapPage;
+        Values.mealsPage = mealsPage;
+        Values.shiftsPage = shiftsPage;
+
         // Root Setup
         root.setLeft(sideMenu);
         root.setCenter(mapPage);

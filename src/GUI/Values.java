@@ -14,6 +14,11 @@ public class Values {
     public static Stage primaryStage;
     public static BorderPane rootPage;
 
+    public static FoodPage foodPage;
+    public static MapPage mapPage;
+    public static MealsPage mealsPage;
+    public static ShiftsPage shiftsPage;
+
     public static double windowHeight = 0;
     public static double windowWidth = 0;
     public static int sideMenuFontSize = 0;

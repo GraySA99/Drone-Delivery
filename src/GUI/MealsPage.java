@@ -209,7 +209,7 @@ public class MealsPage extends BorderPane {
         }
     }
 
-    private void initFromFile(String filename) {
+    public void initFromFile(String filename) {
 
         try {
 
@@ -273,10 +273,6 @@ public class MealsPage extends BorderPane {
             System.out.println("Problem With File");
             e.printStackTrace();
         }
-    }
-
-    public void loadMealsFrom(String filename) {
-
     }
 
     public void resizeWindow() {
