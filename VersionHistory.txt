@@ -11,6 +11,9 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
+Version 2.2.3 4/28/20
+-Fixed an issue with the default values in the defaults_universal file (Patrick)
+
 Version 2.2.2 4/27/20
 -initFromFile(String filename) inits from file (Josh)
 -Added "load from ..." method stubs (Josh)

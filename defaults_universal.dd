@@ -2,9 +2,9 @@ Food Format:
 Name&Weight
 
 @Food
-Burger&6.0
-Fries&4.0
-Drink&14.0
+Burger&0.375
+Fries&0.25
+Drink&0.875
 @/Food
 
 
@@ -14,19 +14,21 @@ Name:Probability
 *...
 
 @Meals
-All Three&55
+All Three&50
 *Burger&1
 *Fries&1
 *Drink&1
-All Three - Double Burger&10
+All Three - Double Burger&20
 *Burger&2
 *Fries&1
 *Drink&1
-Burger + Fries&20
+Burger + Fries&15
 *Burger&1
 *Fries&1
-Two Burgers + Fries&15
+Two Burgers + Fries&10
 *Burger&2
+*Fries&1
+One Fry&05
 *Fries&1
 @/Meals
 
