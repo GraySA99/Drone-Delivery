@@ -113,15 +113,15 @@ public class SideMenu extends ToolBar {
             @Override public void handle(ActionEvent e) {
                 FileChooser fileChooser = new FileChooser();
 
-                //If we want we can set extension filters for text files
-                FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-                fileChooser.getExtensionFilters().add(filter);
+                //Set extension filter for our .dd files
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(".DD files (*.dd)", "*.dd");
+                fileChooser.getExtensionFilters().add(extFilter);
 
                 //Show save file dialogue
                 File file = fileChooser.showSaveDialog(Values.primaryStage);
 
                 if(file != null) {
-                    writeTextToFile(getResultsStr(), file);
+                    writeSimSettingsToFile(file);
                 }
             }
         });
@@ -274,11 +274,11 @@ public class SideMenu extends ToolBar {
     }
 
     //Writes str to file file
-    private void writeTextToFile(String str, File file)
+    private void writeSimSettingsToFile(File file)
     {
         try {
             PrintWriter writer = new PrintWriter(file);
-            writer.println(str);
+            //writer.println(str);
             writer.close();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
