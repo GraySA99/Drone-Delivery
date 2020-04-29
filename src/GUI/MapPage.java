@@ -179,7 +179,7 @@ public class MapPage extends BorderPane {
         }
     }
 
-    private void initFromFile(String filename) {
+    public void initFromFile(String filename) {
 
         try {
 
@@ -225,10 +225,6 @@ public class MapPage extends BorderPane {
             System.out.println("Problem With File");
             e.printStackTrace();
         }
-    }
-
-    public void loadMapsFrom(String filename) {
-
     }
 
     public void resizeWindow() {

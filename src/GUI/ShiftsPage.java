@@ -128,8 +128,8 @@ public class ShiftsPage extends BorderPane {
             }
         }
     }
-
-    private void initFromFile(String filename) {
+    // change this to private again??
+    public void initFromFile(String filename) {
 
         try {
 
@@ -205,10 +205,6 @@ public class ShiftsPage extends BorderPane {
             System.out.println("Problem With File");
             e.printStackTrace();
         }
-    }
-
-    public void loadShiftsFrom(String filename) {
-        
     }
 
     public void resizeWindow() {
