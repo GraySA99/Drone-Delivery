@@ -12,7 +12,16 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 Version Version# Month/Day/Year
 
 Version 2.2.3 4/28/20
+-Added several methods to the simulation class for code cleanup purposes (Patrick)
+-Promoted the currentTime, tripTime, currentOrder variables in the simulation to be class-wide to
+allow more efficient methods to be created (Patrick)
 -Fixed an issue with the default values in the defaults_universal file (Patrick)
+-Fixed an issue where skipped knapsack orders did not have the correct pickup time (Patrick)
+-Removed variables not declared in the correct spot in the knapsack method (Patrick)
+-Removed the launched variable in the simulations. Just uses canLoad now (Patrick)
+-Removed break statements outside of the skipped orders sections (Patrick)
+-Enabled loading a .dd file - v1 (Josh)
+-Made framework to save rules to .dd file (Josh)
 
 Version 2.2.2 4/27/20
 -initFromFile(String filename) inits from file (Josh)
