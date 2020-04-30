@@ -131,6 +131,10 @@ public class FoodPage extends BorderPane {
         initFromFile("");
     }
 
+    public ListView<HBox> getFoodList() {
+        return foodList;
+    }
+
     // Function: isNumeric
     // Purpose: checks if given string is a number
     // Input: String s

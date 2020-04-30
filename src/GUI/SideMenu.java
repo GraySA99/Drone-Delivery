@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class SideMenu extends ToolBar {
 
@@ -279,6 +280,23 @@ public class SideMenu extends ToolBar {
         try {
             PrintWriter writer = new PrintWriter(file);
             //writer.println(str);
+
+            // Print food information to file
+            writer.println("@Food");
+            for(int listItem = 0; listItem < Values.foodPage.getFoodList().getItems().size(); listItem++) {
+                String foodName = ((Text) Values.foodPage.getFoodList().getItems().get(listItem).getChildren().get(0)).getText();
+                String foodWeight = ((Text) Values.foodPage.getFoodList().getItems().get(listItem).getChildren().get(2)).getText()
+                        .replaceAll(" oz.", "");
+                System.out.println("name: " + foodName);
+                System.out.println("weight: " + foodWeight);
+                writer.println(foodName + "&" + foodWeight);
+            }
+            writer.println("@/Food\n\n");
+
+            // Get map waypoints
+
+
+
             writer.close();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
