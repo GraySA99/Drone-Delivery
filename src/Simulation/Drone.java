@@ -12,11 +12,11 @@ import java.util.ArrayList;
 
 public class Drone {
     private ArrayList<Order> loadedOrdersList; //the list of orders currently on the Drone
-    private double weightCapacity, currentWeight; //stores the Drones weight capacity and current stored weight
+    private double weightCapacity, currentWeight, turnAroundTime; //stores the Drones weight capacity, current stored weight, and turn around time
     private Waypoint currentPosition; //stores the Drone's current position
-    private int turnAroundTime, speed, maxFlightTime; //stores the drones turn around time, speed, and max flight time
+    private int speed, maxFlightTime; //stores the drones speed and max flight time
     //these crazy lists will probably be their own class in Sprint 2
-    public ArrayList<ArrayList<Double>> FIFODeliveryTimes, KnapsackDeliveryTimes; //stores the lists of lists of delivery times for each
+    public DeliveryTimeList FIFODeliveryTimes, KnapsackDeliveryTimes; //stores the lists of lists of delivery times for each
     // hour of each simulation ran
 
 
@@ -28,10 +28,10 @@ public class Drone {
         weightCapacity = 12;
         currentWeight = 0;
         currentPosition = null;
-        turnAroundTime = 3;
-        FIFODeliveryTimes = new ArrayList<ArrayList<Double>>();
-        KnapsackDeliveryTimes = new ArrayList<ArrayList<Double>>();
-        speed = 20;
+        turnAroundTime = 2.5;
+        FIFODeliveryTimes = new DeliveryTimeList();
+        KnapsackDeliveryTimes = new DeliveryTimeList();
+        speed = 25;
         maxFlightTime = 20;
     }
 
@@ -44,11 +44,11 @@ public class Drone {
         weightCapacity = 12;
         currentWeight = 0;
         currentPosition = s;
-        turnAroundTime = 3;
-        FIFODeliveryTimes = new ArrayList<ArrayList<Double>>();
-        KnapsackDeliveryTimes = new ArrayList<ArrayList<Double>>();
+        turnAroundTime = 2.5;
+        FIFODeliveryTimes = new DeliveryTimeList();
+        KnapsackDeliveryTimes = new DeliveryTimeList();
         speed = 20;
-        maxFlightTime = 20;
+        maxFlightTime = 25;
     }
 
     /**
@@ -137,7 +137,7 @@ public class Drone {
      * Returns the Drone's turn around time.
      * @return the Drone's  turn around time.
      */
-    public int getTurnAroundTime(){
+    public double getTurnAroundTime(){
         return turnAroundTime;
     }
 
@@ -157,91 +157,11 @@ public class Drone {
         return speed;
     }
 
-    /**
-     * Adds a FIFO delivery time to a specified hour's list.
-     * @param i is the index of the desired hour.
-     * @param b is the delivery time being added.
-     */
-    public void addFIFODeliveryTime(int i, double b){
-        FIFODeliveryTimes.get(i).add(b);
-    }
-
-    /**
-     * Returns a specified FIFO delivery time.
-     * @param i is the index of the hour the delivery time is in.
-     * @param j is the position in the hour's list of the delivery time.
-     * @return the specified delivery time.
-     */
-    public double getFIFODeliveryTime(int i, int j){
-        return FIFODeliveryTimes.get(i).get(j);
-    }
-
-    /**
-     * Returns a specified Knapsack delivery time.
-     * @param i is the index of the hour the delivery time is in.
-     * @param j is the position in the hour's list of the delivery time.
-     * @return the specified delivery time.
-     */
-    public double getKnapsackDeliveryTime(int i, int j){
-        return KnapsackDeliveryTimes.get(i).get(j);
-    }
-
-    /**
-     * Returns the number of hours of stored FIFO times.
-     * @return the number of hours of stored FIFO times.
-     */
-    public int getNumFIFODeliveryTimes(){
-        return FIFODeliveryTimes.size();
-    }
-
-    /**
-     * Returns the number of FIFO delivery times stored for a specified hour.
-     * @param i the index of the desired delivery time hour.
-     * @return the the number of delivery times stored specified hour's delivery's list.
-     */
-    public int getNumFIFODeliveryTimes(int i){
-        return FIFODeliveryTimes.get(i).size();
-    }
-
-    /**
-     * Returns the number of hours of stored Knapsack times.
-     * @return the number of hours of stored Knapsack times.
-     */
-    public int getNumKnapsackDeliveryTimes(){
-        return KnapsackDeliveryTimes.size();
-    }
-
-    /**
-     * Returns the number of Knapsack delivery times stored for a specified hour.
-     * @param i the index of the desired delivery time hour.
-     * @return the the number of delivery times stored specified hour's delivery's list.
-     */
-    public int getNumKnapsackDeliveryTimes(int i){
-        return KnapsackDeliveryTimes.get(i).size();
-    }
-
-    /**
-     * Adds a Knapsack delivery time to a specified hour's list.
-     * @param i is the index of the desired hour.
-     * @param b is the delivery time being added.
-     */
-    public void addKnapsackDeliveryTime(int i, double b){
-        KnapsackDeliveryTimes.get(i).add(b);
-    }
-
-    /**
-     * Returns the list containing the lists of each hours FIFO delivery times.
-     * @return the list containing the lists of each hours FIFO delivery times.
-     */
-    public ArrayList<ArrayList<Double>> getFIFODeliveryTimesList(){
+    public DeliveryTimeList getFIFODeliveryTimesList(){
         return FIFODeliveryTimes;
     }
 
-    /**
-     * Returns the list containing the lists of each hours FIFO delivery times.
-     * @return the list containing the lists of each hours FIFO delivery times.
-     */
-    public ArrayList<ArrayList<Double>> getKnapsackDeliveryTimesList(){
+    public DeliveryTimeList getKnapsackDeliveryTimesList(){
         return KnapsackDeliveryTimes;
     }
 

@@ -1,14 +1,12 @@
-package sample;
+package GUI;
 
 import Food.Food;
 
-import Mapping.Waypoint;
 import Simulation.DataTransfer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
@@ -16,9 +14,7 @@ import javafx.scene.text.Text;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Set;
 
 public class FoodPage extends BorderPane {
 
@@ -116,7 +112,8 @@ public class FoodPage extends BorderPane {
         this.setLeft(foodItemEntry);
         this.setRight(foodListContainer);
 
-        initFromFile();
+        // initFromFile will load defaults now
+        initFromFile("");
     }
 
     public void refresh() {
@@ -174,11 +171,13 @@ public class FoodPage extends BorderPane {
         }
     }
 
-    private void initFromFile() {
+    public void initFromFile(String filename) {
 
         try {
+            FileInputStream fis = new FileInputStream(Values.defaultFileName);
+            if(!filename.equals(""))
+                fis = new FileInputStream(filename);
 
-            FileInputStream fis = new FileInputStream(Values.defaultFoodFileName);
             Scanner fileIn = new Scanner(fis);
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();

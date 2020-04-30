@@ -11,6 +11,67 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
+Version 2.2.4 4/29/20
+-Added the addSkippedOrders, shouldContinueSkipping, and skipOrderIfMax methods to the simulation class for code cleanup (Patrick)
+-Added misc improvements to the Knapsack simulation to make it more efficient (Patrick)
+-Removed the OldFIFOSim.txt file (Patrick)
+-Removed the final break statement from the Knapsack simulation (Patrick)
+
+Version 2.2.3 4/28/20
+-Added several methods to the simulation class for code cleanup purposes (Patrick)
+-Promoted the currentTime, tripTime, currentOrder variables in the simulation to be class-wide to
+allow more efficient methods to be created (Patrick)
+-Fixed an issue with the default values in the defaults_universal file (Patrick)
+-Fixed an issue where skipped knapsack orders did not have the correct pickup time (Patrick)
+-Removed variables not declared in the correct spot in the knapsack method (Patrick)
+-Removed the launched variable in the simulations. Just uses canLoad now (Patrick)
+-Removed break statements outside of the skipped orders sections (Patrick)
+-Enabled loading a .dd file - v1 (Josh)
+-Made framework to save rules to .dd file (Josh)
+
+Version 2.2.2 4/27/20
+-initFromFile(String filename) inits from file (Josh)
+-Added "load from ..." method stubs (Josh)
+
+Version 2.2.1 4/24/20
+-Refactored to make loops cleaner (Paul)
+
+Version 2.2.0 4/23/20
+-Created defaults_universal.dd file for default GUI values (Josh)
+-Removed default files and removed their filename strings (Josh)
+-Added more whitespace to defaults_universal.dd (Josh)
+
+Version 2.1.0 4/22/20
+-Added the DeliveryTimeList class to store all of the methods needed for a delivery time list and get them out of the drone class (Patrick)
+-Removed all delivery time related methods from the Drone class except to get its two new lists (Patrick)
+
+Version 2.0.2 4/22/20
+-Added a getNumMeals method to the DataTransfer class (Patrick)
+-Added pulling from the meals list in Simulation. There are no longer any hardcoded values in the Simulation class (Patrick)
+-Changed default meals into new defaults meals (Patrick)
+-Removed the deliverOrderFIFO and deliverOrderKnapsack methods and combined them into one method that does the function of both (Patrick)
+-Graphs looks better and is refactored to add in multiple simulations (Paul)
+
+Version 2.0.1 4/21/20
+-Added the pulling number of orders per a given shift and number of simulations to be run from Data transfer to the simulation class (Patrick)
+-Updated the default number of orders in each shift (Patrick)
+-Changed all hardcoded values in the simulation class to meet the new requirements (Patrick)
+-Renamed the sample package to the GUI package (Patrick)
+-Began cleaning simulation class code, starting with magic numbers and predicate methods (Patrick)
+-Fixed several issues when running more then one instance of Knapsack including an infinite loop when there were only skipped orders, and
+an issue where it would get stuck at times
+-Lengthened hour counter to receive results from number of simulations as well (Paul)
+
+Version 2.0.0 4/15/20
+-Started restyling pages (Not Finished) (Spencer)
+
+
+||SPRINT 2||
+
+
+Version 1.20.2 4/11/20
+-Added a "Simulation is Finished" dialog window after the start button is pressed (Spencer)
+
 Version 1.20.1 4/10/20
 -Added lots of documentation to the Simulation class, Map class, Order class, Drone class, Food class, Meal class, and Waypoint class (Patrick)
 -Added the hasSkipped variable to the Knapsack method as using just skip at some points may have been causing errors (Patrick)
@@ -143,7 +204,7 @@ Version 1.9.0 3/25/20
 
 Version 1.8.0 3/24/20
 -Added the drones current turn around time and its getter and setter methods to the drone class (Patrick)
--Added the default constructor in the Drone class
+-Added the default constructor in the Drone class (Patrick)
 -Implemented the copyOrderQueue method in the simulation class (Patrick)
 -Changed the targetPosition waypoint in drone to a list of target positions calculated with TSP (Patrick)
 -Changed the getTargetPosition method in drone to get the first position within the drone (Patrick)
@@ -213,4 +274,4 @@ Version 1.0.1 3/12/20
 
 Version 1.0.0 3/12/20
 -Added main and controller classes made by default for JavaFX project's (Patrick)
--Added the sample package (Patrick)
+-Added the GUI package (Patrick)
