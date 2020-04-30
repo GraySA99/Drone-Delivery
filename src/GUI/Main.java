@@ -1,4 +1,4 @@
-package sample;
+package GUI;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -17,8 +17,6 @@ import java.util.HashMap;
 
 public class Main extends Application {
 
-    private final Styles myStyles = new Styles();
-    private final Values myVals = new Values();
     private SideMenu sideMenu;
     private HashMap<String, HBox> foodItems;
 

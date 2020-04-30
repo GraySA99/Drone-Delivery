@@ -1,4 +1,4 @@
-package sample;
+package GUI;
 
 import Food.Food;
 import Food.Meal;
@@ -271,7 +271,7 @@ public class MealsPage extends BorderPane {
 
         try {
 
-            FileInputStream fis = new FileInputStream(Values.defaultMealsFileName);
+            FileInputStream fis = new FileInputStream(Values.defaultFileName);
             Scanner fileIn = new Scanner(fis);
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();

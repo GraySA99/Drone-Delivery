@@ -1,4 +1,4 @@
-package sample;
+package GUI;
 
 import Mapping.Waypoint;
 import Simulation.DataTransfer;
@@ -258,7 +258,7 @@ public class MapPage extends BorderPane {
 
         try {
 
-            FileInputStream fis = new FileInputStream(Values.defaultWaypointFileName);
+            FileInputStream fis = new FileInputStream(Values.defaultFileName);
             Scanner fileIn = new Scanner(fis);
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();
