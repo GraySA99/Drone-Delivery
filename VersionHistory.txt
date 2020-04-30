@@ -11,6 +11,12 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
+Version 2.2.4 4/29/20
+-Added the addSkippedOrders, shouldContinueSkipping, and skipOrderIfMax methods to the simulation class for code cleanup (Patrick)
+-Added misc improvements to the Knapsack simulation to make it more efficient (Patrick)
+-Removed the OldFIFOSim.txt file (Patrick)
+-Removed the final break statement from the Knapsack simulation (Patrick)
+
 Version 2.2.3 4/28/20
 -Added several methods to the simulation class for code cleanup purposes (Patrick)
 -Promoted the currentTime, tripTime, currentOrder variables in the simulation to be class-wide to
