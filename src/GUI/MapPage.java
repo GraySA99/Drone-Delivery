@@ -166,6 +166,10 @@ public class MapPage extends BorderPane {
         initFromFile("");
     }
 
+    public ListView<HBox> getDPList() {
+        return DPList;
+    }
+
     public class JavaConnector {
 
         public void sendLatLong(String lat, String lon) {

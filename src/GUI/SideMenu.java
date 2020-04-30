@@ -287,14 +287,24 @@ public class SideMenu extends ToolBar {
                 String foodName = ((Text) Values.foodPage.getFoodList().getItems().get(listItem).getChildren().get(0)).getText();
                 String foodWeight = ((Text) Values.foodPage.getFoodList().getItems().get(listItem).getChildren().get(2)).getText()
                         .replaceAll(" oz.", "");
-                System.out.println("name: " + foodName);
-                System.out.println("weight: " + foodWeight);
                 writer.println(foodName + "&" + foodWeight);
             }
             writer.println("@/Food\n\n");
 
-            // Get map waypoints
+            // Get meals and print them to file
 
+            // Get map waypoints and print them to file
+            writer.println("@Waypoint");
+            for(int i = 0; i < Values.mapPage.getDPList().getItems().size(); i++) {
+                String name = ((Text) Values.mapPage.getDPList().getItems().get(i).getChildren().get(0)).getText();
+                String coords = ((Text) Values.mapPage.getDPList().getItems().get(i).getChildren().get(2)).getText();
+                String lat = coords.substring(1, coords.length() - 1).split(", ")[0];
+                String lon = coords.substring(1, coords.length() - 1).split(", ")[1];
+                writer.println(name + "&" + lat + "," + lon);
+            }
+            writer.println("@/Waypoint\n\n");
+
+            // Get shifts and print them to file
 
 
             writer.close();
