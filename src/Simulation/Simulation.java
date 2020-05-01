@@ -273,8 +273,7 @@ public class Simulation {
     private void runKnapsack(int iteration){
         double calcTime, homeTime; //calcTime and homeTime are used for storing various calculation results
         int max; //tracks the current order in currentOrderQueue
-        boolean skip = false, hasSkipped; //both launched and canLoad are used when the drone is loading to stop it from loading
-        // when needed, skip is used when an order is skipped within the currentOrderQueue and added to the skipped queue
+        boolean skip = false, hasSkipped; // when needed, skip is used when an order is skipped within the currentOrderQueue and added to the skipped queue
 
         while ((ordersInQueueOrDrone() || skippedList.size() > 0)){
             if(drone.getCurrentPosition().isStarting()){

@@ -11,6 +11,11 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
+Version 2.2.5 4/30/20
+-Markers now properly implemented for live Map (Spencer)
+-MapPage fully stylized. (Spencer)
+-Meals and Food pages partially stylized (Spencer)
+
 Version 2.2.4 4/29/20
 -Added the addSkippedOrders, shouldContinueSkipping, and skipOrderIfMax methods to the simulation class for code cleanup (Patrick)
 -Added misc improvements to the Knapsack simulation to make it more efficient (Patrick)
@@ -59,7 +64,7 @@ Version 2.0.1 4/21/20
 -Renamed the sample package to the GUI package (Patrick)
 -Began cleaning simulation class code, starting with magic numbers and predicate methods (Patrick)
 -Fixed several issues when running more then one instance of Knapsack including an infinite loop when there were only skipped orders, and
-an issue where it would get stuck at times
+an issue where it would get stuck at times (Patrick)
 -Lengthened hour counter to receive results from number of simulations as well (Paul)
 
 Version 2.0.0 4/15/20
