@@ -5,6 +5,7 @@ import Food.Food;
 import Simulation.DataTransfer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -20,34 +21,37 @@ public class FoodPage extends BorderPane {
     private ListView<HBox> foodList;
     private TextField foodNameEnt;
     private TextField foodWeightEnt;
+    private StackPane foodListContainer;
+    private VBox foodItemEntry;
+    private Text foodNameLabel, foodWeightLabel;
+    private Button foodAddItemBtn, foodRemoveItemBtn;
+    private HBox foodBtnFrame;
 
     public FoodPage() {
 
         super(); // Super Constructor
-        this.setStyle(Styles.foodPage);
-
-        PageTitle pageTitle = new PageTitle("Food Items");
 
         // Right Side - The List of Entered Food
-        StackPane foodListContainer = new StackPane();
-        foodListContainer.setStyle(Styles.foodListContainer);
+        foodListContainer = new StackPane();
         foodList = new ListView<HBox>();
-        foodList.setStyle(Styles.foodList);
         foodList.getItems().add(new HBox());
         foodListContainer.getChildren().add(foodList);
 
         // Left Side - How the user enters the food
-        GridPane foodItemEntry = new GridPane(); // Container for right side
-        Text foodNameLabel = new Text("Name");
-        Text foodWeightLabel = new Text("Weight");
+        foodItemEntry = new VBox();
+
+        foodNameLabel = new Text("Name: ");
         foodNameEnt = new TextField();
         foodNameEnt.setPromptText("ex. Burger");
+
+        foodWeightLabel = new Text("Weight: ");
         foodWeightEnt = new TextField();
         foodWeightEnt.setPromptText("ex. 10");
-        Button foodAddItemBtn = new Button("Add");
-        Button foodRemoveItemBtn = new Button("Remove");
 
-        // Add food item into List on Left Side
+        foodBtnFrame = new HBox();
+        foodAddItemBtn = new Button("Add");
+        foodRemoveItemBtn = new Button("Remove");
+        foodBtnFrame.getChildren().addAll(new ESHBox(), foodAddItemBtn, new ESHBox(), foodRemoveItemBtn, new ESHBox());
         foodAddItemBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
@@ -84,8 +88,6 @@ public class FoodPage extends BorderPane {
                 foodWeightEnt.clear();
             }
         });
-
-        // Remove food item from list on left side if it exists
         foodRemoveItemBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
@@ -105,34 +107,55 @@ public class FoodPage extends BorderPane {
             }
         });
 
-        // Add Items to Grid
-        foodItemEntry.add(foodNameLabel, 0, 0, 2, 1);
-        foodItemEntry.add(foodNameEnt, 0, 1, 2, 1);
-        foodItemEntry.add(foodWeightLabel, 0, 3, 2, 1);
-        foodItemEntry.add(foodWeightEnt, 0, 4, 2, 1);
-        foodItemEntry.add(foodAddItemBtn, 0, 6, 1, 1);
-        foodItemEntry.add(foodRemoveItemBtn, 1, 6, 1, 1);
+        foodItemEntry.getChildren().addAll(foodNameLabel, foodNameEnt, foodWeightLabel, foodWeightEnt, foodBtnFrame);
 
-        // Set Styles and Sizes
-        foodItemEntry.setStyle(Styles.foodItemEntry);
-        foodNameLabel.setStyle(Styles.foodLabels);
-        foodWeightLabel.setStyle(Styles.foodLabels);
-        foodNameEnt.setPrefSize(50, 10);
-        foodWeightEnt.setPrefSize(50, 10);
-        foodNameEnt.setStyle(Styles.foodEntries);
-        foodWeightEnt.setStyle(Styles.foodEntries);
-
-        // Add Frames to this
         this.setLeft(foodItemEntry);
         this.setRight(foodListContainer);
-        this.setTop(pageTitle);
 
         // initFromFile will load defaults now
         initFromFile("");
     }
 
+
     public ListView<HBox> getFoodList() {
         return foodList;
+
+    public void refresh() {
+
+        double pageWidth = Values.windowWidth * (1 - Values.sideMenuWidthPercent);
+        double pageHeight = Values.windowHeight;
+        this.setMaxWidth(pageWidth);
+        this.setPrefWidth(pageWidth);
+        this.setPrefHeight(pageHeight);
+
+        foodListContainer.setMaxWidth(pageWidth * Values.foodPageFoodListWidthPercent);
+        foodListContainer.setMaxHeight(pageHeight * Values.foodPageFoodListHeightPercent);
+        foodList.setPrefWidth(pageWidth * Values.foodPageFoodListWidthPercent);
+        foodList.setPrefHeight(pageHeight * Values.foodPageFoodListHeightPercent);
+        BorderPane.setAlignment(foodListContainer, Pos.CENTER_LEFT);
+
+        foodItemEntry.setPrefWidth(pageWidth * Values.foodPageFoodItemEntryWidthPercent);
+        foodItemEntry.setPrefHeight(pageHeight * Values.foodPageFoodItemEntryHeightPercent);
+
+        double foodItemEntryWidth = foodItemEntry.getWidth();
+        double foodItemEntryHeight = foodItemEntry.getHeight();
+
+        foodNameEnt.setPrefWidth(foodItemEntryWidth * Values.foodPageFoodNameEntWidthPercent);
+        foodNameEnt.setPrefHeight(foodItemEntryHeight * Values.foodPageFoodNameEntHeightPercent);
+        foodWeightEnt.setPrefWidth(foodItemEntryWidth * Values.foodPageFoodWeightEntWidthPercent);
+        foodWeightEnt.setPrefHeight(foodItemEntryHeight * Values.foodPageFoodWeightEntHeightPercent);
+        foodAddItemBtn.setPrefWidth(foodItemEntryWidth * Values.foodPageBtnWidthPercent);
+        foodAddItemBtn.setPrefHeight(foodItemEntryHeight * Values.foodPageBtnHeightPercent);
+        foodRemoveItemBtn.setPrefWidth(foodItemEntryWidth * Values.foodPageBtnWidthPercent);
+        foodRemoveItemBtn.setPrefHeight(foodItemEntryHeight * Values.foodPageBtnHeightPercent);
+
+        // Styles
+        this.setStyle(Styles.foodPage);
+        foodListContainer.setStyle(Styles.foodPageFoodListContainer);
+        foodNameLabel.setStyle(Styles.foodPageFoodLabel + "-fx-font-size: "
+                + (foodNameEnt.getHeight() * Values.foodPageFontSize) + ";\n");
+        foodWeightLabel.setStyle(Styles.foodPageWeightLabel + "-fx-font-size: "
+                + (foodWeightEnt.getHeight() * Values.foodPageFontSize) + ";\n");
     }
 
     // Function: isNumeric
@@ -200,10 +223,5 @@ public class FoodPage extends BorderPane {
             System.out.println("Problem With File");
             e.printStackTrace();
         }
-    }
-
-    public void resizeWindow() {
-
-        this.setMinWidth(Values.windowWidth * Values.mainPageWidthPercent);
     }
 }
