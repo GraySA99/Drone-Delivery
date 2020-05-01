@@ -1,5 +1,6 @@
 package GUI;
 
+import Simulation.DataTransfer;
 import Simulation.Simulation;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -9,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -19,9 +21,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class SideMenu extends ToolBar {
 
@@ -30,7 +33,7 @@ public class SideMenu extends ToolBar {
     private Integer activeScene;
     private ToolBar secondaryMenu;
     private Button sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn;
-    private Button start, save, results, load;
+    private Button start, save, results, quit;
     private HBox title;
     private Text titleLabel;
     private Button titleBtn;
@@ -63,11 +66,12 @@ public class SideMenu extends ToolBar {
 
         SetupActionButtons();
         SideMenuOnHover(new Button[] {sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn,
-                start, results, save, load});
+                start, results, save, quit});
         SideMenuOnClick(new Button[]{sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn});
 
-        this.getItems().addAll(title, sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn,
-                                new ESVBox(), start, results, save, load);
+        this.getItems().addAll(title, new Separator(),
+                sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn,
+                new ESVBox(), new Separator(), new ESVBox(), start, results, save, quit);
 
         resizeWindow();
     }
@@ -77,7 +81,7 @@ public class SideMenu extends ToolBar {
         start = new Button("Start");
         save = new Button("Save");
         results = new Button("Results");
-        load = new Button("Load");
+        quit = new Button("Quit");
 
         start.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
@@ -108,20 +112,20 @@ public class SideMenu extends ToolBar {
             }
         });
 
-        // TODO: This save button is supposed to save the results of a simulation in a .dd file
+        // Code to handle save action for save button in sidemenu
         save.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 FileChooser fileChooser = new FileChooser();
 
-                //Set extension filter for our .dd files
-                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(".DD files (*.dd)", "*.dd");
-                fileChooser.getExtensionFilters().add(extFilter);
+                //If we want we can set extension filters for text files
+                FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+                fileChooser.getExtensionFilters().add(filter);
 
                 //Show save file dialogue
                 File file = fileChooser.showSaveDialog(Values.primaryStage);
 
                 if(file != null) {
-                    writeSimSettingsToFile(file);
+                    writeTextToFile(getResultsStr(), file);
                 }
             }
         });
@@ -133,24 +137,11 @@ public class SideMenu extends ToolBar {
             }
         });
 
-        // is supposed to put the rules in the specified .dd file into the simulation
-        load.setOnAction(new EventHandler<ActionEvent>() {
+        quit.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                //Platform.exit(); //System.exit(0);
-                FileChooser fileChooser = new FileChooser();
 
-                //Set extension filter for our .dd files
-                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(".DD files (*.dd)", "*.dd");
-                fileChooser.getExtensionFilters().add(extFilter);
-
-                // Show open dialog
-                File openFile = fileChooser.showOpenDialog(Values.primaryStage);
-
-                if(openFile != null) {
-                    String path = openFile.getAbsolutePath();
-                    //System.out.println("PATH: " + path);
-                    setSimSettings(path);
-                }
+                Platform.exit();
+                System.exit(0);
             }
         });
     }
@@ -169,6 +160,9 @@ public class SideMenu extends ToolBar {
         this.setOrientation(Orientation.VERTICAL);
         this.setMinWidth(menuWidth);
 
+        title.setPrefWidth(menuWidth);
+        title.setPrefHeight(menuHeight * Values.sideMenuTitleFrameHeightPercent);
+
         sideMenuMapBtn.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
         sideMenuMapBtn.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
         sideMenuFoodBtn.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
@@ -183,13 +177,14 @@ public class SideMenu extends ToolBar {
         results.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
         save.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
         save.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
-        load.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
-        load.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
+        quit.setPrefWidth(menuWidth * Values.sideMenuBtnWidthPercent);
+        quit.setPrefHeight(menuHeight * Values.sideMenuBtnHeightPercent);
 
         // Buttons
         SideMenuOnHover(new Button[] {sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn,
-                                        start, results, save, load});
+                                        start, results, save, quit});
         SideMenuOnClick(new Button[] {sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn});
+        HamburgerButtonSetup(titleBtn);
     }
 
     public int getActiveScene() {
@@ -220,8 +215,8 @@ public class SideMenu extends ToolBar {
         start = new Button("Start");
         save = new Button("Save");
         results = new Button("Results");
-        load = new Button("Load");
-        Button[] buttons = {start, save, results, load};
+        quit = new Button("Quit");
+        Button[] buttons = {start, save, results, quit};
 
         for (Button b : buttons) {
 
@@ -237,7 +232,7 @@ public class SideMenu extends ToolBar {
                             )
             );
         }
-        secondaryMenu.getItems().addAll(start, save, results, new ESHBox(), load);
+        secondaryMenu.getItems().addAll(start, save, results, new ESHBox(), quit);
 
         for (Pane p : pages) {
 
@@ -251,34 +246,26 @@ public class SideMenu extends ToolBar {
         }
     }
 
-    //Todo - This is supposed to save the rules for the simulation in a .dd file
+    // Pulls the simulation times from Values and returns their string representation
     private String getResultsStr() {
-        /*String ret = "Your Results:\n";
+        String ret = "Your Results:\n";
         ret += "FIFO Avg Time: " + Values.simulation.FIFOaverageTime.toString() + "\n";
         ret += "FIFO Worst Time: " + Values.simulation.FIFOworstTime.toString() + "\n\n";
         ret += "KS Avg Time:" + Values.simulation.KSaverageTime.toString() + "\n";
-        ret += "KS Worst Time: " + Values.simulation.KSworstTime.toString() + "\n\n";*/
+        ret += "KS Worst Time: " + Values.simulation.KSworstTime.toString() + "\n\n";
 
         // Need some way to get shift information
         //DataTransfer.getNumShifts()  DataTransfer.getShifts()
 
-        //return ret;
-        return "YOU STILL NEED TO DEAL WITH ME";
-    }
-
-    private void setSimSettings(String filepath) {
-        Values.foodPage.initFromFile(filepath);
-        Values.mapPage.initFromFile(filepath);
-        Values.mealsPage.initFromFile(filepath);
-        Values.shiftsPage.initFromFile(filepath);
+        return ret;
     }
 
     //Writes str to file file
-    private void writeSimSettingsToFile(File file)
+    private void writeTextToFile(String str, File file)
     {
         try {
             PrintWriter writer = new PrintWriter(file);
-            //writer.println(str);
+            writer.println(str);
             writer.close();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
@@ -300,7 +287,15 @@ public class SideMenu extends ToolBar {
         b.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
-                swapMenues();
+                //swapMenues();
+                Colors.swapToDarkTheme();
+                Values.resizeWindow();
+                Styles.reset();
+                resizeWindow();
+                ((MapPage)pages[Values.mapMenuID-1]).refresh();
+                ((FoodPage)pages[Values.foodMenuID-1]).refresh();
+                ((MealsPage)pages[Values.mealsMenuID-1]).refresh();
+                ((ShiftsPage)pages[Values.shiftsMenuID-1]).resizeWindow();
             }
         });
     }
@@ -336,6 +331,9 @@ public class SideMenu extends ToolBar {
                     }
 
                     Values.rootPage.setCenter(pages[activeScene-1]);
+                    MultiThreadRefresh thread = new MultiThreadRefresh();
+                    thread.start();
+
                     for (Button btn : menues.keySet()) {
 
                         btn.styleProperty().unbind();

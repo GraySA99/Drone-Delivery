@@ -5,6 +5,7 @@ import Simulation.DataTransfer;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -14,8 +15,14 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
+import javax.swing.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class MapPage extends BorderPane {
@@ -23,45 +30,46 @@ public class MapPage extends BorderPane {
     private JSObject javascriptConnector;
     private JavaConnector javaConnector = new JavaConnector();
     private Text currentPointLabel;
+    private Text nameLabel;
     private TextField nameEnt;
     private ListView<HBox> DPList;
+    private StackPane DPListContainer;
+    private StackPane mapViewContainer;
+    private WebView mapView;
+    private VBox mapContainer;
+    private VBox mapInfoContainer;
+    private Button addDP;
+    private Button removeDP;
 
     public MapPage() {
 
         super(); // Super Constructor
-        this.setStyle(Styles.mapPage);
-        PageTitle pageTitle = new PageTitle("Map");
 
         // Right Side - Point List
-        StackPane DPListContainer = new StackPane();
-        DPListContainer.setStyle(Styles.DPListContainer);
+        DPListContainer = new StackPane();
         DPList = new ListView<>();
-        DPList.setStyle(Styles.DPList);
-        DPList.setPrefWidth(600);
         DPList.getItems().add(new HBox());
         DPListContainer.getChildren().add(DPList);
 
         // Left Side - Map
-        VBox pointEntryContainer = new VBox();
-
+        mapContainer = new VBox();
+        mapInfoContainer = new VBox();
         HBox nameContainer = new HBox();
-        Text nameLabel = new Text("Name:");
+        nameLabel = new Text("Waypoint\nName:");
         nameEnt = new TextField();
         nameEnt.setPromptText("ex. Home");
-        nameContainer.getChildren().addAll(new ESHBox(), nameLabel, nameEnt, new ESHBox());
-
+        nameContainer.getChildren().addAll(new ESHBox(), nameLabel, new ESHBox(), nameEnt, new ESHBox());
         HBox currentPointContainer = new HBox();
         currentPointLabel = new Text("(, )");
-        currentPointLabel.setStyle(Styles.currentPointLabel);
         currentPointContainer.getChildren().addAll(
                 new ESHBox(),
                 currentPointLabel,
                 new ESHBox()
         );
-
         HBox addRemoveContainer = new HBox();
-        Button addDP = new Button("Add");
-        Button removeDP = new Button("Remove");
+        addDP = new Button("Add");
+        removeDP = new Button("Remove");
+        mapInfoContainer.getChildren().addAll(nameContainer, currentPointContainer, addRemoveContainer);
 
         addDP.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
@@ -91,16 +99,15 @@ public class MapPage extends BorderPane {
                         currentPointLabel.setText(((Text)frame.getChildren().get(2)).getText());
                     });
 
+                    javascriptConnector.call("addMarker", name, lat, lng);
                     DataTransfer.addWaypoint(new Waypoint(name, lat, lng, DPList.getItems().isEmpty()));
 
-                    javascriptConnector.call("addMarker", name);
                     DPList.getItems().add(frame);
                     nameEnt.setText("");
                     currentPointLabel.setText("(, )");
                 }
             }
         });
-
         removeDP.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
@@ -123,6 +130,8 @@ public class MapPage extends BorderPane {
                     DPList.getItems().add(new HBox());
                 }
 
+                javascriptConnector.call("removeMarker", nameEnt.getText());
+
                 nameEnt.clear();
                 currentPointLabel.setText("(, )");
 
@@ -137,33 +146,90 @@ public class MapPage extends BorderPane {
                 new ESHBox()
         );
 
-        StackPane webContainer = new StackPane();
-        WebView webView = new WebView();
-        final WebEngine webEngine = webView.getEngine();
+        mapView = new WebView();
+        mapViewContainer = new StackPane();
+        mapViewContainer.getChildren().add(mapView);
+        final WebEngine webEngine = mapView.getEngine();
         webEngine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
            if (Worker.State.SUCCEEDED == newValue) {
                JSObject window = (JSObject) webEngine.executeScript("window");
                window.setMember("javaConnector", javaConnector);
 
                javascriptConnector = (JSObject) webEngine.executeScript("getJsConnector()");
+               setMarkers();
            }
 
         });
 
+        mapContainer.getChildren().addAll(mapInfoContainer, mapViewContainer);
 
-
-        pointEntryContainer.getChildren().addAll(nameContainer, currentPointContainer, addRemoveContainer, webContainer);
-        webContainer.getChildren().add(webView);
-        pointEntryContainer.setStyle(Styles.mapWebContainer);
-        webContainer.setStyle(Styles.mapWebView);
-
-        this.setTop(pageTitle);
-        this.setLeft(pointEntryContainer);
+        this.setLeft(mapContainer);
         this.setRight(DPListContainer);
 
-        webEngine.loadContent(Values.googleMapsJavaScript);
-        //will load defaults
-        initFromFile("");
+        try {
+            webEngine.loadContent(new String(Files.readAllBytes(Paths.get(getClass().getResource("googlemap.html").toURI()))));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        initFromFile();
+        refresh();
+    }
+
+    public void refresh() {
+
+        double pageWidth = Values.windowWidth * (1 - Values.sideMenuWidthPercent);
+        double pageHeight = Values.windowHeight;
+        this.setMaxWidth(pageWidth);
+        this.setPrefWidth(pageWidth);
+        this.setPrefHeight(pageHeight);
+
+        mapViewContainer.setPrefWidth(pageWidth * Values.mapPageMapWidthPercent);
+        mapViewContainer.setPrefHeight(pageHeight * Values.mapPageMapHeightPercent);
+
+        mapInfoContainer.setPrefWidth(pageWidth * Values.mapPageMapInfoWidthPercent);
+        mapInfoContainer.setPrefHeight(pageHeight * Values.mapPageMapInfoHeightPercent);
+
+        DPListContainer.setMaxWidth(pageWidth * Values.mapPageDPListWidthPercent);
+        DPListContainer.setMaxHeight(pageHeight * Values.mapPageDPListHeightPercent);
+        DPList.setPrefWidth(pageWidth * Values.mapPageDPListWidthPercent);
+        DPList.setPrefHeight(pageHeight * Values.mapPageDPListHeightPercent);
+        BorderPane.setAlignment(DPListContainer, Pos.CENTER_LEFT);
+
+        // mapInfoContainer Items
+        double mapInfoWidth = mapInfoContainer.getWidth();
+        double mapInfoHeight = mapInfoContainer.getHeight();
+
+        addDP.setPrefWidth(mapInfoWidth * Values.mapPageBtnWidthPercent);
+        addDP.setPrefHeight(mapInfoHeight * Values.mapPageBtnHeightPercent);
+        removeDP.setPrefWidth(mapInfoWidth * Values.mapPageBtnWidthPercent);
+        removeDP.setPrefHeight(mapInfoHeight * Values.mapPageBtnHeightPercent);
+
+        nameEnt.setPrefWidth(mapInfoWidth * Values.mapPageNameWidthPercent);
+        nameEnt.setPrefHeight(mapInfoHeight * Values.mapPageNameHeightPercent);
+
+        // Styles
+        this.setStyle(Styles.mapPage);
+        nameLabel.setStyle(Styles.mapPageNameLabel + "-fx-font-size: "
+                + (mapInfoHeight * Values.mapPageNameFontPercent) + ";\n");
+        currentPointLabel.setStyle(Styles.mapPageCurrentPointLabel + "-fx-font-size: "
+                + (mapInfoHeight * Values.mapPageLatLngFontPercent) + ";\n");
+        mapViewContainer.setStyle(Styles.mapPageMapView);
+        mapInfoContainer.setStyle(Styles.mapPageMapInfoContainer);
+        DPListContainer.setStyle(Styles.mapPageDPListContainer);
+        mapContainer.setStyle(Styles.mapPageMapContainer);
+        BorderPane.setAlignment(mapContainer, Pos.CENTER);
+
+    }
+
+    public void setMarkers() {
+
+        if (DataTransfer.getWaypoints() != null) {
+
+            for (Waypoint wp : DataTransfer.getWaypoints()) {
+
+                javascriptConnector.call("addMarker", wp.getName(), wp.getLatitude(), wp.getLongitude());
+            }
+        }
     }
 
     public class JavaConnector {
@@ -177,16 +243,22 @@ public class MapPage extends BorderPane {
                         Double.parseDouble(lon)));
             }
         }
+
+        public void highlight(String name) {
+
+            Waypoint target = DataTransfer.getWaypoint(name);
+            nameEnt.setText(target.getName());
+            currentPointLabel.setText(String.format("(%.5f, %.5f)",
+                    target.getLatitude(),
+                    target.getLongitude()));
+        }
     }
 
-    public void initFromFile(String filename) {
+    private void initFromFile() {
 
         try {
 
             FileInputStream fis = new FileInputStream(Values.defaultFileName);
-            if(!filename.equals(""))
-                fis = new FileInputStream(filename);
-
             Scanner fileIn = new Scanner(fis);
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();

@@ -5,19 +5,23 @@ public class Colors {
     private static int themeIndex = 0;
 
     private static final String[] primary_colors = {
-        "#ffffff"
+        "#ffffff",
+        "#1b262c"
     };
 
     private static final String[] secondary_colors = {
-        "#e3f6f5"
+        "#e3f6f5",
+        "#0f4c75"
     };
 
     private static final String[] tertiary_colors = {
-        "#272343"
+        "#272343",
+        "#bbe1fa"
     };
 
     private static final String[] quaternary_colors = {
-        "#bae8e8"
+        "#bae8e8",
+        "#3282b8"
     };
 
     private static final String[] contrast_font_colors = {
@@ -40,7 +44,7 @@ public class Colors {
     public static String complimentaryFontColor = complimentary_font_colors[themeIndex];
 
     public static void swapToLightTheme() { themeIndex = 0; changeTheme(); }
-    public static void swapToDarkTheme() { themeIndex = 0; changeTheme(); }
+    public static void swapToDarkTheme() { themeIndex = 1; changeTheme(); }
     private static void changeTheme() {
 
         primaryColor = primary_colors[themeIndex];
