@@ -26,6 +26,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
 public class SideMenu extends ToolBar {
 
     private HashMap<Button, Integer> menues;
@@ -265,7 +268,37 @@ public class SideMenu extends ToolBar {
     {
         try {
             PrintWriter writer = new PrintWriter(file);
+
+            //writer.println(str);
+
+            // Print food information to file
+            writer.println("@Food");
+            for(int listItem = 0; listItem < Values.foodPage.getFoodList().getItems().size(); listItem++) {
+                String foodName = ((Text) Values.foodPage.getFoodList().getItems().get(listItem).getChildren().get(0)).getText();
+                String foodWeight = ((Text) Values.foodPage.getFoodList().getItems().get(listItem).getChildren().get(2)).getText()
+                        .replaceAll(" oz.", "");
+                writer.println(foodName + "&" + foodWeight);
+            }
+            writer.println("@/Food\n\n");
+
+            // Get meals and print them to file
+
+            // Get map waypoints and print them to file
+            writer.println("@Waypoint");
+            for(int i = 0; i < Values.mapPage.getDPList().getItems().size(); i++) {
+                String name = ((Text) Values.mapPage.getDPList().getItems().get(i).getChildren().get(0)).getText();
+                String coords = ((Text) Values.mapPage.getDPList().getItems().get(i).getChildren().get(2)).getText();
+                String lat = coords.substring(1, coords.length() - 1).split(", ")[0];
+                String lon = coords.substring(1, coords.length() - 1).split(", ")[1];
+                writer.println(name + "&" + lat + "," + lon);
+            }
+            writer.println("@/Waypoint\n\n");
+
+            // Get shifts and print them to file
+
+
             writer.println(str);
+
             writer.close();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());

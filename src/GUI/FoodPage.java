@@ -116,6 +116,10 @@ public class FoodPage extends BorderPane {
         initFromFile("");
     }
 
+
+    public ListView<HBox> getFoodList() {
+        return foodList;
+
     public void refresh() {
 
         double pageWidth = Values.windowWidth * (1 - Values.sideMenuWidthPercent);
