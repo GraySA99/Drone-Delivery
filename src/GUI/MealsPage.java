@@ -23,12 +23,12 @@ public class MealsPage extends BorderPane {
     private HashMap<Food, HBox> foodItems;
     private ListView<HBox> mealsList;
     private StackPane mealsListContainer;
-    private VBox mealEntry;
     private Text mealsNameLabel, mealsProbLabel;
     private TextField mealsNameEnt, mealsProbEnt;
     private Button mealsAddItem, mealsRemoveItem;
     private ScrollPane foodScrollFrame;
     private HBox mealsNameFrame, mealsProbFrame, mealsBtnFrame;
+    private VBox mealEntryFrame, foodItemsFrame;
 
     public MealsPage() {
 
@@ -42,13 +42,15 @@ public class MealsPage extends BorderPane {
         mealsList.getItems().add(new HBox());
         mealsListContainer.getChildren().add(mealsList);
 
-        // Left Side
-        mealEntry = new VBox();
+        // Center
+        foodItemsFrame = new VBox();
         foodFrame = new VBox();
         foodScrollFrame = new ScrollPane();
         foodScrollFrame.setContent(foodFrame);
         foodScrollFrame.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
+        // Left Side
+        mealEntryFrame = new VBox();
         mealsNameFrame = new HBox();
         mealsNameLabel = new Text("Name: ");
         mealsNameEnt = new TextField();
@@ -150,9 +152,10 @@ public class MealsPage extends BorderPane {
             }
         });
 
-        mealEntry.getChildren().addAll(mealsNameFrame, mealsProbFrame, foodScrollFrame, mealsBtnFrame);
+        mealEntryFrame.getChildren().addAll(mealsNameFrame, mealsProbFrame, mealsBtnFrame);
 
-        this.setLeft(mealEntry);
+        this.setLeft(mealEntryFrame);
+        this.setCenter(foodScrollFrame);
         this.setRight(mealsListContainer);
 
         initFromFile();
@@ -173,46 +176,19 @@ public class MealsPage extends BorderPane {
         mealsList.setPrefHeight(pageHeight * Values.mealsPageListHeightPercent);
         BorderPane.setAlignment(mealsListContainer, Pos.CENTER_LEFT);
 
-        mealEntry.setPrefWidth(pageWidth * Values.mealsPageMealEntryWidthPercent);
-        mealEntry.setPrefHeight(pageHeight * Values.mealsPageMealEntryHeightPercent);
-        BorderPane.setAlignment(mealEntry, Pos.CENTER);
+        mealEntryFrame.setPrefWidth(pageWidth * Values.mealsPageEntryFrameWidthPercent);
+        mealEntryFrame.setMaxHeight(pageHeight * Values.mealsPageEntryFrameHeightPercent);
+        BorderPane.setAlignment(mealEntryFrame, Pos.CENTER_RIGHT);
 
-        // Meal Entry Stuff
-        double mealEntryWidth = pageWidth * Values.mealsPageMealEntryWidthPercent;
-        double mealEntryHeight = pageHeight * Values.mealsPageMealEntryHeightPercent;
+        foodScrollFrame.setMaxWidth(pageWidth * Values.mealsPageScrollFrameWidthPercent);
+        foodScrollFrame.setMaxHeight(pageHeight * Values.mealsPageScrollFrameHeightPercent);
+        BorderPane.setAlignment(foodScrollFrame, Pos.CENTER_LEFT);
 
-        mealsNameFrame.setPrefWidth(mealEntryWidth * Values.mealsPageNameFrameWidthPercent);
-        mealsNameFrame.setPrefHeight(mealEntryHeight * Values.mealsPageNameFrameHeightPercent);
-
-        mealsProbFrame.setPrefWidth(mealEntryWidth * Values.mealsPageProbFrameWidthPercent);
-        mealsProbFrame.setPrefHeight(mealEntryHeight * Values.mealsPageProbFrameHeightPercent);
-
-        foodScrollFrame.setPrefWidth(mealEntryWidth * Values.mealsPageFoodScrollFrameWidthPercent);
-        foodScrollFrame.setPrefHeight(mealEntryHeight * Values.mealsPageFoodScrollFrameHeightPercent);
-
-        mealsBtnFrame.setPrefWidth(mealEntryWidth * Values.mealsPageBtnFrameWidthPercent);
-        mealsBtnFrame.setPrefHeight(mealEntryHeight * Values.mealsPageBtnFrameHeightPercent);
-
-        // Food Frame
-        VBox.setVgrow(foodFrame, Priority.ALWAYS);
-        foodFrame.setPrefWidth(foodScrollFrame.getWidth() * Values.mealsPageFoodFrameWidthPercent);
-        foodFrame.setPrefHeight(foodScrollFrame.getHeight() * Values.mealsPageFoodFrameHeightPercent);
-        for (Node n : foodFrame.getChildren()) {
-
-            HBox item = ((HBox)n);
-            item.setStyle(Styles.mealsPageFoodItem);
-            item.setPrefWidth(foodFrame.getWidth() * Values.mealsPageFoodItemWidthPercent);
-            item.setPrefHeight(foodFrame.getHeight() * Values.mealsPageFoodItemHeightPercent);
-        }
 
         // Styles
         this.setStyle(Styles.mealsPage);
         mealsListContainer.setStyle(Styles.mealsPageMealsListContainer);
-        mealsNameLabel.setStyle(Styles.mealsPageMealsNameLabel + "-fx-font-size: "
-                + (mealEntryHeight * Values.mealsPageMealsLabelFontPercent));
-        mealsProbLabel.setStyle(Styles.mealsPageMealsProbLabel + "-fx-font-size: "
-                + (mealEntryHeight * Values.mealsPageMealsLabelFontPercent));
-        mealEntry.setStyle(Styles.mealsPageMealEntry);
+        mealEntryFrame.setStyle(Styles.mealsPageEntryFrame);
 
     }
 

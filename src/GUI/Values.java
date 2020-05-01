@@ -56,19 +56,11 @@ public class Values {
     // Meals Page
     public static final double mealsPageListWidthPercent = 0.35;
     public static final double mealsPageListHeightPercent = 0.75;
-    public static final double mealsPageMealEntryWidthPercent = 0.45;
-    public static final double mealsPageMealEntryHeightPercent = 0.85;
+    public static final double mealsPageEntryFrameWidthPercent = 0.25;
+    public static final double mealsPageEntryFrameHeightPercent = 0.35;
+    public static final double mealsPageScrollFrameWidthPercent = 0.25;
+    public static final double mealsPageScrollFrameHeightPercent = 0.55;
     public static final double mealsPageMealsLabelFontPercent = 0.07;
-    public static final double mealsPageBtnWidthPercent = 0.25;
-    public static final double mealsPageBtnHeightPercent = 0.15;
-    public static final double mealsPageNameFrameWidthPercent = 0.90;
-    public static final double mealsPageNameFrameHeightPercent = 0.15;
-    public static final double mealsPageProbFrameWidthPercent = 0.90;
-    public static final double mealsPageProbFrameHeightPercent = 0.15;
-    public static final double mealsPageFoodScrollFrameWidthPercent = 0.90;
-    public static final double mealsPageFoodScrollFrameHeightPercent = 0.60;
-    public static final double mealsPageBtnFrameWidthPercent = 0.90;
-    public static final double mealsPageBtnFrameHeightPercent = 0.15;
     public static final double mealsPageFoodFrameWidthPercent = 1.0;
     public static final double mealsPageFoodFrameHeightPercent = 1.0;
     public static final double mealsPageFoodItemWidthPercent = 1.0;

@@ -37,13 +37,9 @@ public class Styles {
     public static String mealsPage = ""
             + "-fx-background-color: " + Colors.secondaryColor + ";\n";
     public static String mealsPageMealsListContainer = ""
-            + "-fx-padding: 50px 50px 50px 50px;\n";
-    public static String mealsPageMealsNameLabel = "";
-    public static String mealsPageMealsProbLabel = "";
-    public static String mealsPageMealEntry = ""
-            + "-fx-padding: 50px 0px 0px 50px;\n";
-    public static String mealsPageFoodItem = ""
-            + "-fx-border-style: hidden hidden solid hidden;\n";
+            + "-fx-padding: 0px 50px 0px 0px;\n";
+    public static String mealsPageEntryFrame = ""
+            + "-fx-padding: 0px 75px 0px 75px;\n";
 
     // Menu
     public static String secondaryMenuBtn = ""
@@ -114,14 +110,6 @@ public class Styles {
         // Meals Page
         mealsPage = ""
                 + "-fx-background-color: " + Colors.secondaryColor + ";\n";
-        mealsPageMealsListContainer = ""
-                + "-fx-padding: 50px 50px 50px 50px;\n";
-        mealsPageMealsNameLabel = "";
-        mealsPageMealsProbLabel = "";
-        mealsPageMealEntry = ""
-                + "-fx-padding: 50px 0px 0px 50px;\n";
-        mealsPageFoodItem = ""
-                + "-fx-border-style: hidden hidden solid hidden;\n";
 
         // Side Menu
         secondaryMenuBtn = ""
