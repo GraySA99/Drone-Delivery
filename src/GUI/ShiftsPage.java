@@ -1,8 +1,10 @@
 package GUI;
 
+import Mapping.Waypoint;
 import Simulation.DataTransfer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
@@ -27,8 +29,6 @@ public class ShiftsPage extends BorderPane {
         StackPane hoursListContainer = new StackPane();
         hoursList = new ListView<>();
         hoursList.setPrefWidth(550);
-        hoursListContainer.setStyle(Styles.shiftsListContainer);
-        hoursList.setStyle(Styles.shiftsList);
         hoursListContainer.getChildren().add(hoursList);
 
         // Left Side
@@ -61,9 +61,8 @@ public class ShiftsPage extends BorderPane {
         this.setRight(hoursListContainer);
         this.setLeft(entryContainer);
         this.setTop(pageTitle);
-        this.setStyle(Styles.shiftsPage);
-        //this change lets initFromFile init from defaults
-        initFromFile("");
+
+        initFromFile();
     }
 
     public void reload(int newNumHours, int oldNumHours) {
@@ -128,15 +127,12 @@ public class ShiftsPage extends BorderPane {
             }
         }
     }
-    // change this to private again??
-    public void initFromFile(String filename) {
+
+    private void initFromFile() {
 
         try {
 
             FileInputStream fis = new FileInputStream(Values.defaultFileName);
-            if(!filename.equals(""))
-                fis = new FileInputStream(filename);
-
             Scanner fileIn = new Scanner(fis);
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();
