@@ -284,6 +284,7 @@ public class MealsPage extends BorderPane {
 
             fileLine = fileIn.nextLine();
             mealsList.getItems().clear();
+            foodFrame.getChildren().clear();
 
             String name = "";
             String prob = "";
