@@ -320,7 +320,13 @@ public class SideMenu extends ToolBar {
             writer.println("@/Waypoint\n\n");
 
             // Get shifts and print them to file
-            //Use DataTransfer and do it over again :) wasn't hard
+            writer.println("@Shifts");
+            int numShifts = DataTransfer.getNumShifts();
+            int numSims = DataTransfer.getNumSimulations();
+            for(int i = 1; i <= numShifts; i++) {
+                writer.println("*" + i + "&" + DataTransfer.getShift(i));
+            }
+            writer.println("@/Shifts\n\n");
 
 
             writer.close();
