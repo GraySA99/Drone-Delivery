@@ -1,6 +1,9 @@
 package GUI;
 
+import Food.Food;
+import Food.Meal;
 import Simulation.Simulation;
+import Simulation.DataTransfer;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
@@ -292,7 +295,18 @@ public class SideMenu extends ToolBar {
             writer.println("@/Food\n\n");
 
             // Get meals and print them to file
-            //Use DataTransfer and do it over again :)
+            writer.println("@Meals");
+            for(int i = 0; i < DataTransfer.getNumMeals(); i++) {
+                Meal tempMeal = DataTransfer.getMeal(i);
+                String name = tempMeal.getName();
+                double prob = tempMeal.getProbability();
+                writer.println(name + "&" + prob);
+
+                for(Food food : tempMeal.getFoodItems()) {
+                    writer.println("*" + food.getName() + "&" + tempMeal.getFoodItemQty(food));
+                }
+            }
+            writer.println("@/Meals\n\n");
 
             // Get map waypoints and print them to file
             writer.println("@Waypoint");
