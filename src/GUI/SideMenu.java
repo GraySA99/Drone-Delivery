@@ -292,6 +292,7 @@ public class SideMenu extends ToolBar {
             writer.println("@/Food\n\n");
 
             // Get meals and print them to file
+            //Use DataTransfer and do it over again :)
 
             // Get map waypoints and print them to file
             writer.println("@Waypoint");
@@ -305,6 +306,7 @@ public class SideMenu extends ToolBar {
             writer.println("@/Waypoint\n\n");
 
             // Get shifts and print them to file
+            //Use DataTransfer and do it over again :) wasn't hard
 
 
             writer.close();
