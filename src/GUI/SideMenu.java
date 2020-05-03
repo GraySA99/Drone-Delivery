@@ -255,21 +255,7 @@ public class SideMenu extends ToolBar {
         }
     }
 
-    //Todo - This is supposed to save the rules for the simulation in a .dd file
-    private String getResultsStr() {
-        /*String ret = "Your Results:\n";
-        ret += "FIFO Avg Time: " + Values.simulation.FIFOaverageTime.toString() + "\n";
-        ret += "FIFO Worst Time: " + Values.simulation.FIFOworstTime.toString() + "\n\n";
-        ret += "KS Avg Time:" + Values.simulation.KSaverageTime.toString() + "\n";
-        ret += "KS Worst Time: " + Values.simulation.KSworstTime.toString() + "\n\n";*/
-
-        // Need some way to get shift information
-        //DataTransfer.getNumShifts()  DataTransfer.getShifts()
-
-        //return ret;
-        return "YOU STILL NEED TO DEAL WITH ME";
-    }
-
+    //Sets the simulation settings through .dd file the user chooses
     private void setSimSettings(String filepath) {
         Values.foodPage.initFromFile(filepath);
         Values.mapPage.initFromFile(filepath);
@@ -277,7 +263,7 @@ public class SideMenu extends ToolBar {
         Values.shiftsPage.initFromFile(filepath);
     }
 
-    //Writes str to file file
+    //Writes str to .dd file "file"
     private void writeSimSettingsToFile(File file)
     {
         try {
@@ -323,11 +309,11 @@ public class SideMenu extends ToolBar {
             writer.println("@Shifts");
             int numShifts = DataTransfer.getNumShifts();
             int numSims = DataTransfer.getNumSimulations();
+            writer.println(numShifts + "&" + numSims);
             for(int i = 1; i <= numShifts; i++) {
                 writer.println("*" + i + "&" + DataTransfer.getShift(i));
             }
             writer.println("@/Shifts\n\n");
-
 
             writer.close();
         } catch (IOException ex) {

@@ -1,5 +1,7 @@
 package GUI;
 
+import Food.Food;
+import Food.Meal;
 import Simulation.DataTransfer;
 import Simulation.Drone;
 import Simulation.Simulation;
@@ -67,17 +69,65 @@ public class ResultsPage extends VBox {
     }
 
     //Methods for saving to a file
+    //Gets the
     private String getResultsStr() {
-        String ret = "Your Results:\n";
-        ret += "FIFO Avg Time: " + Values.simulation.FIFOaverageTime.toString() + "\n";
-        ret += "FIFO Worst Time: " + Values.simulation.FIFOworstTime.toString() + "\n\n";
-        ret += "KS Avg Time: " + Values.simulation.KSaverageTime.toString() + "\n";
-        ret += "KS Worst Time: " + Values.simulation.KSworstTime.toString() + "\n\n";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Your Results:\n");
+        sb.append("FIFO Avg Time: " + Values.simulation.FIFOaverageTime.toString() + "\n");
+        sb.append("FIFO Worst Time: " + Values.simulation.FIFOworstTime.toString() + "\n\n");
+        sb.append("KS Avg Time: " + Values.simulation.KSaverageTime.toString() + "\n");
+        sb.append("KS Worst Time: " + Values.simulation.KSworstTime.toString() + "\n\n\n");
 
         // Need some way to get shift information
         //DataTransfer.getNumShifts()  DataTransfer.getShifts()
+        sb.append("====== Rules used in this simulation ======\n\n");
 
-        return ret;
+        // Add food information
+        sb.append("Food Item Information: (Name -> Weight in oz.)\n");
+        for(int listItem = 0; listItem < Values.foodPage.getFoodList().getItems().size(); listItem++) {
+            String foodName = ((Text) Values.foodPage.getFoodList().getItems().get(listItem).getChildren().get(0)).getText();
+            String foodWeight = ((Text) Values.foodPage.getFoodList().getItems().get(listItem).getChildren().get(2)).getText()
+                    .replaceAll(" oz.", "");
+            sb.append(foodName + " -> " + foodWeight + "\n");
+        }
+        sb.append("\n\n");
+
+        // Add meals information
+        sb.append("Meals Information:\nFormat:\nMeal Name -> Probability\n-Food Name: Food quantity\n-...\n\n");
+        for(int i = 0; i < DataTransfer.getNumMeals(); i++) {
+            Meal tempMeal = DataTransfer.getMeal(i);
+            String name = tempMeal.getName();
+            double prob = tempMeal.getProbability();
+            sb.append(name + " -> " + prob + "%\n");
+
+            for(Food food : tempMeal.getFoodItems()) {
+                sb.append("-" + food.getName() + ": " + tempMeal.getFoodItemQty(food) + "\n");
+            }
+        }
+        sb.append("\n\n");
+
+        // Add waypoints/Delivery Point information
+        sb.append("Delivery Point information: (Point Name >>  Latitude, Longitude)\n");
+        for(int i = 0; i < Values.mapPage.getDPList().getItems().size(); i++) {
+            String name = ((Text) Values.mapPage.getDPList().getItems().get(i).getChildren().get(0)).getText();
+            String coords = ((Text) Values.mapPage.getDPList().getItems().get(i).getChildren().get(2)).getText();
+            String lat = coords.substring(1, coords.length() - 1).split(", ")[0];
+            String lon = coords.substring(1, coords.length() - 1).split(", ")[1];
+            sb.append(name + " >>  " + lat + ", " + lon + "\n");
+        }
+        sb.append("\n\n");
+
+        // Add Shifts Information
+        sb.append("Shifts Information:\n");
+        int numShifts = DataTransfer.getNumShifts();
+        int numSims = DataTransfer.getNumSimulations();
+        sb.append("Number of Shifts: " + numShifts + "\nNumber of Simulations ran: " + numSims + "\n");
+        for(int i = 1; i <= numShifts; i++) {
+            sb.append("Shift " + i + ": " + DataTransfer.getShift(i) + " orders\n");
+        }
+        sb.append("\n\n");
+
+        return sb.toString();
     }
     // writes string str to file file
     private void writeTextToFile(String str, File file)
