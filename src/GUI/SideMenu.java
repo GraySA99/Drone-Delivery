@@ -323,6 +323,7 @@ public class SideMenu extends ToolBar {
             writer.println("@Shifts");
             int numShifts = DataTransfer.getNumShifts();
             int numSims = DataTransfer.getNumSimulations();
+            writer.println(numShifts + "&" + numSims);
             for(int i = 1; i <= numShifts; i++) {
                 writer.println("*" + i + "&" + DataTransfer.getShift(i));
             }
