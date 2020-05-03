@@ -62,7 +62,7 @@ public class ShiftsPage extends BorderPane {
         this.setLeft(entryContainer);
         this.setTop(pageTitle);
 
-        initFromFile();
+        initFromFile("");
     }
 
     public void reload(int newNumHours, int oldNumHours) {
@@ -128,11 +128,14 @@ public class ShiftsPage extends BorderPane {
         }
     }
 
-    private void initFromFile() {
+    public void initFromFile(String filename) {
 
         try {
 
             FileInputStream fis = new FileInputStream(Values.defaultFileName);
+            if(!filename.equals(""))
+                fis = new FileInputStream(filename);
+
             Scanner fileIn = new Scanner(fis);
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();

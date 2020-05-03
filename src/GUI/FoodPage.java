@@ -119,6 +119,7 @@ public class FoodPage extends BorderPane {
 
     public ListView<HBox> getFoodList() {
         return foodList;
+    }
 
     public void refresh() {
 
