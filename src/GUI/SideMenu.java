@@ -275,7 +275,9 @@ public class SideMenu extends ToolBar {
             for(int listItem = 0; listItem < Values.foodPage.getFoodList().getItems().size(); listItem++) {
                 String foodName = ((Text) Values.foodPage.getFoodList().getItems().get(listItem).getChildren().get(0)).getText();
                 String foodWeight = ((Text) Values.foodPage.getFoodList().getItems().get(listItem).getChildren().get(2)).getText()
-                        .replaceAll(" oz.", "");
+                        .replaceAll(" oz.", ""); // in oz
+                Double weight = Double.valueOf(foodWeight) / 16; // converts to lbs
+                foodWeight = weight.toString(); // in lbs
                 writer.println(foodName + "&" + foodWeight);
             }
             writer.println("@/Food\n\n");
