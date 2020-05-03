@@ -83,11 +83,10 @@ public class ResultsPage extends VBox {
         sb.append("====== Rules used in this simulation ======\n\n");
 
         // Add food information
-        sb.append("Food Item Information: (Name -> Weight in oz.)\n");
+        sb.append("Food Item Information: (Name -> Weight)\n");
         for(int listItem = 0; listItem < Values.foodPage.getFoodList().getItems().size(); listItem++) {
             String foodName = ((Text) Values.foodPage.getFoodList().getItems().get(listItem).getChildren().get(0)).getText();
-            String foodWeight = ((Text) Values.foodPage.getFoodList().getItems().get(listItem).getChildren().get(2)).getText()
-                    .replaceAll(" oz.", "");
+            String foodWeight = ((Text) Values.foodPage.getFoodList().getItems().get(listItem).getChildren().get(2)).getText();
             sb.append(foodName + " -> " + foodWeight + "\n");
         }
         sb.append("\n\n");
