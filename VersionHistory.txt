@@ -11,6 +11,10 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
+Version 2.2.7 5/3/20
+-fixed bug in saving shifts (Josh)
+-user can save sim rules with results (Josh)
+
 Version 2.2.6 5/2/20
 -Hopefully removed all bad stuff (Josh)
 -Added comments (Josh)

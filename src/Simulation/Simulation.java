@@ -25,6 +25,7 @@ public class Simulation {
     private Map simMap; //stores the map used by the simulation. Waypoints imported from DataTransfer and map created in constructor
     public Drone drone; //the drone used throughout all of a simulations in a specified number of iterations
 
+    //variables manipulated a lot by each simulation created here to allow for more shared code between them
     private double currentTime, tripTime;
     private int currentOrder;
     private boolean canLoad;
@@ -95,22 +96,20 @@ public class Simulation {
             }
             setInitialSimValues();
             runKnapsack(currentIteration);
-        }
 
-        //used for debugging to view delivery times
-        /*for(int i = 0; i < drone.getNumFIFODeliveryTimes(); i++){
-            for(int j = 0; j < drone.getNumFIFODeliveryTimes(i); j++){
-                System.out.print(drone.getFIFODeliveryTime(i, j) + " ");
+            /*int sumF = 0, sumK = 0, j = 0;
+            System.out.println("Simulation " + currentIteration + ":");
+            for(int i = 4 * currentIteration; i < numShifts * (currentIteration + 1); i++){
+                for(int k = 0; k < ordersPerHour[j]; k++){
+                    sumF += drone.getFIFODeliveryTimesList().getDeliveryTime(i, k);
+                    System.out.println("FIFO: " +  drone.getFIFODeliveryTimesList().getDeliveryTime(i, k));
+                    sumK += drone.getKnapsackDeliveryTimesList().getDeliveryTime(i, k);
+                    System.out.println("Knapsack: " +  drone.getKnapsackDeliveryTimesList().getDeliveryTime(i, k));
+                }
+                j++;
             }
-            System.out.print("\n");
+            System.out.println("FIFO total: " + sumF + "\tKnapsack total: " + sumK);*/
         }
-        System.out.println("\n");
-        for(int i = 0; i < drone.getNumKnapsackDeliveryTimes(); i++){
-            for(int j = 0; j < drone.getNumKnapsackDeliveryTimes(i); j++){
-                System.out.print(drone.getKnapsackDeliveryTime(i, j) + " ");
-            }
-            System.out.print("\n");
-        }*/
     }
 
     private void setInitialSimValues(){
@@ -421,7 +420,7 @@ public class Simulation {
      * @return the time for the drone to travel between the two Waypoints in minutes.
      */
     private double calculateTime(Waypoint a, Waypoint b){
-        return Math.round((((distance(a, b) * 1) / (drone.getSpeed() * 1609.34)) / 60 + .5) * 100.00) / 100.00;
+        return (((distance(a, b) * 1) / (drone.getSpeed() * 1609.34)) / 60 + .5);
     }
 
     /**
