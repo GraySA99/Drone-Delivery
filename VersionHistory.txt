@@ -14,6 +14,8 @@ Version Version# Month/Day/Year
 Version 2.2.7 5/3/20
 -fixed bug in saving shifts (Josh)
 -user can save sim rules with results (Josh)
+-Changed weights to oz in defaults_universal.dd (Josh)
+-Fixed issue with lbs/oz (Josh)
 
 Version 2.2.6 5/2/20
 -Hopefully removed all bad stuff (Josh)
