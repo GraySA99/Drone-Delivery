@@ -2,14 +2,11 @@ package GUI;
 
 public class Styles {
 
+    // Results Page
     public static String resultsDataFrame = "";
-
     public static String resultsDeliveryTime = "";
-
     public static String resultsDeliveryTypeLabel = "";
-
     public static String FIFODataFrame = "";
-
     public static String resultsButtonFrame = "";
 
     // Map Page
