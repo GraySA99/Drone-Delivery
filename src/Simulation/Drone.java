@@ -157,10 +157,18 @@ public class Drone {
         return speed;
     }
 
+    /**
+     * For getting the drones list of FIFO delivery times.
+     * @return the list of FIFO Delivery times
+     */
     public DeliveryTimeList getFIFODeliveryTimesList(){
         return FIFODeliveryTimes;
     }
 
+    /**
+     * For getting the drones list of Knapsack delivery times.
+     * @return the list of Knapsack Delivery times
+     */
     public DeliveryTimeList getKnapsackDeliveryTimesList(){
         return KnapsackDeliveryTimes;
     }
