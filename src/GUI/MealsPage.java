@@ -158,7 +158,7 @@ public class MealsPage extends BorderPane {
         this.setCenter(foodScrollFrame);
         this.setRight(mealsListContainer);
 
-        initFromFile();
+        initFromFile("");
         refresh();
     }
 
@@ -243,11 +243,14 @@ public class MealsPage extends BorderPane {
         }
     }
 
-    private void initFromFile() {
+    public void initFromFile(String filename) {
 
         try {
 
             FileInputStream fis = new FileInputStream(Values.defaultFileName);
+            if(!filename.equals(""))
+                fis = new FileInputStream(filename);
+
             Scanner fileIn = new Scanner(fis);
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();
@@ -257,6 +260,7 @@ public class MealsPage extends BorderPane {
 
             fileLine = fileIn.nextLine();
             mealsList.getItems().clear();
+            foodFrame.getChildren().clear();
 
             String name = "";
             String prob = "";

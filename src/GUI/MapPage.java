@@ -171,7 +171,7 @@ public class MapPage extends BorderPane {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        initFromFile();
+        initFromFile("");
         refresh();
     }
 
@@ -232,6 +232,10 @@ public class MapPage extends BorderPane {
         }
     }
 
+    public ListView<HBox> getDPList() {
+        return DPList;
+    }
+
     public class JavaConnector {
 
         public void sendLatLong(String lat, String lon) {
@@ -254,11 +258,14 @@ public class MapPage extends BorderPane {
         }
     }
 
-    private void initFromFile() {
+    public void initFromFile(String filename) {
 
         try {
 
             FileInputStream fis = new FileInputStream(Values.defaultFileName);
+            if(!filename.equals(""))
+                fis = new FileInputStream(filename);
+
             Scanner fileIn = new Scanner(fis);
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();

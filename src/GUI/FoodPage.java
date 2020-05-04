@@ -116,6 +116,11 @@ public class FoodPage extends BorderPane {
         initFromFile("");
     }
 
+
+    public ListView<HBox> getFoodList() {
+        return foodList;
+    }
+
     public void refresh() {
 
         double pageWidth = Values.windowWidth * (1 - Values.sideMenuWidthPercent);
@@ -192,11 +197,12 @@ public class FoodPage extends BorderPane {
                 if (fileLine.strip().equals("@/Food")) { break; }
 
                 String name = fileLine.strip().split("&")[0];
-                String weight = fileLine.strip().split("&")[1];
+                String weight = fileLine.strip().split("&")[1]; // in lbs
+                Double weightInOz = Double.parseDouble(weight) * 16; // in oz
 
                 HBox foodItemFrame = new HBox();
                 Text foodItemName = new Text(name);
-                Text foodItemWeight = new Text(weight + " oz.");
+                Text foodItemWeight = new Text(weightInOz.toString() + " oz.");
                 foodItemFrame.getChildren().addAll(foodItemName, new ESHBox(), foodItemWeight);
                 foodItemFrame.setOnMouseClicked(evt -> {
 
@@ -210,6 +216,7 @@ public class FoodPage extends BorderPane {
 
                 foodList.getItems().add(foodItemFrame);
 
+                //added to datatransfer in pounds
                 DataTransfer.addFood(new Food(name, Double.parseDouble(weight)));
 
                 fileLine = fileIn.nextLine();

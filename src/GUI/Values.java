@@ -12,10 +12,10 @@ public class Values {
     public static ShiftsPage shiftsPage;
 
     public static final String defaultFileName = "defaults_universal.dd";
-    public static final String defaultShiftsFileName = "DefaultShifts.txt";
-    public static final String defaultMealsFileName = "DefaultMeals.txt";
-    public static final String defaultFoodFileName = "DefaultFoodItems.txt";
-    public static final String defaultWaypointFileName = "DefaultWaypoints.txt";
+    //public static final String defaultShiftsFileName = "DefaultShifts.txt";
+    //public static final String defaultMealsFileName = "DefaultMeals.txt";
+    //public static final String defaultFoodFileName = "DefaultFoodItems.txt";
+    //public static final String defaultWaypointFileName = "DefaultWaypoints.txt";
 
     public static Simulation simulation;
 
