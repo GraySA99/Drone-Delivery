@@ -305,11 +305,6 @@ public class MapPage extends BorderPane {
             e.printStackTrace();
         }
     }
-
-    public void resizeWindow() {
-
-        this.setMinWidth(Values.windowWidth * Values.mainPageWidthPercent);
-    }
 }
 
 

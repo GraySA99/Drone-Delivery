@@ -12,6 +12,14 @@ public class Styles {
 
     public static String resultsButtonFrame = "";
 
+    // Shifts Page
+    public static String shiftsPage = ""
+            + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+    public static String shiftsPageHoursList = ""
+            + "-fx-padding: 0px 75px 0px 0px;\n";
+    public static String shiftsPageEntryContainer = ""
+            + "-fx-padding: 0px 0px 0px 150px;\n";
+
     // Map Page
     public static String mapPageCurrentPointLabel = "";
     public static String mapPageNameLabel = "";
@@ -27,11 +35,15 @@ public class Styles {
 
     // Food Page
     public static String foodPageFoodListContainer = ""
-            + "-fx-padding: 0px 50px 0px 0px;\n";
+            + "-fx-padding: 0px 75px 0px 0px;\n";
     public static String foodPageFoodLabel = "";
     public static String foodPageWeightLabel = "";
     public static String foodPage = ""
-            + "fx-background-color: " + Colors.secondaryColor + ";\n";
+            + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+    public static String foodPageFoodItemEntry = ""
+            + "-fx-padding: 0px 0px 0px 150px;\n";
+    public static String foodPageButton = ""
+            + "-fx-padding: 75px 0px 0px 0px;\n";
 
     // Meals Page
     public static String mealsPage = ""
@@ -40,6 +52,14 @@ public class Styles {
             + "-fx-padding: 0px 50px 0px 0px;\n";
     public static String mealsPageEntryFrame = ""
             + "-fx-padding: 0px 75px 0px 75px;\n";
+    public static String mealsPageButtonFrame = ""
+            + "-fx-padding: 10px 0px 0px 0px;\n";
+    public static String mealsPageEntryBox = ""
+            + "-fx-padding: 0px 0px 10px 0px;\n";
+    public static String mealsPageFoodItemFrame = ""
+            + "-fx-border-style: hidden hidden solid hidden;\n";
+    public static String test = ""
+            + "-fx-background-color: " + Colors.primaryColor + ";\n";
 
     // Menu
     public static String secondaryMenuBtn = ""
@@ -89,10 +109,8 @@ public class Styles {
         resultsButtonFrame = "";
 
         // Food Page
-        foodPageFoodListContainer = ""
-                + "-fx-padding: 0px 50px 0px 0px;\n";
         foodPage = ""
-                + "fx-background-color: " + Colors.secondaryColor + ";\n";
+                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
 
         // Map Page
         mapPageCurrentPointLabel = "";

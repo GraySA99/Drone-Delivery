@@ -24,7 +24,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         // Setup
-        //Parent root1 = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Team Azure Drones");
         BorderPane root = new BorderPane();
         MapPage mapPage = new MapPage();
@@ -56,8 +55,12 @@ public class Main extends Application {
 
         primaryStage.show();
         refresh();
-        MultiThreadRefresh obj = new MultiThreadRefresh();
-        obj.start();
+        MultiThreadRefresh MTR = new MultiThreadRefresh();
+        MTR.start();
+
+        try {
+            MTR.join();
+        } catch (InterruptedException ie) {};
 
         primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
             refresh();
@@ -76,7 +79,7 @@ public class Main extends Application {
         Values.mapPage.refresh();
         Values.foodPage.refresh();
         Values.mealsPage.refresh();
-        Values.shiftsPage.resizeWindow();
+        Values.shiftsPage.refresh();
     }
 
     public void putCenter(BorderPane bp) { Values.rootPage.setCenter(bp); }
