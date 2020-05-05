@@ -11,6 +11,10 @@ Keywords for Starting entries (Just as a guide to keep things consistent):
 
 Version Version# Month/Day/Year
 
+Version 2.2.8 5/4/20
+-Reworked the layout of MealsPage (Spencer)
+-Styling Complete (Spencer)
+
 Version 2.2.7 5/3/20
 -Added several more methods to the simulation class for code cleanup (Patrick)
 -Added additional documentation to the Simulation and Drone classes (Patrick)
