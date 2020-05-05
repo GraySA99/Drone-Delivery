@@ -3,11 +3,15 @@ package GUI;
 public class Styles {
 
     // Results Page
-    public static String resultsDataFrame = "";
-    public static String resultsDeliveryTime = "";
+    public static String resultsDataFrame = ""
+            + "-fx-background-color: " + Colors.secondaryColor + ";\n";
+    public static String resultsDeliveryTime = ""
+            + "-fx-font-size:50px;\n";
     public static String resultsDeliveryTypeLabel = "";
     public static String FIFODataFrame = "";
     public static String resultsButtonFrame = "";
+    public static String resultsBarChart = "-fx-padding: 10px 50px 50px 10px;";
+    public static String resultsPageBackground = "-fx-background-color: " + Colors.secondaryColor + ";\n";
 
     // Map Page
     public static String mapPageCurrentPointLabel = "";
