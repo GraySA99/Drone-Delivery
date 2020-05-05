@@ -4,7 +4,6 @@ import Food.Food;
 import Food.Meal;
 import Simulation.Simulation;
 import Simulation.DataTransfer;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -24,20 +23,20 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.Scanner;
-import java.util.stream.Collectors;
+
+/**
+ ** This class controls the left side menu of the GUI and how it loads pages in and out
+ **/
 
 public class SideMenu extends ToolBar {
 
     private HashMap<Button, Integer> menues;
     private Pane[] pages;
     private Integer activeScene;
-    private ToolBar secondaryMenu;
     private Button sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn;
     private Button start, save, results, load;
     private HBox title;
     private Text titleLabel;
-    private Button titleBtn;
 
     public SideMenu(Pane[] panes, BorderPane rM, Stage pM) {
 
@@ -46,14 +45,11 @@ public class SideMenu extends ToolBar {
         menues = new HashMap<Button, Integer>();
         activeScene = 1;
         pages = panes.clone();
-        //setUpSecondaryMenu();
 
         title = new HBox();
         HBox.setHgrow(title, Priority.ALWAYS);
         titleLabel = new Text("AzureSim");
-        titleBtn = new Button("|||");
-        title.getChildren().addAll(new ESHBox(), titleLabel, new ESHBox(), titleBtn);
-        HamburgerButtonSetup(titleBtn);
+        title.getChildren().addAll(new ESHBox(), titleLabel, new ESHBox());
 
         sideMenuMapBtn = new Button("Map");
         sideMenuFoodBtn = new Button("Food");
@@ -112,7 +108,6 @@ public class SideMenu extends ToolBar {
             }
         });
 
-        // TODO: This save button is supposed to save the results of a simulation in a .dd file
         save.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 FileChooser fileChooser = new FileChooser();
@@ -196,65 +191,6 @@ public class SideMenu extends ToolBar {
         SideMenuOnClick(new Button[] {sideMenuMapBtn, sideMenuFoodBtn, sideMenuMealsBtn, sideMenuShiftsBtn});
     }
 
-    public int getActiveScene() {
-
-        return activeScene;
-    }
-
-    public boolean isOnSecondaryScreen() {
-
-        return Values.rootPage.getLeft().equals(secondaryMenu);
-    }
-
-    public void swapMenues() {
-
-        if (isOnSecondaryScreen()) {
-            Values.rootPage.setLeft(this);
-        } else {
-            Values.rootPage.setLeft(secondaryMenu);
-        }
-    }
-
-    private void setUpSecondaryMenu() {
-
-        secondaryMenu = new ToolBar();
-        secondaryMenu.setOrientation(Orientation.VERTICAL);
-        secondaryMenu.setStyle(Styles.secondaryMenu);
-
-        start = new Button("Start");
-        save = new Button("Save");
-        results = new Button("Results");
-        load = new Button("Load");
-        Button[] buttons = {start, save, results, load};
-
-        for (Button b : buttons) {
-
-            b.setStyle(Styles.sideMenuBtnActive);
-
-            b.styleProperty().bind(
-                    Bindings.when(b.hoverProperty())
-                            .then(
-                                    new SimpleStringProperty(Styles.secondaryMenuBtnHover)
-                            )
-                            .otherwise(
-                                    new SimpleStringProperty(Styles.secondaryMenuBtn)
-                            )
-            );
-        }
-        secondaryMenu.getItems().addAll(start, save, results, new ESHBox(), load);
-
-        for (Pane p : pages) {
-
-            p.setOnMouseClicked(evt -> {
-
-                if (this.isOnSecondaryScreen()) {
-
-                    this.swapMenues();
-                }
-            });
-        }
-    }
-
     //Sets the simulation settings through .dd file the user chooses
     private void setSimSettings(String filepath) {
         Values.foodPage.initFromFile(filepath);
@@ -323,26 +259,6 @@ public class SideMenu extends ToolBar {
         }
     }
 
-    private void HamburgerButtonSetup(Button b) {
-
-        b.styleProperty().bind(
-                Bindings.when(b.hoverProperty())
-                        .then(
-                                new SimpleStringProperty(Styles.sideMenuTitleBtnHover)
-                        )
-                        .otherwise(
-                                new SimpleStringProperty(Styles.sideMenuTitleBtn)
-                        )
-        );
-
-        b.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-
-                swapMenues();
-            }
-        });
-    }
-
     private void SideMenuOnHover(Button[] buttons) {
 
         for (Button b : buttons) {
@@ -368,10 +284,16 @@ public class SideMenu extends ToolBar {
 
                     activeScene = menues.get(b);
 
-                    if (activeScene.equals(Values.mealsMenuID)) {
+                    MultiThreadRefresh MTR = new MultiThreadRefresh();
+                    MTR.start();
 
-                        ((MealsPage)(pages[activeScene-1])).setFoodFrame();
-                    }
+                    try {
+                        MTR.join();
+                        if (activeScene.equals(Values.mealsMenuID)) {
+
+                            ((MealsPage)(pages[activeScene-1])).setFoodFrame();
+                        }
+                    } catch (InterruptedException ie) {};
 
                     Values.rootPage.setCenter(pages[activeScene-1]);
                     for (Button btn : menues.keySet()) {

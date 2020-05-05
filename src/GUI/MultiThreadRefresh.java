@@ -1,5 +1,9 @@
 package GUI;
 
+/**
+ ** This class refreshes all the values of the at a fixed rate to ensure everything loads properly
+ **/
+
 public class MultiThreadRefresh extends Thread {
 
     public void run() {

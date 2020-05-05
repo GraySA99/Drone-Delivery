@@ -16,6 +16,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/**
+ ** This class contains the information, layout, and logic for the food page of the GUI
+ **/
+
 public class FoodPage extends BorderPane {
 
     private ListView<HBox> foodList;
@@ -58,6 +62,7 @@ public class FoodPage extends BorderPane {
                 String name = foodNameEnt.getText();
                 String weight = foodWeightEnt.getText();
 
+                // Data Filtering
                 if (!name.strip().isBlank() && !weight.strip().isBlank()
                         && isNumeric(weight)
                         && DataTransfer.getFood(name) == null) {
@@ -65,6 +70,7 @@ public class FoodPage extends BorderPane {
                     DataTransfer.addFood(new Food(name, Double.parseDouble(weight)));
                 }
 
+                // This adds an entry into the list foodList which is a ListView of HBox's
                 HBox foodItemFrame = new HBox();
                 Text foodItemName = new Text(name);
                 Text foodItemWeight = new Text(weight + " oz.");
@@ -79,6 +85,8 @@ public class FoodPage extends BorderPane {
                     foodWeightEnt.setText(foodWeight);
                 });
 
+                // In order for the ListView to show up there needs to be one entry in it
+                // So if the first entry is blank, that's just a filler HBox and needs deleted
                 if (foodList.getItems().size() == 1 && foodList.getItems().get(0).getChildren().isEmpty()) {
                     foodList.getItems().clear();
                 }
@@ -98,6 +106,8 @@ public class FoodPage extends BorderPane {
                     DataTransfer.removeFood(DataTransfer.getFood(name));
                     foodList.getItems().removeIf(hb -> ((Text) hb.getChildren().get(0)).getText().equals(name));
 
+                    // In order for the ListView to show up there needs to be one entry in it
+                    // So if the list is empty after the remove then a blank is added
                     if (foodList.getItems().isEmpty())
                         foodList.getItems().add(new HBox());
 
@@ -112,7 +122,7 @@ public class FoodPage extends BorderPane {
         this.setLeft(foodItemEntry);
         this.setRight(foodListContainer);
 
-        // initFromFile will load defaults now
+        // Loading settings from files
         initFromFile("");
     }
 
@@ -121,6 +131,8 @@ public class FoodPage extends BorderPane {
         return foodList;
     }
 
+    // This long method is just for setting the sizing and layout of each element in the page
+    // It is called on every screen resize
     public void refresh() {
 
         double pageWidth = Values.windowWidth * (1 - Values.sideMenuWidthPercent);
@@ -136,19 +148,9 @@ public class FoodPage extends BorderPane {
         BorderPane.setAlignment(foodListContainer, Pos.CENTER_LEFT);
 
         foodItemEntry.setPrefWidth(pageWidth * Values.foodPageFoodItemEntryWidthPercent);
+        foodItemEntry.setMaxHeight(pageHeight * Values.foodPageFoodItemEntryHeightPercent);
         foodItemEntry.setPrefHeight(pageHeight * Values.foodPageFoodItemEntryHeightPercent);
-
-        double foodItemEntryWidth = foodItemEntry.getWidth();
-        double foodItemEntryHeight = foodItemEntry.getHeight();
-
-        foodNameEnt.setPrefWidth(foodItemEntryWidth * Values.foodPageFoodNameEntWidthPercent);
-        foodNameEnt.setPrefHeight(foodItemEntryHeight * Values.foodPageFoodNameEntHeightPercent);
-        foodWeightEnt.setPrefWidth(foodItemEntryWidth * Values.foodPageFoodWeightEntWidthPercent);
-        foodWeightEnt.setPrefHeight(foodItemEntryHeight * Values.foodPageFoodWeightEntHeightPercent);
-        foodAddItemBtn.setPrefWidth(foodItemEntryWidth * Values.foodPageBtnWidthPercent);
-        foodAddItemBtn.setPrefHeight(foodItemEntryHeight * Values.foodPageBtnHeightPercent);
-        foodRemoveItemBtn.setPrefWidth(foodItemEntryWidth * Values.foodPageBtnWidthPercent);
-        foodRemoveItemBtn.setPrefHeight(foodItemEntryHeight * Values.foodPageBtnHeightPercent);
+        BorderPane.setAlignment(foodItemEntry, Pos.CENTER_RIGHT);
 
         // Styles
         this.setStyle(Styles.foodPage);
@@ -157,6 +159,7 @@ public class FoodPage extends BorderPane {
                 + (foodNameEnt.getHeight() * Values.foodPageFontSize) + ";\n");
         foodWeightLabel.setStyle(Styles.foodPageWeightLabel + "-fx-font-size: "
                 + (foodWeightEnt.getHeight() * Values.foodPageFontSize) + ";\n");
+        foodItemEntry.setStyle(Styles.foodPageFoodItemEntry);
     }
 
     // Function: isNumeric
@@ -176,6 +179,7 @@ public class FoodPage extends BorderPane {
         }
     }
 
+    // Load settings for food page from a specified file or default file
     public void initFromFile(String filename) {
 
         try {
@@ -187,6 +191,7 @@ public class FoodPage extends BorderPane {
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();
 
+            // See defaults_universal.dd for how we layout stored data
             while (fileIn.hasNextLine() && !fileLine.equals("@Food")) { fileLine = fileIn.nextLine(); }
             if (!fileIn.hasNextLine()) { return; }
 
@@ -194,6 +199,7 @@ public class FoodPage extends BorderPane {
             foodList.getItems().clear();
             while (fileIn.hasNextLine()) {
 
+                // Read new food until there is none left
                 if (fileLine.strip().equals("@/Food")) { break; }
 
                 String name = fileLine.strip().split("&")[0];
