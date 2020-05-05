@@ -155,6 +155,9 @@ public class MapPage extends BorderPane {
 
         // If the WebView properly loads and has a getJsConnector function then this connects the two languages
         // This class is required to have a JavaConnector class
+
+        // The Google Maps API HMTL Code was heavily adapted from Googles own Documentation Site:
+        //           https://developers.google.com/maps/documentation/javascript/examples/map-simple
         webEngine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
            if (Worker.State.SUCCEEDED == newValue) {
                JSObject window = (JSObject) webEngine.executeScript("window");
