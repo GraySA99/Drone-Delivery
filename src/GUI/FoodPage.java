@@ -136,19 +136,9 @@ public class FoodPage extends BorderPane {
         BorderPane.setAlignment(foodListContainer, Pos.CENTER_LEFT);
 
         foodItemEntry.setPrefWidth(pageWidth * Values.foodPageFoodItemEntryWidthPercent);
+        foodItemEntry.setMaxHeight(pageHeight * Values.foodPageFoodItemEntryHeightPercent);
         foodItemEntry.setPrefHeight(pageHeight * Values.foodPageFoodItemEntryHeightPercent);
-
-        double foodItemEntryWidth = foodItemEntry.getWidth();
-        double foodItemEntryHeight = foodItemEntry.getHeight();
-
-        foodNameEnt.setPrefWidth(foodItemEntryWidth * Values.foodPageFoodNameEntWidthPercent);
-        foodNameEnt.setPrefHeight(foodItemEntryHeight * Values.foodPageFoodNameEntHeightPercent);
-        foodWeightEnt.setPrefWidth(foodItemEntryWidth * Values.foodPageFoodWeightEntWidthPercent);
-        foodWeightEnt.setPrefHeight(foodItemEntryHeight * Values.foodPageFoodWeightEntHeightPercent);
-        foodAddItemBtn.setPrefWidth(foodItemEntryWidth * Values.foodPageBtnWidthPercent);
-        foodAddItemBtn.setPrefHeight(foodItemEntryHeight * Values.foodPageBtnHeightPercent);
-        foodRemoveItemBtn.setPrefWidth(foodItemEntryWidth * Values.foodPageBtnWidthPercent);
-        foodRemoveItemBtn.setPrefHeight(foodItemEntryHeight * Values.foodPageBtnHeightPercent);
+        BorderPane.setAlignment(foodItemEntry, Pos.CENTER_RIGHT);
 
         // Styles
         this.setStyle(Styles.foodPage);
@@ -157,6 +147,7 @@ public class FoodPage extends BorderPane {
                 + (foodNameEnt.getHeight() * Values.foodPageFontSize) + ";\n");
         foodWeightLabel.setStyle(Styles.foodPageWeightLabel + "-fx-font-size: "
                 + (foodWeightEnt.getHeight() * Values.foodPageFontSize) + ";\n");
+        foodItemEntry.setStyle(Styles.foodPageFoodItemEntry);
     }
 
     // Function: isNumeric

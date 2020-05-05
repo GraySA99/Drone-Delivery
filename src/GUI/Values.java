@@ -40,39 +40,36 @@ public class Values {
     public static final Integer mealsMenuID = 3;
     public static final Integer shiftsMenuID = 4;
 
+    // Shifts Page
+    public static final double shiftsPageHoursListWidthPercent = 0.35;
+    public static final double shiftsPageHourListHeightPercent = 0.65;
+    public static final double shiftsPageEntryContainerWidthPercent = 0.35;
+    public static final double shiftsPageEntryContainerHeightPercent = 0.35;
+
     // Food Page
-    public static final double foodPageFoodListWidthPercent = 0.45;
+    public static final double foodPageFoodListWidthPercent = 0.35;
     public static final double foodPageFoodListHeightPercent = 0.85;
-    public static final double foodPageFoodItemEntryWidthPercent = 0.35;
-    public static final double foodPageFoodItemEntryHeightPercent = 0.85;
-    public static final double foodPageFoodNameEntWidthPercent = 0.75;
-    public static final double foodPageFoodNameEntHeightPercent = 0.05;
-    public static final double foodPageFoodWeightEntWidthPercent = 0.75;
-    public static final double foodPageFoodWeightEntHeightPercent = 0.05;
-    public static final double foodPageBtnWidthPercent = 0.15;
-    public static final double foodPageBtnHeightPercent = 0.04;
-    public static final double foodPageFontSize = 0.50;
+    public static final double foodPageFoodItemEntryWidthPercent = 0.50;
+    public static final double foodPageFoodItemEntryHeightPercent = 0.35;
+    public static final double foodPageEntryBoxWidthPercent = 0.95;
+    public static final double foodPageEntryBoxHeightPercent = 0.25;
+    public static final double foodPageButtonWidthPercent = 0.25;
+    public static final double foodPageButtonHeightPercent = 0.05;
+    public static final double foodPageFontSize = 0.75;
 
     // Meals Page
     public static final double mealsPageListWidthPercent = 0.35;
     public static final double mealsPageListHeightPercent = 0.75;
-    public static final double mealsPageMealEntryWidthPercent = 0.45;
-    public static final double mealsPageMealEntryHeightPercent = 0.85;
-    public static final double mealsPageMealsLabelFontPercent = 0.07;
-    public static final double mealsPageBtnWidthPercent = 0.25;
-    public static final double mealsPageBtnHeightPercent = 0.15;
-    public static final double mealsPageNameFrameWidthPercent = 0.90;
-    public static final double mealsPageNameFrameHeightPercent = 0.15;
-    public static final double mealsPageProbFrameWidthPercent = 0.90;
-    public static final double mealsPageProbFrameHeightPercent = 0.15;
-    public static final double mealsPageFoodScrollFrameWidthPercent = 0.90;
-    public static final double mealsPageFoodScrollFrameHeightPercent = 0.60;
-    public static final double mealsPageBtnFrameWidthPercent = 0.90;
-    public static final double mealsPageBtnFrameHeightPercent = 0.15;
-    public static final double mealsPageFoodFrameWidthPercent = 1.0;
-    public static final double mealsPageFoodFrameHeightPercent = 1.0;
-    public static final double mealsPageFoodItemWidthPercent = 1.0;
-    public static final double mealsPageFoodItemHeightPercent = 0.25;
+    public static final double mealsPageEntryFrameWidthPercent = 0.25;
+    public static final double mealsPageEntryFrameHeightPercent = 0.35;
+    public static final double mealsPageScrollFrameWidthPercent = 0.25;
+    public static final double mealsPageScrollItemsWidthPercent = 0.96;
+    public static final double mealsPageScrollFrameHeightPercent = 0.35;
+    public static final double mealsPageFoodItemFrameWidthPercent = 0.98;
+    public static final double mealsPageFoodItemFrameHeightPercent = 0.15;
+    public static final double mealsPageCheckBoxSidePercent = 0.95;
+    public static final double mealsPageQtyEntWidthPercent = 0.25;
+    public static final double mealsPageQtyEntHeightPercent = 0.95;
 
     // Map Page
     public static final double mapPageMapWidthPercent = 0.4;

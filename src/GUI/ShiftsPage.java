@@ -5,6 +5,7 @@ import Simulation.DataTransfer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
@@ -18,26 +19,26 @@ public class ShiftsPage extends BorderPane {
 
     private ListView<VBox> hoursList;
     private TextField shiftHoursEnt, numSimsEnt;
+    private VBox entryContainer;
+    private Text shiftHoursLabel, numSimsLabel;
+    private StackPane hoursListContainer;
 
     public ShiftsPage() {
 
         super();
 
-        PageTitle pageTitle = new PageTitle("Shifts");
-
         // Right Side
-        StackPane hoursListContainer = new StackPane();
+        hoursListContainer = new StackPane();
         hoursList = new ListView<>();
         hoursList.setPrefWidth(550);
         hoursListContainer.getChildren().add(hoursList);
 
         // Left Side
-        VBox entryContainer = new VBox();
-        Text shiftHoursLabel = new Text("Shift Hours");
+        entryContainer = new VBox();
+        shiftHoursLabel = new Text("Shift Hours");
         shiftHoursEnt = new TextField();
-        Text numSimsLabel = new Text("Number of Simulations");
+        numSimsLabel = new Text("Number of Simulations");
         numSimsEnt = new TextField();
-        shiftHoursEnt.setText("4");
 
         shiftHoursEnt.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -60,9 +61,29 @@ public class ShiftsPage extends BorderPane {
 
         this.setRight(hoursListContainer);
         this.setLeft(entryContainer);
-        this.setTop(pageTitle);
 
         initFromFile("");
+    }
+
+    public void refresh() {
+
+        double pageWidth = Values.windowWidth * (1 - Values.sideMenuWidthPercent);
+        double pageHeight = Values.windowHeight;
+
+        hoursListContainer.setMaxWidth(pageWidth * Values.shiftsPageHoursListWidthPercent);
+        hoursListContainer.setMaxHeight(pageHeight * Values.shiftsPageHourListHeightPercent);
+        hoursList.setPrefWidth(pageWidth * Values.shiftsPageHoursListWidthPercent);
+        hoursList.setPrefHeight(pageHeight * Values.shiftsPageHourListHeightPercent);
+        BorderPane.setAlignment(hoursListContainer, Pos.CENTER_LEFT);
+
+        entryContainer.setPrefWidth(pageWidth * Values.shiftsPageEntryContainerWidthPercent);
+        entryContainer.setMaxHeight(pageHeight * Values.shiftsPageEntryContainerHeightPercent);
+        BorderPane.setAlignment(entryContainer, Pos.CENTER_RIGHT);
+
+        // Styles
+        this.setStyle(Styles.shiftsPage);
+        hoursListContainer.setStyle(Styles.shiftsPageHoursList);
+        entryContainer.setStyle(Styles.shiftsPageEntryContainer);
     }
 
     public void reload(int newNumHours, int oldNumHours) {
@@ -206,8 +227,4 @@ public class ShiftsPage extends BorderPane {
         }
     }
 
-    public void resizeWindow() {
-
-        this.setMinWidth(Values.windowWidth * Values.mainPageWidthPercent);
-    }
 }

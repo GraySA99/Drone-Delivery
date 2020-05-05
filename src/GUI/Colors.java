@@ -1,5 +1,9 @@
 package GUI;
 
+/**
+ ** This Class holds data for all Colors used in the GUI
+ **/
+
 public class Colors {
 
     private static int themeIndex = 0;
