@@ -65,6 +65,8 @@ public class ShiftsPage extends BorderPane {
         initFromFile("");
     }
 
+    // This long method is just for setting the sizing and layout of each element in the page
+    // It is called on every screen resize
     public void refresh() {
 
         double pageWidth = Values.windowWidth * (1 - Values.sideMenuWidthPercent);
@@ -86,6 +88,7 @@ public class ShiftsPage extends BorderPane {
         entryContainer.setStyle(Styles.shiftsPageEntryContainer);
     }
 
+    // This method allows the data in the shifts page to all be live instead of updated only when a button is pushed
     public void reload(int newNumHours, int oldNumHours) {
 
         if (newNumHours < oldNumHours) {
@@ -149,6 +152,7 @@ public class ShiftsPage extends BorderPane {
         }
     }
 
+    // Load settings for food page from a specified file or default file
     public void initFromFile(String filename) {
 
         try {
@@ -161,6 +165,7 @@ public class ShiftsPage extends BorderPane {
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();
 
+            // See defaults_universal.dd for how we layout stored data
             while (fileIn.hasNextLine() && !fileLine.equals("@Shifts")) { fileLine = fileIn.nextLine(); }
             if (!fileIn.hasNextLine()) { return; }
 

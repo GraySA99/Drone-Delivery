@@ -15,12 +15,8 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
-import javax.swing.*;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -74,6 +70,7 @@ public class MapPage extends BorderPane {
         addDP.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
+                // Data Filtering
                 if (!nameEnt.getText().strip().equals("")
                         && !currentPointLabel.getText().equals("(, )")) {
 
@@ -93,15 +90,18 @@ public class MapPage extends BorderPane {
                     Text frameData = new Text(String.format("(%.5f, %.5f)", lat, lng));
                     frame.getChildren().addAll(frameName, new ESHBox(), frameData);
 
+                    // Focus the content of it is clicked on in the list
                     frame.setOnMouseClicked(evt -> {
 
                         nameEnt.setText(((Text)frame.getChildren().get(0)).getText());
                         currentPointLabel.setText(((Text)frame.getChildren().get(2)).getText());
                     });
 
+                    // Calling the JavaScript that the Google Map API is running in to add a marker at the new location
                     javascriptConnector.call("addMarker", name, lat, lng);
                     DataTransfer.addWaypoint(new Waypoint(name, lat, lng, DPList.getItems().isEmpty()));
 
+                    // Reset entry values
                     DPList.getItems().add(frame);
                     nameEnt.setText("");
                     currentPointLabel.setText("(, )");
@@ -130,8 +130,10 @@ public class MapPage extends BorderPane {
                     DPList.getItems().add(new HBox());
                 }
 
+                // Calling the JavaScript that the Google Map API is running in to remove the marker at the removed locations
                 javascriptConnector.call("removeMarker", nameEnt.getText());
 
+                // Clear entry fields
                 nameEnt.clear();
                 currentPointLabel.setText("(, )");
 
@@ -150,6 +152,9 @@ public class MapPage extends BorderPane {
         mapViewContainer = new StackPane();
         mapViewContainer.getChildren().add(mapView);
         final WebEngine webEngine = mapView.getEngine();
+
+        // If the WebView properly loads and has a getJsConnector function then this connects the two languages
+        // This class is required to have a JavaConnector class
         webEngine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
            if (Worker.State.SUCCEEDED == newValue) {
                JSObject window = (JSObject) webEngine.executeScript("window");
@@ -166,6 +171,7 @@ public class MapPage extends BorderPane {
         this.setLeft(mapContainer);
         this.setRight(DPListContainer);
 
+        // Load in the HTML/JavaScript file named googlemap.html
         try {
             webEngine.loadContent(new String(Files.readAllBytes(Paths.get(getClass().getResource("googlemap.html").toURI()))));
         } catch (Exception e) {
@@ -175,6 +181,8 @@ public class MapPage extends BorderPane {
         refresh();
     }
 
+    // This long method is just for setting the sizing and layout of each element in the page
+    // It is called on every screen resize
     public void refresh() {
 
         double pageWidth = Values.windowWidth * (1 - Values.sideMenuWidthPercent);
@@ -221,6 +229,7 @@ public class MapPage extends BorderPane {
 
     }
 
+    // This method loads in the markers for all non-user entered delivery points
     public void setMarkers() {
 
         if (DataTransfer.getWaypoints() != null) {
@@ -236,6 +245,7 @@ public class MapPage extends BorderPane {
         return DPList;
     }
 
+    // This class is passed to the JavaScript in googlemap.html and
     public class JavaConnector {
 
         public void sendLatLong(String lat, String lon) {
@@ -258,6 +268,7 @@ public class MapPage extends BorderPane {
         }
     }
 
+    // Load settings for food page from a specified file or default file
     public void initFromFile(String filename) {
 
         try {
@@ -270,6 +281,7 @@ public class MapPage extends BorderPane {
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();
 
+            // See defaults_universal.dd for how we layout stored data
             while (fileIn.hasNextLine() && !fileLine.equals("@Waypoint")) { fileLine = fileIn.nextLine(); }
             if (!fileIn.hasNextLine()) { return; }
 

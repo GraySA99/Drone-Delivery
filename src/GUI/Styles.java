@@ -1,5 +1,9 @@
 package GUI;
 
+/**
+ ** This class stores all the CSS styling used for the GUI
+ **/
+
 public class Styles {
 
     // Results Page
@@ -99,56 +103,11 @@ public class Styles {
 
     public static void reset() {
 
-        resultsDataFrame = "";
-        resultsDeliveryTime = "";
-        resultsDeliveryTypeLabel = "";
-        FIFODataFrame = "";
-        resultsButtonFrame = "";
-
-        // Food Page
-        foodPage = ""
-                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
-
-        // Map Page
-        mapPageCurrentPointLabel = "";
-        mapPageNameLabel = "";
-        mapPageMapView = ""
-                + "-fx-border-style: solid;\n";
-        mapPageMapInfoContainer = "";
-        mapPageDPListContainer = ""
-                + "-fx-padding: 0px 60px 0px 0px;\n";
-        mapPageMapContainer = ""
-                + "-fx-padding: 50px 0px 50px 50px;\n";
-        mapPage = ""
-                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
-
-        // Meals Page
-        mealsPage = ""
-                + "-fx-background-color: " + Colors.secondaryColor + ";\n";
-
-        // Side Menu
-        secondaryMenuBtn = ""
-                + "-fx-background-color: " + Colors.primaryColor + ";\n";
-        secondaryMenuBtnHover = ""
-                + "-fx-background-color: " + Colors.quaternaryColor + ";\n";
-        secondaryMenu = ""
-                + "-fx-background-color: " + Colors.primaryColor + ";\n";
-        sideMenuTitleBtn = ""
-                + "-fx-background-color: " + Colors.primaryColor + ";\n"
-                + "-fx-text-fill: " + Colors.contrastFontColor + ";\n";
-        sideMenuTitleBtnHover = ""
-                + "-fx-text-fill: " + Colors.quaternaryColor + ";\n"
-                + "-fx-background-color: " + Colors.primaryColor + ";\n";
-        sideMenuTitle = ""
-                + "-fx-background-color: " + Colors.primaryColor + ";\n";
         sideMenuTitleText = ""
                 + "-fx-background-color: " + Colors.primaryColor + ";\n"
                 + "-fx-fill: " + Colors.contrastFontColor + ";\n"
                 + "-fx-font-size: " + Values.sideMenuTitleFontSize + ";\n"
                 + "-fx-font-weight: bold;\n";
-        sideMenu = ""
-                + "-fx-background-color: " + Colors.primaryColor + ";\n"
-                + "-fx-border-style: hidden solid hidden hidden;\n";
         sideMenuBtn = ""
                 + "-fx-background-color: " + Colors.primaryColor + ";\n"
                 + "-fx-color: " + Colors.complimentaryFontColor + ";\n"
@@ -161,8 +120,5 @@ public class Styles {
                 + "-fx-background-color: " + Colors.quaternaryColor + ";\n"
                 + "-fx-color: " + Colors.complimentaryFontColor + ";\n"
                 + "-fx-font-size: " + Values.sideMenuFontSize + "px;\n";
-        pageTitleLabelContainer = "";
-        pageTitleLabel = "";
-        pageTitle = "";
     }
 }

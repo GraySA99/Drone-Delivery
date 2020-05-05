@@ -82,8 +82,6 @@ public class Main extends Application {
         Values.shiftsPage.refresh();
     }
 
-    public void putCenter(BorderPane bp) { Values.rootPage.setCenter(bp); }
-
     static { // use system proxy settings when standalone application
         System.setProperty("java.net.useSystemProxies", "true");
     }

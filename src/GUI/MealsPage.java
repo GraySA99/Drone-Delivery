@@ -67,6 +67,7 @@ public class MealsPage extends BorderPane {
                 String name = mealsNameEnt.getText();
                 String prob = mealsProbEnt.getText();
 
+                // Data Filtering
                 if (DataTransfer.getFoodItems() != null && !name.strip().isBlank() && !prob.strip().isBlank()
                         && isNumeric(prob)
                         && DataTransfer.getMeal(name) == null) {
@@ -165,6 +166,8 @@ public class MealsPage extends BorderPane {
         refresh();
     }
 
+    // This long method is just for setting the sizing and layout of each element in the page
+    // It is called on every screen resize
     public void refresh() {
 
         double pageWidth = Values.windowWidth * (1 - Values.sideMenuWidthPercent);
@@ -226,6 +229,7 @@ public class MealsPage extends BorderPane {
 
     }
 
+    // Populates the list of all Food Items available into the list in the middle of the GUI
     public void setFoodFrame() {
 
         foodFrame.getChildren().clear();
@@ -265,6 +269,7 @@ public class MealsPage extends BorderPane {
         }
     }
 
+    // Checks if a string is numeric
     private boolean isNumeric(String s) {
 
         try {
@@ -278,6 +283,7 @@ public class MealsPage extends BorderPane {
         }
     }
 
+    // Load settings for food page from a specified file or default file
     public void initFromFile(String filename) {
 
         try {
@@ -292,6 +298,7 @@ public class MealsPage extends BorderPane {
             if (!fileIn.hasNextLine()) { return; }
             String fileLine = fileIn.nextLine();
 
+            // See defaults_universal.dd for how we layout stored data
             while (fileIn.hasNextLine() && !fileLine.equals("@Meals")) { fileLine = fileIn.nextLine(); }
             if (!fileIn.hasNextLine()) { return; }
 
