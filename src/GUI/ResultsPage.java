@@ -165,7 +165,7 @@ public class ResultsPage extends VBox {
             NumberAxis resultsYAxis = new NumberAxis();
             resultsYAxis.setLabel("Number of Orders Delivered");
             BarChart<String, Number> resultsBarChart = new BarChart<String, Number>(resultsXAxis, resultsYAxis);
-            resultsBarChart.setTitle("Results");
+            //resultsBarChart.setTitle("Results");
             XYChart.Series<String, Number> FIFOSeries = new XYChart.Series<>();
             FIFOSeries.setName("FIFO");
 
@@ -272,6 +272,16 @@ public class ResultsPage extends VBox {
             Button saveResultsBtn = new Button("Save Results");
             Button finishBtn = new Button("Finish");
 
+            //Change button size
+            double btnHeight = 50;
+            double btnWidth = 75;
+            restartBtn.setPrefHeight(btnHeight);
+            restartBtn.setPrefWidth(btnWidth);
+            saveResultsBtn.setPrefHeight(btnHeight);
+            saveResultsBtn.setPrefWidth(100);
+            finishBtn.setPrefHeight(btnHeight);
+            finishBtn.setPrefWidth(btnWidth);
+
             //Show buttons on page
             resultsButtonFrame.getChildren().addAll(
                     new ESHBox(), restartBtn, new ESHBox(), saveResultsBtn, new ESHBox(), finishBtn, new ESHBox()
@@ -332,6 +342,8 @@ public class ResultsPage extends VBox {
             KSWorstTime.setStyle(Styles.resultsDeliveryTime);
             resultsButtonFrame.setStyle(Styles.resultsButtonFrame);
             resultsDataFrame.setStyle(Styles.resultsDataFrame);
+            resultsBarChart.setStyle(Styles.resultsBarChart);
+            this.setStyle(Styles.resultsPageBackground);
 
             // Growth
             VBox.setVgrow(resultsContainer, Priority.ALWAYS);
@@ -340,8 +352,11 @@ public class ResultsPage extends VBox {
             VBox.setVgrow(resultsDataFrame, Priority.ALWAYS);
 
             // Dimensions
-            resultsBarChart.setPrefWidth(1200);
+            resultsBarChart.setPrefWidth(1000);
+            resultsBarChart.setPrefHeight(500);
+            resultsDataFrame.setPrefWidth(100);
             resultsButtonFrame.setMaxHeight(150);
+
 
             // Alignment
             resultsDataFrame.setAlignment(Pos.CENTER_LEFT);
@@ -365,7 +380,7 @@ public class ResultsPage extends VBox {
             NumberAxis resultsYAxis = new NumberAxis();
             resultsYAxis.setLabel("Number of Orders Delivered");
             BarChart<String, Number> resultsBarChart = new BarChart<String, Number>(resultsXAxis, resultsYAxis);
-            resultsBarChart.setTitle("Results");
+            //resultsBarChart.setTitle("Results");
             XYChart.Series<String, Number> FIFOSeries = new XYChart.Series<>();
             FIFOSeries.setName("FIFO");
 
@@ -409,6 +424,8 @@ public class ResultsPage extends VBox {
             Text KSLabel = new Text("Knapsack: ");
             Text KSAverageTime = new Text("Average Time: " + Double.toString(0));
             Text KSWorstTime = new Text("Worst Time: " + Double.toString(0));
+
+
             KSDataFrame.getChildren().addAll(
                     KSLabel, KSAverageTime, KSWorstTime
             );
@@ -419,6 +436,17 @@ public class ResultsPage extends VBox {
             Button restartBtn = new Button("Restart");
             Button saveResultsBtn = new Button("Save Results");
             Button finishBtn = new Button("Finish");
+
+            //Change button size
+            double btnHeight = 50;
+            double btnWidth = 75;
+            restartBtn.setPrefHeight(btnHeight);
+            restartBtn.setPrefWidth(btnWidth);
+            saveResultsBtn.setPrefHeight(btnHeight);
+            saveResultsBtn.setPrefWidth(100);
+            finishBtn.setPrefHeight(btnHeight);
+            finishBtn.setPrefWidth(btnWidth);
+
             resultsButtonFrame.getChildren().addAll(
                     new ESHBox(), restartBtn, new ESHBox(), saveResultsBtn, new ESHBox(), finishBtn, new ESHBox()
             );
@@ -444,6 +472,8 @@ public class ResultsPage extends VBox {
             KSWorstTime.setStyle(Styles.resultsDeliveryTime);
             resultsButtonFrame.setStyle(Styles.resultsButtonFrame);
             resultsDataFrame.setStyle(Styles.resultsDataFrame);
+            resultsBarChart.setStyle(Styles.resultsBarChart);
+            this.setStyle(Styles.resultsPageBackground);
 
             // Growth
             VBox.setVgrow(resultsContainer, Priority.ALWAYS);
@@ -452,7 +482,9 @@ public class ResultsPage extends VBox {
             VBox.setVgrow(resultsDataFrame, Priority.ALWAYS);
 
             // Dimensions
-            resultsBarChart.setPrefWidth(1200);
+            resultsBarChart.setPrefWidth(1000);
+            resultsBarChart.setPrefHeight(500);
+            resultsDataFrame.setPrefWidth(100);
             resultsButtonFrame.setMaxHeight(150);
 
             // Alignment
