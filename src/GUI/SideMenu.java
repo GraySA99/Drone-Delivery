@@ -24,6 +24,10 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.util.HashMap;
 
+/**
+ ** This class controls the left side menu of the GUI and how it loads pages in and out
+ **/
+
 public class SideMenu extends ToolBar {
 
     private HashMap<Button, Integer> menues;

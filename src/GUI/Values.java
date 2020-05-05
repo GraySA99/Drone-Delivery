@@ -4,6 +4,10 @@ import Simulation.Simulation;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+/**
+ ** This class stores all the hardcoded values used for the GUI
+ **/
+
 public class Values {
 
     public static MapPage mapPage;
