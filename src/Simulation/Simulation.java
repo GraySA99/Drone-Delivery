@@ -152,7 +152,7 @@ public class Simulation {
                 found = false;
 
                 //generates orders according to their given probabilities
-                prob = (Math.random()*(1));
+                prob = (Math.random()*(100));
                 while(curPos < mealList.size() && !found){
                     if(prob < mealList.get(curPos).getProbability() + curProb){
                         found = true;

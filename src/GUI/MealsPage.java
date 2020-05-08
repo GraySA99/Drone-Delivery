@@ -13,7 +13,6 @@ import javafx.scene.text.Text;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -76,7 +75,7 @@ public class MealsPage extends BorderPane {
 
                         if (((CheckBox)hb.getChildren().get(0)).isSelected()) {
 
-                            String qty = ((TextField)hb.getChildren().get(5)).getText();
+                            String qty = ((TextField)hb.getChildren().get(4)).getText();
                             if (!isNumeric(qty))
                                 return;
                         }
@@ -89,7 +88,7 @@ public class MealsPage extends BorderPane {
                         if (((CheckBox)foodItems.get(food).getChildren().get(0)).isSelected()) {
 
                             int qty = Integer.parseInt(
-                                    ((TextField)foodItems.get(food).getChildren().get(5)).getText()
+                                    ((TextField)foodItems.get(food).getChildren().get(4)).getText()
                             );
 
                             tempFoodList.put(new Food(food.getName(), food.getWeight()), qty);
@@ -114,7 +113,7 @@ public class MealsPage extends BorderPane {
                     for (HBox hb : foodItems.values()) {
 
                         CheckBox tempCB = ((CheckBox)hb.getChildren().get(0));
-                        TextField tempTF = ((TextField)hb.getChildren().get(5));
+                        TextField tempTF = ((TextField)hb.getChildren().get(4));
                         tempCB.setSelected(false);
                         tempTF.clear();
                         tempTF.setDisable(!tempCB.isSelected());
@@ -203,7 +202,7 @@ public class MealsPage extends BorderPane {
             CheckBox cb = ((CheckBox)foodItem.getChildren().get(0));
             Text foodName = ((Text)foodItem.getChildren().get(2));
             Text qtyLabel = ((Text)foodItem.getChildren().get(4));
-            TextField qtyEnt = ((TextField)foodItem.getChildren().get(5));
+            TextField qtyEnt = ((TextField)foodItem.getChildren().get(4));
 
             foodItem.setPrefWidth(foodScrollWidth * Values.mealsPageFoodItemFrameWidthPercent);
             foodItem.setMaxHeight(foodScrollHeight * Values.mealsPageFoodItemFrameHeightPercent);
